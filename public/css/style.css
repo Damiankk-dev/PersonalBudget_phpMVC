@@ -1,0 +1,268 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap');
+
+@font-face{
+    font-family: 'Josefin Sans', sans-serif;
+    src:url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500&display=swap');
+}
+
+
+.inputControl{
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.navbar{
+    background-color: whitesmoke !important;
+}
+.navbar-nav{
+    align-items: center;
+}
+.dropdown-toggle .blankLine:before{
+    content: "\A";
+    white-space: pre;
+}
+.dropdown-toggle{
+    text-align: center;
+}
+.brandTop{
+    background-color: whitesmoke;
+    justify-content: space-between;
+    align-items: center;
+	height: 8vh!important;
+}
+.logoIcon{
+    display: inline-block !important;
+    padding: 0;
+    margin: 0;
+    width: 64px !important;
+    height: 64px;
+}
+.logoText{
+    display: inline-block !important;
+    padding: 0;
+    margin: 0;
+}
+.logo{    
+    font: normal 700 64px/66px 'Josefin Sans';
+    text-shadow: 4px 4px 4px #aaa;
+    padding: 15px 5px;
+    letter-spacing: 3px;
+}
+.logo a{
+    text-decoration: none;
+    color: black;
+}
+.navbar .nav-item{
+    font: normal 500 24px/26px 'Josefin Sans';
+}
+.navbar .signOutItem{
+    display: none;
+}
+.buttonsGroup{
+    margin-right: 20px;
+}
+.quoteArea{
+    background-color: grey;
+    color: black;
+    font: normal 500 34px/36px 'Josefin Sans';
+    padding: 10px 30px;
+    position: relative;
+    border-radius: 15px;
+    margin-top: 10vh;
+}
+#quote{
+    width: 75%;
+    margin: auto;
+}
+#author{
+    font-style: italic;
+    text-align: right;
+}
+.centralArea{
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    color: black;
+    opacity: 0.95;
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 65vh;
+}
+.fullColorBackground{
+    
+    background-color: whitesmoke;
+    padding: 0.5rem;
+    opacity: 0.9;
+    border-radius: 15px;
+    margin-top: 1rem;
+}
+.budgetPros{
+    font: normal 300 22px/36px 'Josefin Sans';
+}
+.budgetPros ul{
+    list-style: none;
+}
+.budgetPros span{
+    color: cornflowerblue;
+    font-weight: bold;
+}
+.prosHeader{
+    text-align: center !important;
+}
+.budgetPros .prosIcon{
+    margin-right: 15px;
+    color: cornflowerblue;
+}
+.decideArea{
+    margin-top: 5rem;
+}
+.fullColorBackground .decideTile h3{
+    min-height: 5rem;
+}
+.imageBackground{
+    background-image: url(../img/decideBackground-min.jpg);    
+    background-position: center center;    
+    background-repeat: no-repeat;    
+    background-attachment: fixed;    
+    background-size: cover;    
+    background-color:#464646;
+	height: 92vh!important;    
+}
+.decideTile{
+    text-align: center;
+    height: 10rem;
+}
+.prosHeader .input-group{
+    margin-top: 10px;
+}
+.iconMenuItem{
+    align-items: center;
+    flex-direction: column;
+}
+.dropdown-item:hover{
+    background-color: rgb(235, 235, 235);
+}
+.modal-body .d-flex{
+    align-items: center;
+}
+.balanceTile{
+    display: flex;
+}
+.container_cashflow_col{
+    width: 50%;
+}
+.container_cashflow_wrapper{
+    display: flex;
+}
+.balance_header_tile{
+    background-color: lightgray;
+    width: 75%;
+    text-align: center;
+    border-radius: 10px;
+}
+.cashflow_table{
+	border-collapse: separate;
+	border-spacing: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	
+}
+.cashflow_table th{
+	text-align: center;
+}
+.cashflow_table td{
+	padding-left: 3px;
+	padding-right: 3px;
+}
+.cashflow_table_wrap{	
+	overflow-y: auto;
+	height: 30vh;
+}
+.main_wrapper_balance{
+	overflow-y: auto;
+	height: 60vh;	
+}
+
+/* //Extra small devices (portrait phones, less than 576px) */
+/* @media (max-width: 575.98px) { ... } */
+
+/* // Small devices (landscape phones, less than 768px) */
+@media (max-width: 767.98px) { 
+    .nav-link{
+        font: normal 700 16px/18px 'Josefin Sans';
+    }
+    .buttonsGroup .signOut{
+        display: none !important;
+    }
+    .icon-euro,
+    .datePrependLabel{
+        display: none !important;
+    }
+    .fullColorBackground .budgetPros{
+        font: normal 500 10px/16px 'Josefin Sans';
+    }
+    .fullColorBackground .prosHeader h1{
+        font: normal 500 18px/20px 'Josefin Sans';
+        margin-bottom: 0;
+    }
+    .fullColorBackground h3{
+        font: normal 500 18px/20px 'Josefin Sans';
+    }
+    .decideArea{
+        margin-top: 1rem;
+    }
+    .fullColorBackground .decideTile h3{
+        min-height: 2rem;
+    }
+    .decideTile{
+        height: 5rem;
+    }
+    .quoteArea{
+        font: normal 500 18px/20px 'Josefin Sans';
+    }
+}
+
+/* // Medium devices (tablets, less than 992px) */
+@media (max-width: 991.98px) {
+    .textPart{
+        font: normal 700 22px/24px 'Josefin Sans';
+    }
+    .logoIcon{
+        font: normal 700 50px/52px 'Josefin Sans';
+        width: 50px !important;
+        height: 50px;
+    }
+    h1{
+        font: normal 500 20px/22px 'Josefin Sans';
+        margin-top: 0.5rem;
+    }    
+    .container_cashflow_col{
+        width: 100%;
+    }    
+    .container_cashflow_wrapper{
+        flex-direction: column;
+    }
+}
+
+/* // Large devices (desktops, less than 1200px) */
+@media (max-width: 1199.98px) {
+    .textPart{
+        font: normal 700 21px/23px 'Josefin Sans';
+    }
+    .logoIcon{
+        font: normal 700 46px/48px 'Josefin Sans';
+        width: 48px !important;
+        height: 48px;
+    }
+    h1{
+        font: normal 500 28px/30px 'Josefin Sans';
+        margin-top: 0.5rem;
+    }
+}
+
+/* // Extra large devices (large desktops)
+// No media query since the extra-large breakpoint has no upper bound on its width */
