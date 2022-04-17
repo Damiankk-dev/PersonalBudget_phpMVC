@@ -29,9 +29,9 @@
 }
 .brandTop{
     background-color: whitesmoke;
+    color: black;
     justify-content: space-between;
     align-items: center;
-	height: 8vh!important;
 }
 .logoIcon{
     display: inline-block !important;
@@ -188,7 +188,11 @@
 }
 
 /* //Extra small devices (portrait phones, less than 576px) */
-/* @media (max-width: 575.98px) { ... } */
+@media (max-width: 575.98px) {
+    .btn{
+        font-size: 0.8rem;
+    }
+}
 
 /* // Small devices (landscape phones, less than 768px) */
 @media (max-width: 767.98px) { 
@@ -228,6 +232,9 @@
 
 /* // Medium devices (tablets, less than 992px) */
 @media (max-width: 991.98px) {
+    .nav-link{
+        padding: 0%;
+    }
     .textPart{
         font: normal 700 22px/24px 'Josefin Sans';
     }

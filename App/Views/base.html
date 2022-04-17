@@ -20,27 +20,88 @@
 <body>
     <div class="d-flex flex-column h-100 overflow-hidden container-fluid p-0">
         <header>
-			<nav>
-				<div class="brandTop d-flex flex-row">
-					<div class="logo d-block">
-					  <a href="#">
-						  <div class="logoIcon"><i class="icon-chart-bar"> </i></div>
-						  <div class="logoText">
-							  <div class="textPart d-xl-inline d-block">Personal</div>
-							  <div class="textPart d-xl-inline d-block">Budget</div>
-						  </div> 
-					  </a>                       
-					</div>
-					<div class="topBarButtons">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<div class="container-fluid">
+					<a href="#" class="navbar-brand brandTop">
+						<div class="logo">
+							<div class="logoIcon"><i class="icon-chart-bar"> </i></div>
+							<div class="logoText">
+								<div class="textPart d-xl-inline d-block">Personal</div>
+								<div class="textPart d-xl-inline d-block">Budget</div>
+							</div> 
+						</div>
+					</a> 					
+                    <button class="navbar-toggler d-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>                      
+					<div class="collapse navbar-collapse navi" id="navbarToggler">
+						<ul class="navbar-nav mt-2 mt-lg-0 d-none">
+							<li class="nav-item">
+							  <a class="nav-link" href="income.php">
+								<div class="d-flex iconMenuItem">
+								  <i class="icon-down-open"></i>Dodaj <span>Przychód</span>
+								</div>
+							  </a>
+							</li>
+							<li class="nav-item">
+							  <a class="nav-link " href="expense.php">
+								<div class="d-flex iconMenuItem">
+								  <i class="icon-up-open"></i>Dodaj <span>Wydatek</span>
+								</div>
+							  </a>
+							</li>
+							<li class="nav-item dropdown">
+							  <div class="d-flex iconMenuItem">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">                                  
+								  <span class="icon-list-alt"></span><span class="blankLine">Przeglądaj</span><span class="blankLine">Bilans</span> 
+								</a>
+								<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="balance.php?balance_type=Actual_month">Bieżący miesiąc</a>
+									<a class="dropdown-item" href="balance.php?balance_type=Previous_month">Poprzedni miesiąc</a>
+									<a class="dropdown-item" href="balance.php?balance_type=Actual_year">Bieżący rok</a>
+									<a class="dropdown-item" href="#" data-toggle="modal" data-target="#anyPeriodModal">Dowolny okres</a>
+								</div>
+							  </div>
+							</li>
+							<li class="nav-item">
+							  <a class="nav-link" href="#">
+								<div class="d-flex iconMenuItem">
+								  <i class="icon-sliders"></i>Ustawienia
+								</div>
+							  </a>
+							</li>
+							<li class="nav-item signOutItem">
+							<a class="nav-link" href="#">Wyloguj</a>
+							</li>
+							<li class="nav-item signOut">
+							<a href="logout.php">
+							<button type="button" class="btn btn-outline-warning"><i class="icon-off"></i> Wyloguj</button>
+							</a>
+							</li>
+						</ul>
+					</div> 
+					<ul class="navbar-nav mt-2 mt-lg-0">
+						<li class="nav-item">		
+							<a href="signUp.php" class="nav-link">
+								<button type="button" class="btn btn-outline-secondary signUp d-block d-sm-inline">Rejestracja</button>
+							</a>
+						</li>
+						<li class="nav-item">					
+							<a href="signIn.php" class="nav-link">
+								<button type="button" class="btn btn-outline-primary signIn my-2 d-block d-sm-inline">Logowanie</button>
+							</a>
+						</li>
+					</ul>
+<!-- 					<div class="topBarButtons">
 						<div class="buttonsGroup">			
-							<a href="signUp.php">
+							<a href="signUp.php" class="navButton">
 								<button type="button" class="btn btn-outline-secondary signUp d-block d-sm-inline">Rejestracja</button>
 							</a>						
-							<a href="signIn.php">
+							<a href="signIn.php" class="navButton">
 								<button type="button" class="btn btn-outline-primary signIn my-2 d-block d-sm-inline">Logowanie</button>
 							</a>
 						</div>
-					</div>
+					</div>  -->
 				</div>
 			</nav>
 		</header>
