@@ -24,6 +24,17 @@
     </div>
     <div class="row ">
         <div class="col-10 col-xl-8 offset-1 offset-xl-2 my-2">
+            	
+			{% if current_user %}	
+            <div class="col-12 col-xl-10 offset-xl-1 quoteArea">
+                <div id="quote">
+                    <p>„Wall Street to jedyne miejsce, do którego jedni przyjeżdżają rolls royce’ami, aby zasięgać porad u tych, którzy podróżują metrem”</p>
+                    <div id="author">Warren Buffett</div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if not current_user %}
             <div class="row decideArea">
                 <div class="col-12 col-sm-4 offset-sm-1 fullColorBackground">
                     <div id="registerArea" class="d-block decideTile my-1">
@@ -42,6 +53,8 @@
                     </div>
                 </div>    
             </div>
+            
+            {% endif %}
         </div>    
     </div>
 </div>

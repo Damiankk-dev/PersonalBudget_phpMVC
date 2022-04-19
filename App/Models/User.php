@@ -239,6 +239,35 @@ class User extends \Core\Model
 	}
 
     /**
+     * Remember the login by inserting a new unique token into the remembered_logins table
+     * for this user record
+     *
+     * @return boolean  True if the login was remembered successfully, false otherwise
+     */
+    public function rememberLogin()
+    {
+		$SECONDS_TO_DAYS = 60 * 60 * 24;
+		$DAYS_UNTIL_EXPIRY = 30;
+		
+		$token = new Token();
+		$hashed_token = $token->getHash();
+		$this->remember_token = $token->getValue();
+		
+		$this->expiry_timestamp = time() + $SECONDS_TO_DAYS * $DAYS_UNTIL_EXPIRY;
+		
+		$sql = 'INSERT INTO remembered_logins (token_hash, user_id, expires_at)
+			   VALUES (:token_hash, :user_id, :expires_at)';
+			   
+		$db = static::getDB();
+		$stmt = $db->prepare($sql);
+		$stmt->bindValue(':token_hash', $hashed_token, PDO::PARAM_STR);
+		$stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+		$stmt->bindValue(':expires_at', date('Y-m-d H:i:s', $this->expiry_timestamp), PDO::PARAM_STR);
+		
+		return $stmt->execute();
+	}
+
+    /**
      * Get all the users as an associative array
      *
      * @return array
