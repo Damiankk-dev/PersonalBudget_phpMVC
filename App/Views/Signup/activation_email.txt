@@ -1,0 +1,5 @@
+Aktywacja konta
+
+Skopiuj poniższy link i wklej go w przęglądarce aby aktywować swoje konto.
+
+{{ url }}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+    
+<div class="centralArea">
+    <div class="row">
+        <div class="col-10 col-xl-8 offset-1 offset-xl-2 fullColorBackground">
+            <div class="d-block prosHeader">    
+                <h1>Sign up</h1>
+            </div>
+            <div class="d-block budgetPros w-100">                 
+                <p>Udało się! Dziekuję za założenie konta.</p>
+                
+                <p>Na podany adres e-mail został wysłany link aktywacyjny.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-10 col-xl-8 offset-1 offset-xl-2 my-2">
+            <div class="row decideArea">
+                <div class="col-12 col-sm-4 offset-sm-1 fullColorBackground">
+                    <div id="registerArea" class="d-block decideTile my-1">
+                        <h3>Już teraz załóż konto:</h3>
+                        <a href="/signup/index">
+                        <button type="button" class="btn btn-outline-secondary signUp">Rejestracja</button>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 offset-sm-2 fullColorBackground">
+                    <div id="loginArea" class="d-block decideTile">
+                        <h3 class="d-block">Posiadasz konto:</h3>
+                        <a href="/login/index">
+                        <button type="button" class="btn btn-outline-primary signIn">Logowanie</button>
+                        </a>
+                    </div>
+                </div>    
+            </div>
+        </div>    
+    </div>
+</div>
+
+{% endblock %}
