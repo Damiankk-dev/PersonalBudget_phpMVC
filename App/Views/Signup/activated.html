@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+    
+<div class="centralArea">
+    <div class="row">
+        <div class="col-10 col-xl-8 offset-1 offset-xl-2 fullColorBackground">
+            <div class="d-block prosHeader">    
+                <h1>Konto aktywowane</h1>           
+                <p>Udało się! Twoje konto zostało aktywowane!</p>                
+                <p>Teraz dobrze to wykorzystaj i zaloguj się:</p>
+                <a href="/login/index">
+                    <button type="button" class="btn btn-outline-primary signIn">Logowanie</button>
+                </a>
+            </div>  
+        </div>
+    </div>
+</div>
+
+{% endblock %}

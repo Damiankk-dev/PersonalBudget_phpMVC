@@ -83,7 +83,7 @@
                     </div>   
                     <div class="w-75 mx-auto py-2">
                         <label>
-                        <input type="checkbox" name="rules_accepted" {% if user.rules_accepted %} checked="checked" {% endif %} /> Akceptuję regulamin
+                        <input type="checkbox" name="rules_accepted" required {% if user.rules_accepted %} checked="checked" {% endif %} /> Akceptuję regulamin
                         </label>                        
                     </div>									
                     <button type="submit" class="btn btn-outline-secondary signIn my-4 w-50">Zarejestruj się!</button> 									
