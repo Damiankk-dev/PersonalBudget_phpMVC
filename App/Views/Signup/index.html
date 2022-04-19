@@ -2,46 +2,88 @@
 
 {% block title %}Login{% endblock %}
 
-{% block body %}
+{% block footer %}
 
-    
+	<script src="/js/hideShowPassword.min.js"></Script>
+	<script src="/js/site.js"></Script>	
 
+	<script>
+		
+		$(document).ready(function() {
+			$('#formSignup').validate({
+				rules: {
+					name: 'required',
+					email: {
+						required: true,
+						email: true,
+						remote: '/account/validate-email'
+						},
+					password: {
+						required: true,
+						minlength: 6,
+						validPassword: true
+					}
+				},
+				messages: {
+					email: {
+						remote: 'Adres email znajduje się już w bazie'
+					}
+				}
+			});
+			
+			/**
+			 * Show password toggle button
+			 */
+			$('#inputPassword').hideShowPassword({
+				show: false,
+				innerToggle: 'focus'
+			});
+		});	
+	</script>
+
+{% endblock %}
+
+{% block body %}   
 
 <div class="centralArea col-12">
     <div class="row">
         <div class="col-md-6 offset-md-3 fullColorBackground">
             <div class="d-block prosHeader">
+                <h1><i class="icon-gamepad prosIcon"></i>Rejestracja</h1>
+	
+                {% if user.errors is not empty %}
+                    <p>Popraw wskazane pola:</p>
+                    <ul>
+                        {% for error in user.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
                 <form method="post" action="/signup/create">
-                    <h1><i class="icon-gamepad prosIcon"></i>Rejestracja</h1>
                     <div class="input-group w-75 mx-auto">
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="icon-user"></i></div>
                         </div>
-                        <input name="username" class="form-control " id="username"  placeholder="Podaj imię"/>       
+                        <input name="username" class="form-control " id="inputUsername"  placeholder="Podaj imię" autofocus value="{{ user.name }}" required />       
                     </div>
                     <div class="input-group w-75 mx-auto">
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="icon-at"></i></div>
                         </div>
-                        <input name="email" type="email" class="form-control " id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Podaj email"/> 
+                        <input name="email" type="email" class="form-control " id="inputEmail" aria-describedby="emailHelp" placeholder="Podaj email"
+                        value="{{ user.email }}" required /> 
                     </div>
                     <div class="input-group w-75 mx-auto">
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="icon-lock"></i></div>
                         </div>
                         <label for="exampleInputPassword1"></label>
-                        <input name="password" type="password" class="form-control" id="password" placeholder="Hasło"/>		   
+                        <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Hasło"/>		   
                     </div>   
-                    <div class="input-group w-75 mx-auto">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text"><i class="icon-docs"></i></div>
-                        </div>
-                        <label for="exampleInputPassword2"></label>
-                        <input name="password2" type="password" class="form-control" id="exampleInputPassword2" placeholder="Powtórz hasło"/>  
-                    </div>  
                     <div class="w-75 mx-auto py-2">
                         <label>
-                        <input type="checkbox" name="rules"/> Akceptuję regulamin
+                        <input type="checkbox" name="rules_accepted" {% if user.rules_accepted %} checked="checked" {% endif %} /> Akceptuję regulamin
                         </label>                        
                     </div>									
                     <button type="submit" class="btn btn-outline-secondary signIn my-4 w-50">Zarejestruj się!</button> 									

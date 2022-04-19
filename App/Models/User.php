@@ -81,31 +81,35 @@ class User extends \Core\Model
     {
         //Name
         if ($this->username =='') {
-            $this->errors[] = 'Name is required';
+            $this->errors[] = 'Proszę podaj swoje imię';
         }
         
         //email
         if (filter_var($this->email, FILTER_VALIDATE_EMAIL) === false) {
-            $this->errors[] = 'Invalid email';
+            $this->errors[] = 'Nieprawidłowy adres email';
         }
         
         if (static::emailExists($this->email, $this->id ?? null)) {
-            $this->errors[] = 'email already taken';
+            $this->errors[] = 'Uzyty adres email znajduje się już w naszej bazie';
         }
         
         // Password	
         if (isset($this->password)) {
             if (strlen($this->password) < 6 ) {			
-                $this->errors[] = 'Password must contain at least 6 characters';
+                $this->errors[] = 'Hasło musi zawierać conajmniej 6 znaków';
             }
                 
             if (preg_match('/.*[a-z]+.*/i', $this->password) == 0 ) {			
-                $this->errors[] = 'Password needs at least one letter';
+                $this->errors[] = 'Hasło musi zawierać przynajmniej jedną literę';
             }
             
             if (preg_match('/.*\d+.*/i', $this->password) == 0 ) {			
-                $this->errors[] = 'Password needs at least one number';
+                $this->errors[] = 'Hasło musi zawierać przynajmniej jedną cyfrę';
             }
+        }
+        // Rules
+        if ( ! isset($this->rules_accepted)) {
+            $this->errors[] = 'Proszę o akceptację regulaminu';            
         }
     }
 
