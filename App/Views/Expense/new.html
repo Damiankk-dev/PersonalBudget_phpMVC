@@ -1,6 +1,48 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Expense{% endblock %}
+
+{% block footer %}
+
+	<script src="/js/site.js"></Script>	
+
+	<script>
+		
+		$(document).ready(function() {
+			$('#formExpense').validate({
+				rules: {
+					expense_amount: {
+						required: true,
+						validAmount: true
+						},
+					expense_date: {
+						required: true,
+						validDate: true
+						},
+          payment_method: {
+						required: true,
+            min: 1
+					},
+          expense_category: {
+						required: true,
+            min: 1
+					}
+				},
+				messages: {
+          expense_amount: {
+            required: "Proszę podać kwotę"
+          },            
+          expense_date: {
+            required: "Proszę podać datę"
+          },
+					payment_method: "Proszę wybrać metodę płatności",
+					expense_category: "Proszę wybrać kategorię"
+				}
+			});
+		});	
+	</script>
+
+{% endblock %}
 
 {% block body %}
     
@@ -14,18 +56,18 @@
     </div>
     <div class="row">
         <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
-          <form method="post" action="#">
+          <form method="post" action="/expenses/add" id="formExpense">
             <div class="input-group inputControl w-100">
                 <div class="input-group-prepend w-25">
                     <div class="input-group-text w-100 justify-content-center"><i class="icon-money"></i></div>
                 </div>
-                <input name="expense_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota">
+                <input name="expense_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required>
             </div>
             <div class="input-group inputControl w-100">
                 <div class="input-group-prepend w-25">
                   <label class="input-group-text w-100 justify-content-center"><span class="datePrependLabel">Data</span> <i class="icon-calendar"></i></label>
                 </div>
-                <input name="expense_date" type = "text" id = "datepicker-13" class="form-control datepicker">
+                <input name="expense_date" type = "text" id = "datepicker-13" class="form-control datepicker" required>
             </div>  
             <div class="input-group mb-3 inputControl w-100">
                 <div class="input-group-prepend w-25">
