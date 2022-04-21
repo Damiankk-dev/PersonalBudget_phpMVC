@@ -2,6 +2,43 @@
 
 {% block title %}Login{% endblock %}
 
+{% block footer %}
+
+	<script src="/js/site.js"></Script>	
+
+	<script>
+		
+		$(document).ready(function() {
+			$('#formIncome').validate({
+				rules: {
+					income_amount: {
+						required: true,
+						validAmount: true
+						},
+					income_date: {
+						required: true,
+						validDate: true
+						},
+          income_category: {
+						required: true,
+            min: 1
+					}
+				},
+				messages: {
+          income_amount: {
+            required: "Proszę podać kwotę"
+          },            
+          income_date: {
+            required: "Proszę podać datę"
+          },
+					income_category: "Proszę wybrać kategorię"
+				}
+			});
+		});	
+	</script>
+
+{% endblock %}
+
 {% block body %}
     
 <div class="centralArea">
@@ -14,7 +51,7 @@
   </div>
   <div class="row">
       <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
-        <form method="post" action="#">
+        <form method="post" action="/incomes/add" id="formIncome">
           <div class="input-group inputControl w-100">
               <div class="input-group-prepend w-25">
                   <div class="input-group-text w-100 justify-content-center"><i class="icon-money"></i></div>
@@ -43,7 +80,7 @@
               <div class="input-group-prepend w-25">
                 <div class="input-group-text w-100 justify-content-center"><i class="icon-edit"></i></div>
               </div>
-              <textarea id="income_comment" name="income_comment" rows="1" cols="50" class="form-control">Opisz swój przychód</textarea>
+              <textarea id="income_comment" name="income_comment" rows="1" cols="50" class="form-control" placeholder="Opisz swój przychód"></textarea>
           </div>
           <div class="buttonArea d-flex">
             <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-down-open"></i>Dodaj</button>
