@@ -42,6 +42,22 @@
 {% block body %}
     
 <div class="centralArea">
+
+  {% if income.errors is not empty %}
+  <div class="row">
+    <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground">
+      <p>Błędy:</p>
+      <ul>
+
+        {% for error in income.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
   <div class="row">
       <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground">
           <div class="d-block prosHeader">

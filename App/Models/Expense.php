@@ -103,14 +103,14 @@ class Expense extends \Core\Model
         //amount
         if (isset($this->expense_amount)) 
         {
-            if (preg_match('(?!^0*$)(?!^0*\.0*$)^\d*((\.\d{1,2})|(,\d{1,2}))?$', $this->expense_amount) == 0 ) {			
+            if (preg_match('/(?!^0*$)(?!^0*\.0*$)^\d*((\.\d{1,2})|(,\d{1,2}))?$/', $this->expense_amount) == 0 ) {			
                 $this->errors[] = 'Proszę podać kwotę w odpowiednim formacie z dokładnością do 2 miejsc po przecinku';
             }
         }
         //date
         if (isset($this->expense_date)) 
         {
-            if (preg_match('^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$', $this->expense_date) == 0 ) {			
+            if (preg_match('/^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$/', $this->expense_date) == 0 ) {			
                 $this->errors[] = 'Data powinna być w formacie YYYY-mm-dd';
             }
         }

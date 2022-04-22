@@ -35,11 +35,13 @@ class Expenses extends \Core\Controller
 		$expense = new Expense($_POST);
 		
 		if ($expense->save()) {
-			Flash::addMessage("Expense added");			
+			Flash::addMessage("Wydatek zapisany!");			
 			View::renderTemplate('Expense/new.html');
 		} else {
-			Flash::addMessage("Error", Flash::WARNING);		
-			View::renderTemplate('Expense/new.html');
+			Flash::addMessage("Wydatek nie został dodany", Flash::WARNING);		
+			View::renderTemplate('Expense/new.html', [
+				'expense' => $expense
+			]);
 		}
 
 	}

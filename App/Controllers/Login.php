@@ -76,7 +76,7 @@ class Login extends \Core\Controller
 	 */
 	public function showLogoutMessage()
 	{	
-		Flash::addMessage('Logout successful');
+		Flash::addMessage('Wylogowano z powodzeniem, zapraszam ponownie');
 		
 		static::redirect('/');
 	}

@@ -100,9 +100,17 @@
 					
 					{% endif %}
 				</div>
-			</nav>
+			</nav>			
+
 		</header>
         <div class="col-12 overflow-auto py-2 imageBackground">
+			
+			{% for message in flash_messages %}
+			<div class="col-8 offset-2 mt-2 alert alert-{{ message.type }} text-center">
+				{{ message.body }}
+			</div>
+			{% endfor %}
+
             <main>
 			
 				{% block body %}

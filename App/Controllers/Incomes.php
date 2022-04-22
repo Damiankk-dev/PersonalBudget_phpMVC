@@ -35,11 +35,13 @@ class Incomes extends \Core\Controller
 		$income = new Income($_POST);
 		
 		if ($income->save()) {
-			Flash::addMessage("Income added");			
+			Flash::addMessage("Przychód zapisany!");			
 			View::renderTemplate('Income/new.html');
 		} else {
-			Flash::addMessage("Error", Flash::WARNING);		
-			View::renderTemplate('Income/new.html');
+			Flash::addMessage("Przychód nie został dodany", Flash::WARNING);		
+			View::renderTemplate('Income/new.html', [
+                'income' => $income
+            ]);
 		}
 	}
 }
