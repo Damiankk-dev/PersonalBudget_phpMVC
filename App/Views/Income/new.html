@@ -72,13 +72,13 @@
               <div class="input-group-prepend w-25">
                   <div class="input-group-text w-100 justify-content-center"><i class="icon-money"></i></div>
               </div>
-              <input name="income_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota">
+              <input name="income_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" value = "{{ income.income_amount }}">
           </div>
           <div class="input-group inputControl w-100">
               <div class="input-group-prepend w-25">
                 <label class="input-group-text w-100 justify-content-center"><span class="datePrependLabel">Data</span> <i class="icon-calendar"></i></label>
               </div>
-              <input name="income_date" type = "text" id = "datepicker-13" class="form-control datepicker">
+              <input name="income_date" type = "text" id = "datepicker-13" class="form-control datepicker"  value = "{{ income.income_date }}">
           </div>  
           <div class="input-group mb-3 inputControl w-100">
               <div class="input-group-prepend w-25">
@@ -96,7 +96,7 @@
               <div class="input-group-prepend w-25">
                 <div class="input-group-text w-100 justify-content-center"><i class="icon-edit"></i></div>
               </div>
-              <textarea id="income_comment" name="income_comment" rows="1" cols="50" class="form-control" placeholder="Opisz swój przychód"></textarea>
+              <textarea id="income_comment" name="income_comment" rows="1" cols="50" class="form-control" placeholder="Opisz swój przychód">{{ income.income_comment }}</textarea>
           </div>
           <div class="buttonArea d-flex">
             <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-down-open"></i>Dodaj</button>

@@ -56,7 +56,7 @@
       <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground">
         <p>Błędy:</p>
         <ul>
-          
+
           {% for error in expense.errors %}
             <li>{{ error }}</li>
           {% endfor %}
@@ -81,13 +81,13 @@
                 <div class="input-group-prepend w-25">
                     <div class="input-group-text w-100 justify-content-center"><i class="icon-money"></i></div>
                 </div>
-                <input name="expense_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required>
+                <input name="expense_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required value="{{ expense.expense_amount }}">
             </div>
             <div class="input-group inputControl w-100">
                 <div class="input-group-prepend w-25">
                   <label class="input-group-text w-100 justify-content-center"><span class="datePrependLabel">Data</span> <i class="icon-calendar"></i></label>
                 </div>
-                <input name="expense_date" type = "text" id = "datepicker-13" class="form-control datepicker" required>
+                <input name="expense_date" type = "text" id = "datepicker-13" class="form-control datepicker" required value="{{ expense.expense_date }}">
             </div>  
             <div class="input-group mb-3 inputControl w-100">
                 <div class="input-group-prepend w-25">
@@ -134,7 +134,7 @@
                 <div class="input-group-prepend w-25">
                   <div class="input-group-text w-100 justify-content-center"><i class="icon-edit"></i></div>
                 </div>
-                <textarea id="expense_comment" name="expense_comment" rows="1" cols="50" class="form-control" placeholder="Opisz swój wydatek"></textarea>
+                <textarea id="expense_comment" name="expense_comment" rows="1" cols="50" class="form-control" placeholder="Opisz swój wydatek">{{ expense.expense_comment }}</textarea>
             </div>
             <div class="buttonArea d-flex">
               <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-up-open"></i>Dodaj</button>
