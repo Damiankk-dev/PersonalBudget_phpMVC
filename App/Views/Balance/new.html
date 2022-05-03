@@ -51,6 +51,13 @@
   <th>Wartość</th>
   <th>Data</th>
   <th>Opis</th>
+  {% for row in balance.incomes %}
+    <tr>
+      <td>{{ row.amount }}</td>
+      <td>{{ row.date_of_expense }}</td>
+      <td>{{ row.expense_comment }}</td>
+    </tr>
+  {% endfor %}
   </table>
               </div>								
               <div class="balance_footer_tile">
@@ -66,6 +73,13 @@
   <th>Wartość</th>
   <th>Data</th>
   <th>Opis</th>
+  {% for row in balance.expenses %}
+    <tr>
+      <td>{{ row.amount }}</td>
+      <td>{{ row.date_of_expense }}</td>
+      <td>{{ row.expense_comment }}</td>
+    </tr>
+  {% endfor %}
   </table>
               </div>								
               <div class="balance_footer_tile">

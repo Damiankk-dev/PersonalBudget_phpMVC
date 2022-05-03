@@ -23,11 +23,12 @@ class Balances extends \Core\Controller
     public function showAction()
     {
 		$balance = new Balance();
-        $debugMsg = $balance->getPeriod($this->route_params['type']);
-		if ($debugMsg)
+        $balance->show($this->route_params['type']);
+		if ($balance)
 		{
-			Flash::addMessage($debugMsg);
-			View::renderTemplate('Balance/new.html');
+			View::renderTemplate('Balance/new.html', [
+				'balance' => $balance
+			]);
 		} else {
 			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
 			View::renderTemplate('Balance/new.html');
