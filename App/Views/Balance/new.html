@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Expense{% endblock %}
+
+{% block footer %}
+
+	<script src="/js/site.js"></Script>	
+
+{% endblock %}
+
+{% block body %}
+
+
+    
+<div class="centralArea">
+
+  {% if expense.errors is not empty %}
+
+  <div class="row">
+    <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground">
+      <p>Błędy:</p>
+      <ul>
+
+        {% for error in expense.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+
+      </ul>
+    </div>
+  </div>
+
+  {% endif %}
+
+  <div class="row">
+    <div class="col-12 fullColorBackground">
+      <div class="d-block prosHeader">
+        <h1><i class="icon-chart-bar"></i>Twój bilans<i class="icon-chart-bar"></i></h1>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 fullColorBackground my-4 px-4 pb-3 d-flex justify-content-center">                          
+      <div class="main_wrapper_balance d-flex flex-column w-100">
+        <div class="container_cashflow_wrapper px-2 justify-content-around">
+          <div class="container_cashflow_col d-flex flex-column align-items-center">
+            <div class="balance_header_tile">
+              <h3>Przychody</h3>
+            </div>
+            <div id="registerArea" class=" my-1">
+            </div>                                
+          </div>
+          <div class="container_cashflow_col d-flex flex-column align-items-center">
+            <div class="balance_header_tile">
+              <h3>Wydatki</h3>
+            </div>
+            <div id="registerArea" class=" my-1">
+            </div>
+          </div>
+        </div>
+        <div class="container_balance_row d-flex flex-column px-2 align-items-center">
+          <div class="balance_header_tile">
+            <h3>Bilans</h3>
+          </div> 
+          <div id="registerArea" class=" my-1">
+          </div>                           
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="anyPeriodModal" tabindex="-1" role="dialog" aria-labelledby="anyPeriodModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="anyPeriodModalLabel">Zdefiniuj okres</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" >
+        <div class="input-group d-flex">
+            <label class=" justify-content-center">
+              <span class="datePrependLabel"></span><i class="icon-calendar"></i> Od:</label>
+          <div class="modal-body">
+            <input type="text" id="startBalancePeriod" class="form-control datepicker" data-toggle="datepicker">
+          </div> 
+        </div>
+        <div class="input-group d-flex">
+            <label class=" justify-content-center">
+              <span class="datePrependLabel"></span><i class="icon-calendar"></i> Do:</label>
+          <div class="modal-body">
+            <input type="text" id="endtBalancePeriod" class="form-control datepicker" data-toggle="datepicker">
+          </div> 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+        <button type="button" class="btn btn-primary">Wyświetl bilans</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
