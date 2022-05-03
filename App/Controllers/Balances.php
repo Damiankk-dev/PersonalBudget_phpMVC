@@ -27,10 +27,10 @@ class Balances extends \Core\Controller
 		if ($debugMsg)
 		{
 			Flash::addMessage($debugMsg);
-			View::renderTemplate('Expense/new.html');
+			View::renderTemplate('Balance/new.html');
 		} else {
 			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
-			View::renderTemplate('Expense/new.html');
+			View::renderTemplate('Balance/new.html');
 		}
     }
 }
