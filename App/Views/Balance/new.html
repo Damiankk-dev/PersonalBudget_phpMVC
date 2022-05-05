@@ -61,7 +61,7 @@
   </table>
               </div>								
               <div class="balance_footer_tile">
-                  <h5>SUMA: </h5>
+                  <h5>SUMA: {{ balance.incomes_sum }}</h5>
               </div>                               
             </div>
             <div class="container_cashflow_col d-flex flex-column align-items-center">
@@ -83,7 +83,7 @@
   </table>
               </div>								
               <div class="balance_footer_tile">
-                  <h5>SUMA:</h5>
+                  <h5>SUMA: {{ balance.expenses_sum }}</h5>
               </div>
             </div>
           </div>
@@ -92,10 +92,10 @@
                 <h3>Bilans</h3>
             </div> 
             <div class=" my-1">
-  <h5>SESSION['balance']</h5>
+  <h5>{{ balance.balance_value }}</h5>
             </div>  
             <div class=" my-1">
-  <h6>SESSION['balance_status']</h6>
+  <h6>{{ balance.status }}</h6>
             </div>                           
           </div>
         </div>

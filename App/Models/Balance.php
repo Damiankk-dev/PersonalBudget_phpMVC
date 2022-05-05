@@ -84,6 +84,14 @@ class Balance extends \Core\Model
         $user = Auth::getUser();
         $this->expenses = $this->getExpensesById($user->id);
         $this->incomes = $this->getIncomesById($user->id);
+        $this->incomes_sum = $this->getIncomeSumById($user->id);
+        $this->expenses_sum = $this->getExpenseSumById($user->id);
+        $this->balance_value = $this->incomes_sum - $this->expenses_sum;
+        if ($this->balance_value > 0){
+            $this->status = "Gratulacje! W tym okresie udało Ci się zaoszczędzić pieniądze!";
+        } else {
+            $this->status = "Uwaga! W tym okresie Twoje wydatki przerosły przychody!";
+        }
     }
 
     /**
@@ -156,7 +164,6 @@ class Balance extends \Core\Model
         }
     }
 
-
     /**
      * Gets balance's period based on a chosen type
      *
@@ -189,33 +196,65 @@ class Balance extends \Core\Model
         $chosen_period = [$end_date, $start_date];
         return $chosen_period;
     }
-    /*
+
+    /**
+     * Calculates sum of incomes assigned to user's id
+     * 
+     * @param int $user_id CHosen user's id
+     * 
+     * @return mixed double sum of chosen's user incomes if no error false otherwise
+     */
+    public function getIncomeSumById($user_id){     
+        if($chosen_period = $this->getPeriod())
+        {
+            $sql = 'SELECT SUM(amount) AS sum FROM incomes 
+                        WHERE 
+                        user_id = :user_id
+                        AND 
+                        date_of_income BETWEEN :start_date AND :end_date';
+            $db = static::getDB();
+            if ($db !== null ) 
+            {
+                $stmt = $db->prepare($sql);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $stmt->bindParam(':start_date', 
+                                    $chosen_period[1], PDO::PARAM_STR);
+                $stmt->bindParam(':end_date', 
+                                    $chosen_period[0], PDO::PARAM_STR);                
+		        $stmt->execute();
+                return current($stmt->fetch());
+            }
+        }
+    }
+
+    /**
+     * Calculates sum of incomes assigned to user's id
+     * 
+     * @param int $user_id CHosen user's id
+     * 
+     * @return mixed double sum of chosen's user incomes if no error false otherwise
+     */
+    public function getExpenseSumById($user_id){     
+        if($chosen_period = $this->getPeriod())
+        {
+            $sql = 'SELECT SUM(amount) AS sum FROM expenses 
+                        WHERE 
+                        user_id = :user_id
+                        AND 
+                        date_of_expense BETWEEN :start_date AND :end_date';
+            $db = static::getDB();
+            if ($db !== null ) 
+            {
+                $stmt = $db->prepare($sql);
+                $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+                $stmt->bindParam(':start_date', 
+                                    $chosen_period[1], PDO::PARAM_STR);
+                $stmt->bindParam(':end_date', 
+                                    $chosen_period[0], PDO::PARAM_STR);                
+		        $stmt->execute();
+                return current($stmt->fetch());
+            }
+        }
+    }
     
-					case "Actual_month":
-						$end_date = date('Y-m-d');
-						$start_date = date('Y-m-01');						
-						break;				
-					case "Previous_month":
-						$end_date = date('Y-m-d', strtotime('last day of previous month'));
-						$start_date = date('Y-m-d', strtotime('first day of previous month'));
-						break;
-					case "Actual_year":
-						$end_date = date('Y-m-d');
-						$start_date = date('Y-m-d', mktime(0, 0, 0, 1, 1, date('Y')));
-						break;
-					case "Custom":
-						if (isset($_POST['endBalancePeriod']) && 
-							isset($_POST['startBalancePeriod'])){
-							$end_date = $_POST['endBalancePeriod'];
-							$start_date = $_POST['startBalancePeriod'];
-							if ($start_date > $end_date){
-								$start_date = $date_zero;
-								$end_date = $date_zero;
-								echo "</br>Invalid date!";
-							}	
-						}						
-						break;	
-					default:
-						echo "Invalid query";
-    */
 }
