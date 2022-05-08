@@ -12,29 +12,8 @@ use PDO;
  *
  * PHP version 7.0
  */
-class Income extends \Core\Model
-{
-	/**
-	 * Error messages
-	 * 
-	 * @var array
-	 */
-	public $errors = [];
-    
-    /**
-     * Class constructor
-     *
-     * @param array $data  Initial property values
-     *
-     * @return void
-     */
-    public function __construct($data = [])
-    {
-        foreach ($data as $key => $value){
-            $this->$key = $value;
-        };
-    }
-   
+class Income extends Cashflow
+{   
     /**
      * Save the expense model with the current property values
      *
@@ -44,6 +23,10 @@ class Income extends \Core\Model
     {
         $this->validate();
         $user = Auth::getUser();
+        foreach ($this->errors as $key => $error_value)
+        {
+            if (empty($error_value)) unset($this->errors[$key]);
+        }
         if (empty($this->errors)) 
         {
             $sql = 'INSERT INTO incomes (
@@ -87,23 +70,16 @@ class Income extends \Core\Model
     public function validate()
     {
         //Category
-        if ($this->income_category == 0)
-        {
-            $this->errors[] = 'Proszę wybrać kategorię';
-        }
+        $this->errors[] = $this->validateCategory($this->income_category);
         //amount
         if (isset($this->income_amount)) 
         {
-            if (preg_match('/(?!^0*$)(?!^0*\.0*$)^\d*((\.\d{1,2})|(,\d{1,2}))?$/', $this->income_amount) == 0 ) {			
-                $this->errors[] = 'Proszę podać kwotę w odpowiednim formacie z dokładnością do 2 miejsc po przecinku';
-            }
+            $this->errors[] = $this->validateAmount($this->income_amount);
         }
         //date
         if (isset($this->income_date)) 
         {
-            if (preg_match('/^(\d{4})\D?(0[1-9]|1[0-2])\D?([12]\d|0[1-9]|3[01])$/', $this->income_date) == 0 ) {			
-                $this->errors[] = 'Data powinna być w formacie YYYY-mm-dd';
-            }
+            $this->errors[] = $this->validateDate($this->income_date);
         }
     }
 }
