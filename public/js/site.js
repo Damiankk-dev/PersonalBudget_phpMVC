@@ -1,3 +1,4 @@
+
 /**
  * Add jQuery Validation plugin method for a valid password
  *
@@ -52,17 +53,19 @@ function(value, element, param) {
 },
 'Data powinna być w formacie YYYY-mm-dd'
 );
-/* 
+
+
 $(document).ready(function() {
 });
 
-$(function() {
+$(document).ready(function() {
     $( ".datepicker" ).datepicker(
-		{
-			dateFormat: "yy-mm-dd"
-		}
-	);
+               {
+                       dateFormat: "yy-mm-dd"
+               }
+       );
  });
  $(document).ready(function(){
-    $("#datepicker-13").datepicker().datepicker('setDate', new Date());	
- }); */
+    $("#datepicker-13").datepicker().datepicker('setDate', new Date());
+ }); 
+
