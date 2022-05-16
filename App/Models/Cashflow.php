@@ -60,7 +60,6 @@ class Cashflow extends \Core\Model
             return 'Proszę wybrać metodę płatności';
         }
     }
-    
 
     /**
      * Gets expenses based on user ID and demended of a chosen period
@@ -121,4 +120,37 @@ class Cashflow extends \Core\Model
         }
     }
 
+    /**
+     * Gets cashflow with categories based on user ID and demended of a chosen period
+     *
+     * @param int $user_id Authenticated user id
+     *
+     * @return mixed Expenses array if no error false otherwise
+     */
+    static function getByIdCategory($user_id, $cashflow_type, $chosen_period)
+    {
+        $sql = 'SELECT
+                    e.*, c.name FROM '. $cashflow_type .'s e
+                NATURAL JOIN '. $cashflow_type .'s_category_assigned_to_users c
+                WHERE
+                    user_id = :user_id
+                AND
+                    date_of_'. $cashflow_type .' BETWEEN :start_date AND :end_date';
+
+        $db = static::getDB();
+        if ($db !== null )
+        {
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':start_date',
+                                $chosen_period[1], PDO::PARAM_STR);
+            $stmt->bindParam(':end_date',
+                                $chosen_period[0], PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        $this->errors[] = 'Null database!';
+        return false;
+    }
 }

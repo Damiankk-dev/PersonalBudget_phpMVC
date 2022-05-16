@@ -83,8 +83,8 @@ class Balance extends \Core\Model
     {
         $this->type = $type;
         $user = Auth::getUser();
-        $this->incomes = Cashflow::getById($user->id, 'income', $this->getPeriod());
-        $this->expenses = Cashflow::getById($user->id, 'expense', $this->getPeriod());
+        $this->incomes = Cashflow::getByIdCategory($user->id, 'income', $this->getPeriod());
+        $this->expenses = Cashflow::getByIdCategory($user->id, 'expense', $this->getPeriod());
         $this->incomes_sum = Cashflow::getSumById($user->id, 'income', $this->getPeriod());
         $this->expenses_sum = Cashflow::getSumById($user->id, 'expense', $this->getPeriod());
         $this->balance_value = $this->incomes_sum - $this->expenses_sum;

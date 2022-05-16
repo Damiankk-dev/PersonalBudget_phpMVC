@@ -47,19 +47,21 @@
                   <h3>Przychody</h3>
               </div>
               <div class="cashflow_table_wrap my-1">
-  <table  class="income_table cashflow_table">
-  <th>Wartość</th>
-  <th>Data</th>
-  <th>Opis</th>
-  {% for row in balance.incomes %}
-    <tr>
-      <td>{{ row.amount }}</td>
-      <td>{{ row.date_of_income }}</td>
-      <td>{{ row.income_comment }}</td>
-    </tr>
-  {% endfor %}
-  </table>
-              </div>								
+                <table  class="income_table cashflow_table">
+                  <th>Wartość</th>
+                  <th>Data</th>
+                  <th>Kategoria</th>
+                  <th>Opis</th>
+                  {% for row in balance.incomes %}
+                    <tr>
+                      <td>{{ row.amount }}</td>
+                      <td>{{ row.date_of_income }}</td>
+                      <td>{{ row.name }}</td>
+                      <td>{{ row.income_comment }}</td>
+                    </tr>
+                  {% endfor %}
+                </table>
+              </div>
               <div class="balance_footer_tile">
                   <h5>SUMA: {{ balance.incomes_sum }}</h5>
               </div>                               
@@ -69,19 +71,21 @@
                   <h3>Wydatki</h3>
               </div>
               <div class="cashflow_table_wrap my-1">
-  <table  class="expense_table cashflow_table">
-  <th>Wartość</th>
-  <th>Data</th>
-  <th>Opis</th>
-  {% for row in balance.expenses %}
-    <tr>
-      <td>{{ row.amount }}</td>
-      <td>{{ row.date_of_expense }}</td>
-      <td>{{ row.expense_comment }}</td>
-    </tr>
-  {% endfor %}
-  </table>
-              </div>								
+                <table  class="expense_table cashflow_table">
+                  <th>Wartość</th>
+                  <th>Data</th>
+                  <th>Kategoria</th>
+                  <th>Opis</th>
+                  {% for row in balance.expenses %}
+                    <tr>
+                      <td>{{ row.amount }}</td>
+                      <td>{{ row.date_of_expense }}</td>
+                      <td>{{ row.name }}</td>
+                      <td>{{ row.expense_comment }}</td>
+                    </tr>
+                  {% endfor %}
+                </table>
+              </div>
               <div class="balance_footer_tile">
                   <h5>SUMA: {{ balance.expenses_sum }}</h5>
               </div>

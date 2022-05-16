@@ -31,7 +31,7 @@ class Expense extends Cashflow
         {
             $sql = 'INSERT INTO expenses (
                 user_id, 
-                expense_category_assigned_to_user, 
+                expense_category_id,
                 payment_method_assigned_to_user, 
                 amount, 
                 date_of_expense, 
