@@ -87,6 +87,8 @@ class Balance extends \Core\Model
         $this->expenses = Cashflow::getByIdCategory($user->id, 'expense', $this->getPeriod());
         $this->incomes_sum = Cashflow::getSumById($user->id, 'income', $this->getPeriod());
         $this->expenses_sum = Cashflow::getSumById($user->id, 'expense', $this->getPeriod());
+        $this->incomes_categories = Cashflow::categorySum($user->id, 'income', $this->getPeriod());
+        $this->expenses_categories = Cashflow::categorySum($user->id, 'expense', $this->getPeriod());
         $this->balance_value = $this->incomes_sum - $this->expenses_sum;
         if ($this->balance_value > 0){
             $this->status = "Gratulacje! W tym okresie udało Ci się zaoszczędzić pieniądze!";

@@ -180,7 +180,7 @@
 }
 .cashflow_table_wrap{	
 	overflow-y: auto;
-	height: 30vh;
+	min-height: 15vh;
 }
 .main_wrapper_balance{
 	overflow-y: auto;

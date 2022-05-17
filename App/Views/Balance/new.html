@@ -5,6 +5,59 @@
 {% block footer %}
 
 	<script src="/js/site.js"></Script>	
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var incomesData = $('.js-balance-incomes').data('balanceIncomes');
+        var arrayLenght = incomesData.length;
+        var incomeData = [["Name", "Amount"]];
+        for (var i = 0; i < arrayLenght; i++){
+          var innerTable = [incomesData[i].name, parseFloat(incomesData[i].categorySum)]
+          incomeData.push(innerTable);
+        }
+        var data = google.visualization.arrayToDataTable(incomeData);
+
+        var options = {
+          title: 'Incomes'
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart-incomes'));
+
+        chart.draw(data, options);
+      }
+
+    </script>
+
+    <script type="text/javascript">
+
+
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+
+  var expensesData = $('.js-balance-expenses').data('balanceExpenses');
+  var arrayLenght = expensesData.length;
+  var expenseData = [["Name", "Amount"]];
+  for (var i = 0; i < arrayLenght; i++){
+    var innerTable = [expensesData[i].name, parseFloat(expensesData[i].categorySum)]
+    expenseData.push(innerTable);
+  }
+  var data = google.visualization.arrayToDataTable(expenseData);
+  var options = {
+    title: 'Expenses'
+  };
+
+  var chart = new google.visualization.PieChart(document.getElementById('piechart-expenses'));
+
+  chart.draw(data, options);
+}
+
+  </script>
 
 {% endblock %}
 
@@ -62,6 +115,9 @@
                   {% endfor %}
                 </table>
               </div>
+              <div class="js-balance-incomes" data-balance-incomes="{{ balance.incomes_categories|json_encode }}">
+                <div id="piechart-incomes"></div>
+              </div>
               <div class="balance_footer_tile">
                   <h5>SUMA: {{ balance.incomes_sum }}</h5>
               </div>                               
@@ -85,6 +141,9 @@
                     </tr>
                   {% endfor %}
                 </table>
+              </div>
+              <div class="js-balance-expenses" data-balance-expenses="{{ balance.expenses_categories|json_encode }}">
+                <div id="piechart-expenses"></div>
               </div>
               <div class="balance_footer_tile">
                   <h5>SUMA: {{ balance.expenses_sum }}</h5>
