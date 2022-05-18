@@ -72,17 +72,32 @@ class Balance extends \Core\Model
 	public $type = 'any';
 
     /**
+     * Class constructor
+     *
+     * @param array $data  Initial property values
+     *
+     * @return void
+     */
+    public function __construct($data = [])
+    {
+        foreach ($data as $key => $value){
+            $this->$key = $value;
+        };
+    }
+
+    /**
      * Show balance 
      * 
      * @param string $type  A type of chosen balance
      *
      * @return void 
      */
-   
     public function show($type)
     {
         $this->type = $type;
         $user = Auth::getUser();
+        var_dump($this->endBalancePeriod);
+        var_dump($this->startBalancePeriod);
         $this->incomes = Cashflow::getByIdCategory($user->id, 'income', $this->getPeriod());
         $this->expenses = Cashflow::getByIdCategory($user->id, 'expense', $this->getPeriod());
         $this->incomes_sum = Cashflow::getSumById($user->id, 'income', $this->getPeriod());
@@ -123,6 +138,9 @@ class Balance extends \Core\Model
                 break;
             
             case $this::ANY:
+                $end_date = $this->endBalancePeriod;
+                $start_date = $this->startBalancePeriod;
+                break;
             default:
                 return false;
         }        

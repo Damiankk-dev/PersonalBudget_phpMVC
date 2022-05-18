@@ -4,7 +4,7 @@
 
 {% block footer %}
 
-	<script src="/js/site.js"></Script>	
+	<script src="/js/site.js"></Script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
       google.charts.load('current', {'packages':['corechart']});
@@ -64,7 +64,7 @@ function drawChart() {
 {% block body %}
 
 
-    
+
 <div class="centralArea">
 
   {% if expense.errors is not empty %}
@@ -92,7 +92,7 @@ function drawChart() {
     </div>
   </div>
   <div class="row">
-      <div class="col-12 fullColorBackground my-4 px-4 pb-3 d-flex justify-content-center">                          
+      <div class="col-12 fullColorBackground my-4 px-4 pb-3 d-flex justify-content-center">
         <div class="main_wrapper_balance d-flex flex-column w-100">
           <div class="container_cashflow_wrapper px-2 justify-content-around">
             <div class="container_cashflow_col d-flex flex-column align-items-center">
@@ -120,7 +120,7 @@ function drawChart() {
               </div>
               <div class="balance_footer_tile">
                   <h5>SUMA: {{ balance.incomes_sum }}</h5>
-              </div>                               
+              </div>
             </div>
             <div class="container_cashflow_col d-flex flex-column align-items-center">
               <div class="balance_header_tile">
@@ -153,13 +153,13 @@ function drawChart() {
           <div class="container_balance_row d-flex flex-column px-2 align-items-center">
             <div class="balance_header_tile">
                 <h3>Bilans</h3>
-            </div> 
+            </div>
             <div class=" my-1">
   <h5>{{ balance.balance_value }}</h5>
-            </div>  
+            </div>
             <div class=" my-1">
   <h6>{{ balance.status }}</h6>
-            </div>                           
+            </div>
           </div>
         </div>
       </div>

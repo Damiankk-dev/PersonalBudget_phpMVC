@@ -31,7 +31,7 @@ class Income extends Cashflow
         {
             $sql = 'INSERT INTO incomes (
                 user_id, 
-                income_category_assigned_to_user, 
+                income_category_id,
                 amount, 
                 date_of_income, 
                 income_comment)

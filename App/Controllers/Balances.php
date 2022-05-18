@@ -22,7 +22,7 @@ class Balances extends \Core\Controller
      */
     public function showAction()
     {
-		$balance = new Balance();
+		$balance = new Balance($_POST);
         $balance->show($this->route_params['type']);
 		if ($balance)
 		{

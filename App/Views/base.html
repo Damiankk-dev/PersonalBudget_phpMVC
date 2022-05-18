@@ -61,7 +61,7 @@
 										<a class="dropdown-item" href="/balances/show/actual">Bieżący miesiąc</a>
 										<a class="dropdown-item" href="/balances/show/previous">Poprzedni miesiąc</a>
 										<a class="dropdown-item" href="/balances/show/last-year">Bieżący rok</a>
-										<a class="dropdown-item" href="/balances/show/any">Dowolny okres</a>
+										<a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#anyPeriodModal">Dowolny okres</a>
 									</div>
 								  </div>
 								</li>
@@ -116,6 +116,40 @@
 				{% block body %}
 				{% endblock %}
 
+				<div class="modal fade" id="anyPeriodModal" tabindex="-1" role="dialog" aria-labelledby="anyPeriodModalLabel">
+					<div class="modal-dialog" role="document">
+					  <div class="modal-content">
+						<div class="modal-header">
+						  <h5 class="modal-title" id="anyPeriodModalLabel">Zdefiniuj okres</h5>
+						  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						  </button>
+						</div>
+						<form action="/balances/show/any" method="post">
+						  <div class="modal-body">
+							<div class="input-group d-flex">
+							  <label class=" justify-content-center">
+								<span class="datePrependLabel"></span><i class="icon-calendar"></i> Od:</label>
+							  <div class="modal-body">
+								<input type="text" name="startBalancePeriod" class="form-control datepicker" data-toggle="datepicker">
+							  </div>
+							</div>
+							<div class="input-group d-flex">
+							  <label class=" justify-content-center">
+								<span class="datePrependLabel"></span><i class="icon-calendar"></i> Do:</label>
+							  <div class="modal-body">
+								<input type="text" name="endBalancePeriod" class="form-control datepicker" data-toggle="datepicker">
+							  </div>
+							</div>
+						  </div>
+						  <div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
+							<button type="submit" class="btn btn-primary">Wyświetl bilans</button>
+						  </div>
+						</form>
+					  </div>
+					</div>
+				</div>
             </main>
 		</div>
 	</div>
