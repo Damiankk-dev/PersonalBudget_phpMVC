@@ -96,8 +96,6 @@ class Balance extends \Core\Model
     {
         $this->type = $type;
         $user = Auth::getUser();
-        var_dump($this->endBalancePeriod);
-        var_dump($this->startBalancePeriod);
         $this->incomes = Cashflow::getByIdCategory($user->id, 'income', $this->getPeriod());
         $this->expenses = Cashflow::getByIdCategory($user->id, 'expense', $this->getPeriod());
         $this->incomes_sum = Cashflow::getSumById($user->id, 'income', $this->getPeriod());

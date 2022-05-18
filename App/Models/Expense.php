@@ -32,7 +32,7 @@ class Expense extends Cashflow
             $sql = 'INSERT INTO expenses (
                 user_id, 
                 expense_category_id,
-                payment_method_assigned_to_user, 
+                payment_method_id,
                 amount, 
                 date_of_expense, 
                 expense_comment)
@@ -86,5 +86,9 @@ class Expense extends Cashflow
         {
             $this->errors[] = $this->validateDate($this->expense_date);
         }
-    }   
+    }
+
+    /**
+     *
+     */
 }

@@ -131,12 +131,14 @@ function drawChart() {
                   <th>Wartość</th>
                   <th>Data</th>
                   <th>Kategoria</th>
+                  <th>Metoda płatności</th>
                   <th>Opis</th>
                   {% for row in balance.expenses %}
                     <tr>
                       <td>{{ row.amount }}</td>
                       <td>{{ row.date_of_expense }}</td>
                       <td>{{ row.name }}</td>
+                      <td>{{ row.method_name }}</td>
                       <td>{{ row.expense_comment }}</td>
                     </tr>
                   {% endfor %}

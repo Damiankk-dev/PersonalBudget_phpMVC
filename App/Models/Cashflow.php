@@ -129,14 +129,17 @@ class Cashflow extends \Core\Model
      */
     static function getByIdCategory($user_id, $cashflow_type, $chosen_period)
     {
+        $payment_method_query_join = $cashflow_type == "expense" ? "INNER JOIN payment_methods_assigned_to_users m on e.payment_method_id = m.payment_method_id " : "";
+        $payment_method_query_column = $cashflow_type == "expense" ? ", m.name AS method_name " : "";
         $sql = 'SELECT
-                    e.*, c.name FROM '. $cashflow_type .'s e
-                NATURAL JOIN '. $cashflow_type .'s_category_assigned_to_users c
+                    e.*, c.name'. $payment_method_query_column .' FROM '. $cashflow_type .'s e
+                INNER JOIN '. $cashflow_type .'s_category_assigned_to_users c
+                    on e.'. $cashflow_type .'_category_id = c.'. $cashflow_type .'_category_id
+                '. $payment_method_query_join .'
                 WHERE
-                    user_id = :user_id
+                    e.user_id = :user_id
                 AND
                     date_of_'. $cashflow_type .' BETWEEN :start_date AND :end_date';
-
         $db = static::getDB();
         if ($db !== null )
         {
