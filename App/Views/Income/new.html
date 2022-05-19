@@ -72,19 +72,19 @@
               <div class="input-group-prepend w-25">
                   <div class="input-group-text w-100 justify-content-center"><i class="icon-money"></i></div>
               </div>
-              <input name="income_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" value = "{{ income.income_amount }}">
+              <input name="income_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required value = "{{ income.income_amount }}">
           </div>
           <div class="input-group inputControl w-100">
               <div class="input-group-prepend w-25">
                 <label class="input-group-text w-100 justify-content-center"><span class="datePrependLabel">Data</span> <i class="icon-calendar"></i></label>
               </div>
-              <input name="income_date" type = "text" id = "datepicker-13" class="form-control datepicker"  value = "{{ income.income_date }}">
+              <input name="income_date" type = "text" id = "datepicker-13" class="form-control datepicker" required value = "{{ income.income_date }}">
           </div>  
           <div class="input-group mb-3 inputControl w-100">
               <div class="input-group-prepend w-25">
                 <div class="input-group-text w-100 justify-content-center"><i class="icon-th"></i></div>
               </div>
-              <select name="income_category" class="form-select" onfocus='this.size=2;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+              <select name="income_category" class="form-select" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                 <option selected>Kategoria</option>
                 <option value="1">Wynagrodzenie</option>
                 <option value="2">Odsetki bankowe</option>

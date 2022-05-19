@@ -115,7 +115,7 @@
 			
 				{% block body %}
 				{% endblock %}
-
+				{% if current_user %}
 				<div class="modal fade" id="anyPeriodModal" tabindex="-1" role="dialog" aria-labelledby="anyPeriodModalLabel">
 					<div class="modal-dialog" role="document">
 					  <div class="modal-content">
@@ -131,14 +131,14 @@
 							  <label class=" justify-content-center">
 								<span class="datePrependLabel"></span><i class="icon-calendar"></i> Od:</label>
 							  <div class="modal-body">
-								<input type="text" name="startBalancePeriod" class="form-control datepicker" data-toggle="datepicker">
+								<input type="text" name="startBalancePeriod" class="form-control datepicker" data-toggle="datepicker" required>
 							  </div>
 							</div>
 							<div class="input-group d-flex">
 							  <label class=" justify-content-center">
 								<span class="datePrependLabel"></span><i class="icon-calendar"></i> Do:</label>
 							  <div class="modal-body">
-								<input type="text" name="endBalancePeriod" class="form-control datepicker" data-toggle="datepicker">
+								<input type="text" name="endBalancePeriod" class="form-control datepicker" data-toggle="datepicker" required>
 							  </div>
 							</div>
 						  </div>
@@ -150,6 +150,7 @@
 					  </div>
 					</div>
 				</div>
+				{% endif %}
             </main>
 		</div>
 	</div>
