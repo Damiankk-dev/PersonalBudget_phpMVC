@@ -1,0 +1,47 @@
+array(2) {
+    [
+        0
+    ]=> array(9) {
+        [
+            "id"
+        ]=> string(2) "33" [
+            "user_id"
+        ]=> string(2) "13" [
+            "expense_category_id"
+        ]=> string(1) "2" [
+            "payment_method_id"
+        ]=> string(1) "1" [
+            "amount"
+        ]=> string(7) "1000.00" [
+            "date_of_expense"
+        ]=> string(10) "2022-05-17" [
+            "expense_comment"
+        ]=> string(4) "Okno" [
+            "name"
+        ]=> string(10) "Mieszkanie" [
+            "method_name"
+        ]=> string(8) "Gotówka"
+    } [
+        1
+    ]=> array(9) {
+        [
+            "id"
+        ]=> string(2) "34" [
+            "user_id"
+        ]=> string(2) "13" [
+            "expense_category_id"
+        ]=> string(1) "9" [
+            "payment_method_id"
+        ]=> string(1) "2" [
+            "amount"
+        ]=> string(7) "4000.00" [
+            "date_of_expense"
+        ]=> string(10) "2022-05-17" [
+            "expense_comment"
+        ]=> string(10) "Nie ważne" [
+            "name"
+        ]=> string(8) "Rozrywka" [
+            "method_name"
+        ]=> string(15) "Karta kredytowa"
+    }
+} string(7) "5349.00"
