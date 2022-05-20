@@ -39,6 +39,11 @@ class Login extends \Core\Controller
 		if ($user)
 		{
 			Auth::login($user, $remember_me);
+
+			if ( !($user->prepareUserAtFirstLogin()) )
+			{
+				Flash::addMessage('Inicjalizacja użytkownika nieudana, niektóre funkcje mogą nie działać poprawnie, skontaktuj się z administratorem!', Flash::WARNING);
+			}
 			
 			Flash::addMessage('Logowanie powiodło się!');
 			

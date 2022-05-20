@@ -183,6 +183,7 @@ class User extends \Core\Model
 		$hashed_token = $token->getHash();
 			$sql = 'UPDATE users
 					SET is_active = 1, 
+                    first_login = 1,
 					activation_hash = null
 					WHERE activation_hash = :hashed_token';
 				
@@ -277,5 +278,127 @@ class User extends \Core\Model
         $db = static::getDB();
         $stmt = $db->query('SELECT id, username FROM users');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Inserts default users settings into individual params table
+     *
+     * @return boolean True if all settings iserted correctly flase otherwise
+     */
+    private function saveDefaultSettings()
+    {
+        $sql = 'INSERT INTO payment_methods_assigned_to_users VALUES ';
+        $sql = $this->concatenateParamsIntoSeparateValues($sql, 'payment_methods_default');
+
+        $sql .= 'INSERT INTO expenses_category_assigned_to_users VALUES ';
+        $sql = $this->concatenateParamsIntoSeparateValues($sql, 'expenses_category_default');
+
+        $sql .= 'INSERT INTO incomes_category_assigned_to_users VALUES ';
+        $sql = $this->concatenateParamsIntoSeparateValues($sql, 'incomes_category_default');
+
+        var_dump($sql);
+		$db = static::getDB();
+        if ($db !== null ) {
+            $stmt = $db->prepare($sql);
+            return $stmt->execute();
+        }
+        $this->errors[] = 'Null database!';
+
+        return false;
+    }
+
+    /**
+     * Get default params assigned to user
+     *
+     * @param string $table_name parameter's table name
+     *
+     * @return mixed Array with default params if no db errors false otherwise
+     */
+    private function getDefaultParams($table_name)
+    {
+        $db = static::getDB();
+        $stmt = $db->query('SELECT * FROM '. $table_name);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Replace first from the left occurrence of searched string
+     *
+     * @param string $search searched string
+     * @param string $replace string to replace
+     * @param string $subject string with removed piece
+     *
+     * @return string input value with changed last occurrence of search part or not changed input value otherwise
+     */
+    private function str_lreplace($search, $replace, $subject)
+    {
+        $pos = strrpos($subject, $search);
+
+        if($pos !== false)
+        {
+            $subject = substr_replace($subject, $replace, $pos, strlen($search));
+        }
+
+        return $subject;
+    }
+
+    /**
+     * Creates arrays of input values in order corresponding to schema (id, user_id, param_name)
+     *
+     * @param string $query 'INSERT' part of query
+     * @param string $params_table Name of table which includes default values of parameters
+     *
+     * @return string Complete INSERT query with VALUES (rows to insert)
+     */
+    private function concatenateParamsIntoSeparateValues($query, $params_table)
+    {
+        $params = $this->getDefaultParams($params_table);
+
+        foreach ($params as $row)
+        {
+            $query .= '('. $row['id'] . ', ' . $this->id . ', \'' .  $row['name'] . '\'),';
+        }
+        $query = $this->str_lreplace(',', ';', $query);
+
+        return $query;
+    }
+
+    /**
+     * Removes is_first_login flag from users table
+     *
+     * @return void
+     */
+    private function removeFirstLoginFlag()
+    {
+        $sql = 'UPDATE users
+                SET is_first_login = 0
+                WHERE id = :user_id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':user_id', $this->id, PDO::PARAM_INT);
+
+        $stmt->execute();
+    }
+
+    /**
+     * Initialize default settings of cashflow parameters ( payment methods, categories etc. )
+     *
+     * @return boolean True if database updated correctly, false otherwise
+     */
+    public function prepareUserAtFirstLogin()
+    {
+        if ($this->is_first_login) {
+            $this->saveDefaultSettings();
+            if (empty($this->errors)) {
+                $this->removeFirstLoginFlag();
+                return true;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }
