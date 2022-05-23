@@ -12,6 +12,12 @@
             <div class="d-block prosHeader">
                 <form action="/login/create" method="post">
                 <h1><i class="icon-flight prosIcon"></i>Logowanie</h1>
+
+                {% if error is not empty %}
+                    <h4>Coś poszło nie tak:</h4>
+                        <p>{{ error }}</p>
+                {% endif %}
+
                 <div class="input-group w-75 mx-auto">
                     <div class="input-group-prepend">
                         <div class="input-group-text"><i class="icon-at"></i></div>

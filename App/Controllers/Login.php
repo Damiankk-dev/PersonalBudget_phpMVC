@@ -24,7 +24,7 @@ class Login extends \Core\Controller
     {
         View::renderTemplate('Login/index.html');
     }
-	
+
 	/**
 	 * Log in a new user
 	 *
@@ -34,8 +34,8 @@ class Login extends \Core\Controller
 	{
 		$user = User::authenticate($_POST['email'], $_POST['password']);
 		$remember_me = isset($_POST['remember_me']);
-		
-		
+
+
 		if ($user)
 		{
 			Auth::login($user, $remember_me);
@@ -44,22 +44,25 @@ class Login extends \Core\Controller
 			{
 				Flash::addMessage('Inicjalizacja użytkownika nieudana, niektóre funkcje mogą nie działać poprawnie, skontaktuj się z administratorem!', Flash::WARNING);
 			}
-			
+
 			Flash::addMessage('Logowanie powiodło się!');
-			
+
 			$this->redirect(Auth::getReturnToPage());
 		}
-		else 
+		else
 		{
 			Flash::addMessage('Logowanie nieudane, spróbuj jeszcze raz!', Flash::WARNING);
-			
+
+			$error = 'Użytkownik przypisany do adresu: '. $_POST['email'] .' nie istnieje lub jest jeszcze nie aktywny';
+
 			View::renderTemplate('Login/index.html', [
+				'error' => $error,
 				'email' => $_POST['email'],
 				'remember_me' => $remember_me
 				]);
 		}
 	}
-	
+
 	/**
 	 * Log out a user
 	 *
@@ -67,11 +70,11 @@ class Login extends \Core\Controller
 	 */
 	public function destroyAction()
 	{
-		Auth::logout();		
-		
-		$this->redirect('/login/show-logout-message');		
+		Auth::logout();
+
+		$this->redirect('/login/show-logout-message');
 	}
-	
+
 	/**
 	 * Show a logged out flash message an dredirect to the homepage. Necessary to use the flash messages
 	 * as they use the session an dat the end of the logout method (destroyAction) the session i destroyed
@@ -80,9 +83,9 @@ class Login extends \Core\Controller
 	 * @return void
 	 */
 	public function showLogoutMessage()
-	{	
+	{
 		Flash::addMessage('Wylogowano z powodzeniem, zapraszam ponownie');
-		
+
 		static::redirect('/');
 	}
 }

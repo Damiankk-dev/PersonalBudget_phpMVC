@@ -39,10 +39,11 @@ class Mail
 			$mail->Username = "dkacztest@gmail.com"; # Gmail username (e-mail) / Nazwa użytkownika
 			$mail->Password = 'Mwzmj$un2102'; # Gmail password / Hasło użytkownika
 			$mail->SMTPSecure = 'ssl';
+			$mail->CharSet = "UTF-8";
 
 			//Recipients
-			$mail->setFrom('dkacztest@gmail.com', 'Mailer');
-			$mail->addAddress($to, 'Damian User');     //Add a recipient     'damian.kaczmarzyk.programista@gmail.com'
+			$mail->setFrom('dkacztest@gmail.com', 'Strona PersonalBudget');
+			$mail->addAddress($to, 'Nowy użytkownik');     //Add a recipient     'damian.kaczmarzyk.programista@gmail.com'
 
 			//Content
 			$mail->isHTML(true);                                  //Set email format to HTML
