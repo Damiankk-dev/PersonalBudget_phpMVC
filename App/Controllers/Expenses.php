@@ -12,8 +12,18 @@ use \App\Flash;
  *
  * PHP version 7.0
  */
-class Expenses extends \Core\Controller
+class Expenses extends Authenticated
 {
+	/**
+	* Before filter - called before each action method
+	*
+	* @return void
+	*/
+	protected function before()
+	{
+		parent::before();
+		$this->user = Auth::getUser();
+	}
 
     /**
      * Show the page allowing creation of a new expense
@@ -27,18 +37,18 @@ class Expenses extends \Core\Controller
 
 	/**
 	 * Add a new expense
-	 * 
+	 *
 	 * @return void
 	 */
 	public function addAction()
 	{
 		$expense = new Expense($_POST);
-		
+
 		if ($expense->save()) {
-			Flash::addMessage("Wydatek zapisany!");			
+			Flash::addMessage("Wydatek zapisany!");
 			View::renderTemplate('Expense/new.html');
 		} else {
-			Flash::addMessage("Wydatek nie został dodany", Flash::WARNING);		
+			Flash::addMessage("Wydatek nie został dodany", Flash::WARNING);
 			View::renderTemplate('Expense/new.html', [
 				'expense' => $expense
 			]);

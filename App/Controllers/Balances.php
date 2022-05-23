@@ -12,8 +12,18 @@ use \App\Flash;
  *
  * PHP version 7.0
  */
-class Balances extends \Core\Controller
+class Balances extends Authenticated
 {
+	/**
+	* Before filter - called before each action method
+	*
+	* @return void
+	*/
+	protected function before()
+	{
+		parent::before();
+		$this->user = Auth::getUser();
+	}
 
     /**
      * Show balance based on chosen period
