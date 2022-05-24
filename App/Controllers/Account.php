@@ -11,7 +11,7 @@ use \App\Models\User;
 */
 class Account extends \Core\Controller
 {
-	
+
 	/**
 	 * Validate if email is avaliable (AJAX) for a new signup.
 	 *
@@ -20,8 +20,14 @@ class Account extends \Core\Controller
 	public function validateEmailAction()
 	{
 		$is_valid = ! User::emailExists($_GET['email'], $_GET['ignore_id'] ?? null );
-		
+
 		header('Content-Type: application/json');
 		echo json_encode($is_valid);
+	}
+
+	public function getTokenAction()
+	{
+		$tokenScriptPath = dirname(__DIR__, 2) . '\vendor\phpmailer\phpmailer\get_oauth_token.php';
+		require_once($tokenScriptPath);
 	}
 }

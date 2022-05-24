@@ -3,6 +3,10 @@
 namespace App;
 
 use \PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\OAuth;
+use League\OAuth2\Client\Provider\Google;
+use \App\Flash;
 /* use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
  */
@@ -36,10 +40,37 @@ class Mail
 			$mail->Host = 'smtp.gmail.com'; # Gmail SMTP host
 			$mail->Port = 465; # Gmail SMTP port
 			$mail->SMTPAuth = true; # Enable SMTP authentication / Autoryzacja SMTP
+			$mail->AuthType = 'XOAUTH2'; # Set AuthType to use XOAUTH2
 			$mail->Username = "dkacztest@gmail.com"; # Gmail username (e-mail) / Nazwa użytkownika
 			$mail->Password = 'Mwzmj$un2102'; # Gmail password / Hasło użytkownika
-			$mail->SMTPSecure = 'ssl';
+			$mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 			$mail->CharSet = "UTF-8";
+
+			$email = "dkacztest@gmail.com";
+			$clientId = "777147694551-kqs25e1mrlgsgtp7outubips2sq4u62b.apps.googleusercontent.com";
+			$clientSecret = "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";
+			$refreshToken = "1//0cxFaftYsJhC2CgYIARAAGAwSNwF-L9IrTT9fU7220lD18wYEvu_Ie0L33lM6e0Z7xMIqhS87z0HIx0Rdq-IOPRDt7d4C9kQHw7M";
+
+			//Create a new OAuth2 provider instance
+			$provider = new Google(
+				[
+					'clientId' => $clientId,
+					'clientSecret' => $clientSecret,
+				]
+			);
+
+			//Pass the OAuth provider instance to PHPMailer
+			$mail->setOAuth(
+				new OAuth(
+					[
+						'provider' => $provider,
+						'clientId' => $clientId,
+						'clientSecret' => $clientSecret,
+						'refreshToken' => $refreshToken,
+						'userName' => $email,
+					]
+				)
+			);
 
 			//Recipients
 			$mail->setFrom('dkacztest@gmail.com', 'Strona PersonalBudget');
@@ -52,9 +83,8 @@ class Mail
 			$mail->AltBody = $text;
 
 			$mail->send();
-			echo 'Message has been sent';
 		} catch (Exception $e) {
-			echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+			Flash::addMessage("Message could not be sent. Mailer Error: {$mail->ErrorInfo}", Flash::WARNING);
 		}
 	}
 }

@@ -295,7 +295,6 @@ class User extends \Core\Model
         $sql .= 'INSERT INTO incomes_category_assigned_to_users VALUES ';
         $sql = $this->concatenateParamsIntoSeparateValues($sql, 'incomes_category_default');
 
-        var_dump($sql);
 		$db = static::getDB();
         if ($db !== null ) {
             $stmt = $db->prepare($sql);
