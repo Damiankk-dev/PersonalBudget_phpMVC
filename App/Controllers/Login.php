@@ -22,7 +22,11 @@ class Login extends \Core\Controller
      */
     public function indexAction()
     {
-        View::renderTemplate('Login/index.html');
+		if (isset($_SESSION['user_id'])) {
+			View::renderTemplate('Home/index.html');
+		} else {
+			View::renderTemplate('Login/index.html');
+		}
     }
 
 	/**
