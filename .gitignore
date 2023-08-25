@@ -4,3 +4,5 @@ composer.lock
 
 App/Config.php
 App/Mail.php
+
+public/.htaccess
