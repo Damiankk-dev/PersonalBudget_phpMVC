@@ -118,7 +118,7 @@
 		<div class="col-12 overflow-auto py-2 imageBackground">
 
 			{% for message in flash_messages %}
-			<div class="col-8 offset-2 mt-2 alert alert-{{ message.type }} text-center">
+			<div class="col-8 offset-2 mt-2 alert alert-{{ message.type }} text-center flashMessage">
 				{{ message.body }}
 			</div>
 			{% endfor %}
@@ -207,6 +207,8 @@
 					endBalancePeriod: {greaterThan: "Data końcowa musi być późniejsza niż początkowa!"}
 				}
 			});
+
+    		$(".alert").fadeOut(6500);
 		});
 	</script>
 
