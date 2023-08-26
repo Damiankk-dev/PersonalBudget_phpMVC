@@ -79,12 +79,12 @@
                 <label class="input-group-text w-100 justify-content-center"><span class="datePrependLabel">Data</span> <i class="icon-calendar"></i></label>
               </div>
               <input name="income_date" type = "text" id = "datepicker-13" class="form-control datepicker" required value = "{{ income.income_date }}">
-          </div>  
+          </div>
           <div class="input-group mb-3 inputControl w-100">
               <div class="input-group-prepend w-25">
                 <div class="input-group-text w-100 justify-content-center"><i class="icon-th"></i></div>
               </div>
-              <select name="income_category" class="form-select" onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+              <select name="income_category" class="form-select">
                 <option selected>Kategoria</option>
                 <option value="1">Wynagrodzenie</option>
                 <option value="2">Odsetki bankowe</option>
@@ -100,7 +100,7 @@
           </div>
           <div class="buttonArea d-flex">
             <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-down-open"></i>Dodaj</button>
-          </div>    
+          </div>
         </form>
       </div>
   </div>
