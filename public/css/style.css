@@ -187,6 +187,12 @@
 	height: 60vh;	
 }
 
+label.error{
+    color: lightcoral;
+    width: 100%;
+    text-align: center;
+}
+
 /* //Extra small devices (portrait phones, less than 576px) */
 @media (max-width: 575.98px) {
     .btn{
