@@ -36,5 +36,6 @@ $router->add('signup/activate/{token:[\da-f]+}', ['controller' => 'Signup', 'act
 $router->add('logout', ['controller' => 'Login', 'action' => 'destroy']);
 $router->add('balances/show/{type}', ['controller' => 'Balances', 'action' => 'Show']);
 $router->add('getToken', ['controller' => 'Account', 'action' => 'getToken']);
+$router->add('settings', ['controller' => 'Settings', 'action' => 'index']);
     
 $router->dispatch($_SERVER['QUERY_STRING']);

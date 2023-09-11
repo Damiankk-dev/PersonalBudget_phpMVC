@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Settings{% endblock %}
+
+{% block body %}
+
+    
+<div class="centralArea">
+    <div class="row">
+        <div class="col-10 col-xl-8 offset-1 offset-xl-2 fullColorBackground">
+            <div class="d-block prosHeader">
+                <h1>
+                    Ustawienia
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-10 col-xl-8 offset-1 offset-xl-2 my-2">
+            <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
+                <h6>
+                    Zmiana hasła
+                </h6>
+                <form method="post" action="">
+                    <div class="input-group w-75 mx-auto">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="icon-lock"></i></div>
+                        </div>
+                        <label for="exampleInputPassword1"></label>
+                        <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Hasło"/>
+                    </div>
+                    <div class="buttonArea d-flex">
+                      <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-up-open"></i>Zapisz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-10 col-xl-8 offset-1 offset-xl-2 my-2">
+            <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
+                <h6>
+                    Zmiana adresu email
+                </h6>
+                <form method="post" action="">
+                    <div class="input-group w-75 mx-auto">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text"><i class="icon-at"></i></div>
+                        </div>
+                        <input name="email" type="email" class="form-control " id="inputEmail" aria-describedby="emailHelp" placeholder="Podaj email"
+                        value="{{ user.email }}" required />
+                    </div>
+                    <div class="buttonArea d-flex">
+                      <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-up-open"></i>Zapisz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-10 col-xl-8 offset-1 offset-xl-2 my-2">
+            <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
+              <form method="post" action="/settings/changeCategories" id="formSettingsCategories">
+                <div id="cat-inputs-wrap">
+                    <div id="paymetMethodsGroup">
+                        <h6>
+                            Metody płatności
+                        </h6>
+                        <div id="paymetMethods" class="setting_wrapper">
+                            {% if paymentMethods is not empty %}
+                                {% for row in paymentMethods %}
+                                <div class="input-group w-100 mx-auto">
+                                    <input name="payment_{{row.payment_method_id}}" class="form-control settings-table" value="{{ row.name }}" required/>
+                                    <button type="button" class="btn btn-danger" onclick="removeCategory(this)">-</button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="buttonArea d-flex">
+                            <button type="button" class="btn btn-info w-75 mx-auto my-2" onclick="addCategory(this, 'payment')">
+                                <i class="icon-up-open"></i>Dodaj sposób płatności
+                            </button>
+                        </div>
+                    </div>
+                    <div id="incomeCategoriesGroup">
+                        <h6>
+                            Źródła dochodu
+                        </h6>
+                        <div id="incomeCategories" class="setting_wrapper">
+                            {% if incomesCategories is not empty %}
+                                {% for row in incomesCategories %}
+                                <div class="input-group w-100 mx-auto">
+                                    <input name="income_{{row.income_category_id}}" class="form-control settings-table" value="{{ row.name }}" required/>
+                                    <button type="button" class="btn btn-danger" onclick="removeCategory(this)">-</button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="buttonArea d-flex">
+                            <button type="button" class="btn btn-info w-75 mx-auto my-2" onclick="addCategory(this, 'income')">
+                                <i class="icon-up-open"></i>Dodaj Kategorię
+                            </button>
+                        </div>
+                    </div>
+                    <div id="expenseCategoriesGroup">
+                        <h6>
+                            Kategorie wydatków
+                        </h6>
+                        <div id="expenseCategories" class="setting_wrapper">
+                            {% if expensesCategories is not empty %}
+                                {% for row in expensesCategories %}
+                                <div class="input-group w-100 mx-auto">
+                                    <input name="expense_{{row.expense_category_id}}" class="form-control settings-table" value="{{ row.name }}" required/>
+                                    <button type="button" class="btn btn-danger" onclick="removeCategory(this)">-</button>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="buttonArea d-flex">
+                            <button type="button" class="btn btn-info w-75 mx-auto my-2" onclick="addCategory(this, 'expense')">
+                                <i class="icon-up-open"></i>Dodaj Kategorię
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttonArea d-flex">
+                  <button type="submit" class="btn btn-outline-primary w-100 mx-auto"><i class="icon-up-open"></i>Zapisz</button>
+                </div>    
+              </form>
+            </div>
+        </div>    
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeDeleteModal()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="deleteModalLabel">Potwierdź akcję</h4>
+        </div>
+        <div class="modal-body">
+          <h2>
+            <span>Usunięcie kategorii "</span>
+            <span class="category-name"></span>
+            <span>" spowoduje usunięcie wszystkich powiązanych z nią wpisów</span>
+          </h2>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeDeleteModal()">Zamknij</button>
+          <button type="button" class="btn btn-danger" onclick="confirmCategoryRemoval(this)">Potwierdź usunięcie</button>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block footer %}
+
+	<script src="/js/site.js"></Script>
+
+{% endblock %}
