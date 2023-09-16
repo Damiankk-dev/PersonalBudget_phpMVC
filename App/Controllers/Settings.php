@@ -76,6 +76,19 @@ class Settings extends Authenticated
 	}
 
 	/**
+	 * Publish JSON data false if there is no error with removal, userSetting object otherwise
+	 */
+	public function validateRemovalAction(){
+		$params = explode('&',$_SERVER['QUERY_STRING']);
+		$settingLabel = explode('=', $params[1])[1];
+		$settingValues = explode('_',$settingLabel);
+		$settingType = $settingValues[0];
+		$settingId = $settingValues[1];
+		$setting = new UserSetting($settingId, "", $settingType, 'del');
+		$myJSON = json_encode($this->errorWhenSettingRemoved($setting));
+	}
+
+	/**
 	 * Checks whether a setting entry can be safely removed
 	 *
 	 * @param UserSetting user setting object containing data from post input

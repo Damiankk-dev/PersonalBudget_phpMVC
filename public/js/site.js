@@ -142,7 +142,7 @@ function getRandomInt(min, max) {
 function validateSetting(setting){
 	var status = false;
 	$.ajax({
-		url: "/settings/validate?setting="+setting,
+		url: "/settings/validateRemoval?setting="+setting,
 		async: false
 	})
 		.done(function(data){
@@ -157,14 +157,14 @@ function closeDeleteModal(){
 	$('#deleteModal').modal('hide')
 }
 
-function confirmCategoryRemoval(btn){
+function confirmRemovalByModal(btn){
 	$('#deleteModal').modal('hide')
 	var modalContent = $(btn).parent().parent();
 	var inputName = modalContent.attr('name');
 	var input = $('input[name="'+inputName+'"]');
 	var inputDiv = input.parent();
 	inputDiv.hide();
-	input.attr('name', inputName + '_del');
+	input.attr('name', inputName + '_confirmed');
 }
 
 function confirmRemoveCategory(btn){
