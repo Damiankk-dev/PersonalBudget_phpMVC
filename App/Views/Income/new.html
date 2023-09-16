@@ -87,10 +87,11 @@
               </div>
               <select name="income_category" class="form-select">
                 <option selected>Kategoria</option>
-                <option value="1">Wynagrodzenie</option>
-                <option value="2">Odsetki bankowe</option>
-                <option value="3">Sprzedaż</option>
-                <option value="4">Inne</option>
+                {% if income_categories is not empty %}
+                  {% for row in income_categories %}
+                    <option value="{{row.id}}">{{ row.name }}</option>
+                  {% endfor %}
+                {% endif %}
               </select>
           </div>
           <div class="input-group mb-3 inputControl w-100">

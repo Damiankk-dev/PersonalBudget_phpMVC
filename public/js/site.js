@@ -166,3 +166,23 @@ function confirmCategoryRemoval(btn){
 	inputDiv.hide();
 	input.attr('name', inputName + '_del');
 }
+
+function confirmRemoveCategory(btn){
+	if(confirm("Potwierdź usunięcie kategorii")){
+	var inputDiv = $(btn).parent()
+	var input = inputDiv.find('input').first();
+	var inputName = input.attr('name');
+	inputDiv.parent().find('span').first().hide();
+	inputDiv.hide();
+	input.attr('name', inputName + 'ed');
+	}
+}
+function undoRemoveCategory(btn){
+	var inputDiv = $(btn).parent()
+	inputDiv.parent().find('span').first().hide();
+	inputDiv.removeClass('border');
+	var input = inputDiv.find('input').first();
+	var inputName = input.attr('name');
+	inputName = inputName.replace('confirm', 'del');
+	$(btn).hide();
+}

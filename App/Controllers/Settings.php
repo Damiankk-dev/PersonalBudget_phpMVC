@@ -5,6 +5,7 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Auth;
 use \App\Flash;
+use \App\UserSetting;
 use \App\Models\UserSettings;
 
 /**
@@ -23,25 +24,228 @@ class Settings extends Authenticated
 	{
 		parent::before();
 	}
+	/**
+	 * global controller variable which let change a view when backend error ocurred
+	 *  and let to keep modified values when saving form fails
+	 * true if no errors false otherwise
+	 */
+	private $validationStatus = true;
 
     /**
      * Show the index page
+	 * @param array UserSetting in configuration prepared for a view, default null, filled only
+	 * 				when form has to be corrected after backend errors occurred
      *
      * @return void
      */
-    public function indexAction()
+    public function indexAction($settingsForView=null)
     {
-		$userSettings = new UserSettings();
-		$userSettings->getUserSettingsForView();
-		if ($userSettings->userSettingsForView) {
+		if ($settingsForView==null){
+			$userSettings = new UserSettings();
+			$userSettings->getUserSettingsForView();
+			$settingsForView = $userSettings->userSettingsForView;
+		}
+		if ($settingsForView) {
 			View::renderTemplate('Settings/index.html', [
-				'expensesCategories' => $userSettings->userSettingsForView["expenses"],
-				'incomesCategories' => $userSettings->userSettingsForView["incomes"],
-				'paymentMethods' => $userSettings->userSettingsForView["payments"]
+				'expensesCategories' => $settingsForView["expense"],
+				'incomesCategories' => $settingsForView["income"],
+				'paymentMethods' => $settingsForView["payment"],
+				'validationStatus' => $this->validationStatus
 			]);
 		} else {
 			Flash::addMessage('Nie udało się pobrać ustawień użytkownika, spróbuj ponownie później', Flash::WARNING);
 			View::renderTemplate('Settings/index.html');
 		}
     }
+
+	/**
+	 * Validate and save settings from input form
+	 *
+	 * @return void
+	 */
+	public function saveAction(){
+		$validatedUserSettings = $this->validateInputData($_POST);
+
+		if($this->validationStatus == true){
+			$this->updateSettings($validatedUserSettings);
+			$this->indexAction();
+		} else {
+			$settingsWithErrorForView = $this->prepareSettingsWithErrorsForView($validatedUserSettings);
+			$this->indexAction($settingsWithErrorForView);
+		}
+	}
+
+	/**
+	 * Checks whether a setting entry can be safely removed
+	 *
+	 * @param UserSetting user setting object containing data from post input
+	 *
+	 * @return mixed false if setting can be removed directly error string if demands confirmation
+	 */
+	private function errorWhenSettingRemoved($userSetting){
+		$userSettings = new UserSettings();
+		if ($userSettings->isSettingInUse($userSetting)){
+			return 'Usunięcie kategorii '.$userSetting->name.' spowoduje usunięcie wszystkich wpisów związanych z kategorią';
+		}
+
+		return false;
+	}
+
+	/**
+	 * Checks whether a setting entry can by saved with a given name
+	 *
+	 * @param UserSetting user setting object containing data from post input
+	 *
+	 * @return mixed false if name is correct, error string otherwise
+	 */
+	private function errorWhenNameIsNotCorrect($userSetting){
+		if ($userSetting->name == ""){
+			return 'Nazwa nie może być pusta';
+		} else {
+			$userSettings = new UserSettings();
+			if ($userSettings->isNameExists($userSetting))
+			return 'Nazwa '.$userSetting->name.' jest już wykorzystana';
+		}
+
+		return false;
+	}
+
+	/**
+	 * Updates user settings
+	 *
+	 * @param array user settings without errors divided by setting type
+	 *
+	 * @return array user settings for a view
+	 */
+	private function updateSettings($settings){
+		$userSettings = new UserSettings();
+		$userSettings->updateSettings($settings);
+	}
+
+	/**
+	 * Changes format of user input data for UserSetting objects array
+	 * Values format is defined by JS script that creates inputs, example key: settingType_id_modificationType; value is an input value
+	 *
+	 * @param $_POST array from user settings form
+	 *
+	 * @return void
+	 */
+	private function validateInputData($inputForm){
+
+		$updatedUserSettings = array();
+		foreach($inputForm as $key => $value){
+			$keyParts = explode('_',$key);
+			if (count($keyParts) < 3 ){
+				$settingType = $keyParts[0];
+				$settingId = $keyParts[1];
+				$modificationType = "notChanged";
+				$userSetting = new UserSetting($settingId, $value, $settingType, $modificationType);
+			} else {
+				$settingType = $keyParts[0];
+				$settingId = $keyParts[1];
+				$modificationType = $keyParts[2];
+				$userSetting = new UserSetting($settingId, $value, $settingType, $modificationType);
+			}
+
+			$userSetting = $this->validateSetting($userSetting);
+			if(count($userSetting->errors) > 0 ){
+				$this->validationStatus = false;
+			}
+
+			$updatedUserSettings[] = $userSetting;
+		}
+
+		return $updatedUserSettings;
+	}
+
+	/**
+	 * Prepares settings array for a view after backend errors occurred
+	 * moves modofocationType param to name param, to use modification type as input name
+	 * to a proper view order
+	 *
+	 * @param array UserSetting after validation with any error
+	 * @return array settings gruped by type and with name changed for view with errors
+	 */
+	private function prepareSettingsWithErrorsForView($settingsWithError){
+		foreach($settingsWithError as $setting){
+			$nameOnView = [$setting->settingType, $setting->id];
+			if ($setting->modificationType != "notChanged"){
+				$nameOnView[] = $setting->modificationType;
+			}
+
+			$nameOnView = implode('_', $nameOnView);
+			$setting->modificationType = $nameOnView;
+
+		}
+
+		$userSettings = new UserSettings();
+		return $userSettings->sortSettingsForView($settingsWithError);
+	}
+
+	/**
+	 * Validates settings by name, usage and modification type
+	 *
+	 * @param UserSetting $userSetting
+	 *
+	 * @return UserSetting with error and/or changed modification type
+	 */
+	private function validateSetting($userSetting){
+		$userSetting = $this->validateName($userSetting);
+		$userSetting = $this->validateUsage($userSetting);
+		$userSetting = $this->confirmRemoval($userSetting);
+		return $userSetting;
+	}
+
+	/**
+	 * Assigns error to a userSetting when name is empty or exists
+	 *
+	 * @param UserSetting $userSetting
+	 *
+	 * @return UserSetting when error ocurrs error is added
+	 */
+	private function validateName($userSetting){
+		if ($userSetting->modificationType == "mod" || $userSetting->modificationType == "new"){
+			$error = $this->errorWhenNameIsNotCorrect($userSetting);
+			if ($error){
+				$userSetting->errors[] = $error;
+			}
+		}
+
+		return $userSetting;
+	}
+
+	/**
+	 * Assigns error to a userSetting when setting is in use
+	 *
+	 * @param UserSetting $userSetting
+	 *
+	 * @return UserSetting when error ocurrs error is added
+	 */
+	private function validateUsage($userSetting){
+		if ($userSetting->modificationType == "del"){
+			$error = $this->errorWhenSettingRemoved($userSetting);
+			if ($error) {
+				$userSetting->modificationType = "confirm";
+				$userSetting->errors[] = $error;
+			}
+		}
+
+		return $userSetting;
+	}
+
+	/**
+	 * Changes setting modificationType flag from confirmed to del that allow model
+	 * methods to delete setting and its ocurrences in a whole db
+	 *
+	 * @param UserSetting $userSetting
+	 *
+	 * @return UserSetting when modification type is confirmed it changes to del
+	 */
+	private function confirmRemoval($userSetting){
+		if ($userSetting->modificationType == "confirmed"){
+			$userSetting->modificationType = "del";
+		}
+
+		return $userSetting;
+	}
 }

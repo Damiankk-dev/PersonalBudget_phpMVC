@@ -132,13 +132,13 @@ class Cashflow extends \Core\Model
         $payment_method_query_join = $cashflow_type ==
             "expense" ?
             "INNER JOIN
-                payment_methods_assigned_to_users m on e.payment_method_id = m.payment_method_id  AND e.user_id = m.user_id "
+                payment_methods_assigned_to_users m on e.payment_method_id = m.id  AND e.user_id = m.user_id "
                 : "";
         $payment_method_query_column = $cashflow_type == "expense" ? ", m.name AS method_name " : "";
         $sql = 'SELECT
                     e.*, c.name'. $payment_method_query_column .' FROM '. $cashflow_type .'s e
                 INNER JOIN '. $cashflow_type .'s_category_assigned_to_users c
-                    on e.'. $cashflow_type .'_category_id = c.'. $cashflow_type .'_category_id AND e.user_id = c.user_id
+                    on e.'. $cashflow_type .'_category_id = c.id AND e.user_id = c.user_id
                 '. $payment_method_query_join .'
                 WHERE
                     e.user_id = :user_id
@@ -174,9 +174,10 @@ class Cashflow extends \Core\Model
         $sql = 'SELECT
                     c.name, SUM(e.amount) AS categorySum
                     FROM '. $cashflow_type .'s e
-                NATURAL JOIN '. $cashflow_type .'s_category_assigned_to_users c
+                INNER JOIN '. $cashflow_type .'s_category_assigned_to_users c
+                ON c.id = e.'.$cashflow_type.'_category_id
                 WHERE
-                    user_id = :user_id
+                    e.user_id = :user_id
                 AND
                     date_of_'. $cashflow_type .' BETWEEN :start_date AND :end_date
                 GROUP BY

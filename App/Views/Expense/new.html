@@ -100,10 +100,11 @@
                 </div>
                 <select name="payment_method" class="form-select">
                   <option selected>Forma płatności</option>
-                  <option value="1">Gotówka</option>
-                  <option value="2">Karta kredytowa</option>
-                  <option value="3">Karta debetowa</option>
-                  <option value="4">Przelew</option>
+                  {% if payment_methods is not empty %}
+                    {% for row in payment_methods %}
+                      <option value="{{row.id}}">{{ row.name }}</option>
+                    {% endfor %}
+                  {% endif %}
                 </select>
             </div>
             <div class="input-group mb-3 inputControl w-100">
@@ -112,23 +113,11 @@
                 </div>
                 <select name="expense_category" class="form-select">
                   <option selected>Kategoria</option>
-                  <option value="1">Jedzenie</option>
-                  <option value="2">Mieszkanie</option>
-                  <option value="3">Transport</option>
-                  <option value="4">Telekomunikacja</option>
-                  <option value="5">Opieka zdrowotna</option>
-                  <option value="6">Ubrania</option>
-                  <option value="7">Higiena</option>
-                  <option value="8">Dzieci</option>
-                  <option value="9">Rozrywka</option>
-                  <option value="10">Wycieczka</option>
-                  <option value="11">Szkolenia</option>
-                  <option value="12">Ksiązki</option>
-                  <option value="13">Oszczędności</option>
-                  <option value="14">Emerytura</option>
-                  <option value="15">Długi</option>
-                  <option value="16">Darowizna</option>
-                  <option value="17">Inne</option>
+                  {% if expense_categories is not empty %}
+                    {% for row in expense_categories %}
+                      <option value="{{row.id}}">{{ row.name }}</option>
+                    {% endfor %}
+                  {% endif %}
                 </select>
             </div>
             <div class="input-group mb-3 inputControl w-100">
