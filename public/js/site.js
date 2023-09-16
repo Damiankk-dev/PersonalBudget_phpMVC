@@ -210,3 +210,23 @@ function undoRemoveCategory(btn){
 	inputName = inputName.replace('confirm', 'del');
 	$(btn).hide();
 }
+
+$(document).ready(function() {
+	$('#formUpdatePassword').validate({
+		rules: {
+			password: {
+				required: true,
+				minlength: 6,
+				validPassword: true
+			}
+		}
+	});
+
+	/**
+	 * Show password toggle button
+	 */
+	$('#inputPassword').hideShowPassword({
+		show: false,
+		innerToggle: 'focus'
+	});
+});

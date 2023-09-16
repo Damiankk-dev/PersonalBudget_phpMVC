@@ -280,6 +280,31 @@ class User extends \Core\Model
     }
 
     /**
+     * Update user password
+     *
+     * @return void
+     */
+    public static function updatePassword($id, $password){
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+
+		$db = static::getDB();
+
+        if ($db !== null ) {
+            $sql = 'UPDATE users
+                    SET password_hash = :password_hash
+                    WHERE id = :user_id';
+
+            $db = static::getDB();
+            $stmt = $db->prepare($sql);
+
+            $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
+            $stmt->bindValue(':user_id', $id, PDO::PARAM_INT);
+            return $stmt->execute();
+        }
+        return false;
+    }
+
+    /**
      * Inserts default users settings into individual params table
      *
      * @return boolean True if all settings iserted correctly flase otherwise

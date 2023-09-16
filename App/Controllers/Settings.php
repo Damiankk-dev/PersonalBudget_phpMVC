@@ -7,6 +7,7 @@ use \App\Auth;
 use \App\Flash;
 use \App\UserSetting;
 use \App\Models\UserSettings;
+use \App\Models\User;
 
 /**
 * Post contrller
@@ -104,6 +105,20 @@ class Settings extends Authenticated
 		$setting = new UserSetting($settingId, $settingName, $settingType, $modificationType);
 		$myJSON = json_encode($this->errorWhenNameIsNotCorrect($setting), JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 		echo $myJSON;
+	}
+
+	/**
+	 * Updates user password action
+	 */
+	public function updatePasswordAction(){
+		$password = $_POST['password'];
+		$user = Auth::getUser();
+		if (User::updatePassword($user->id, $password)){
+			Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+			$this->indexAction();
+		} else {
+			Flash::addMessage('Zmiana hasła nie powiodła się', Flash::WARNING);
+		}
 	}
 
 	/**
