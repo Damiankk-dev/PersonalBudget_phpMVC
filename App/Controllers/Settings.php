@@ -68,6 +68,7 @@ class Settings extends Authenticated
 
 		if($this->validationStatus == true){
 			$this->updateSettings($validatedUserSettings);
+			Flash::addMessage('Zmiany zostały zapisane pomyślnie');
 			$this->indexAction();
 		} else {
 			$settingsWithErrorForView = $this->prepareSettingsWithErrorsForView($validatedUserSettings);
@@ -85,7 +86,24 @@ class Settings extends Authenticated
 		$settingType = $settingValues[0];
 		$settingId = $settingValues[1];
 		$setting = new UserSetting($settingId, "", $settingType, 'del');
-		$myJSON = json_encode($this->errorWhenSettingRemoved($setting));
+		$myJSON = json_encode($this->errorWhenSettingRemoved($setting), JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+		echo $myJSON;
+	}
+
+	/**
+	 * Publish JSON data false if there is no error with given name, error message otherwise
+	 */
+	public function validateNameAction(){
+		$params = explode('&',$_SERVER['QUERY_STRING']);
+		$settingLabel = explode('=', $params[1])[1];
+		$settingValues = explode('_',$settingLabel);
+		$settingType = $settingValues[0];
+		$settingId = $settingValues[1];
+		$modificationType = $settingValues[2];
+		$settingName = $settingValues[3];
+		$setting = new UserSetting($settingId, $settingName, $settingType, $modificationType);
+		$myJSON = json_encode($this->errorWhenNameIsNotCorrect($setting), JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+		echo $myJSON;
 	}
 
 	/**

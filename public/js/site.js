@@ -104,7 +104,18 @@ $(document).ready(function() {
  }
 
 $('#formSettingsCategories input').change(function() {
-	$(this).attr('name', $(this).attr('name') + '_mod');
+	var inputDiv = $(this).parent();
+	var input = inputDiv.find('input').first();
+	var inputName = input.attr('name');
+	var newInputName = inputName + '_' + input.val()
+	var inputName = input.attr('name');
+	var error = validateName(newInputName);
+	if (error){
+		inputDiv.append("<label class='error'>"+error+"</span>")
+	} else {
+		input.attr('name', inputName + '_new');
+		var input = inputDiv.find('label').hide();
+	}
 });
 
 function addCategory(btn, setting){
@@ -153,6 +164,19 @@ function validateSetting(setting){
 	return status;
 }
 
+function validateName(setting){
+	var status = false;
+	$.ajax({
+		url: "/settings/validateName?setting="+setting,
+		async: false
+	})
+		.done(function(data){
+			if (data != 'false'){
+				status = data;
+			}
+		});
+	return status;
+}
 function closeDeleteModal(){
 	$('#deleteModal').modal('hide')
 }
