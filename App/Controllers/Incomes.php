@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\Income;
+use \App\Models\UserSettings;
 use \App\Auth;
 use \App\Flash;
 
@@ -23,6 +24,7 @@ class Incomes extends Authenticated
 	{
 		parent::before();
 		$this->user = Auth::getUser();
+		$this->userSettings = new UserSettings($forView=true);
 	}
 
     /**
@@ -32,7 +34,9 @@ class Incomes extends Authenticated
      */
     public function newAction()
     {
-        View::renderTemplate('Income/new.html');
+        View::renderTemplate('Income/new.html',[
+			'income_categories' => $this->userSettings->userSettingsForView["income"]
+		]);
     }
 
 	/**
@@ -46,11 +50,14 @@ class Incomes extends Authenticated
 
 		if ($income->save()) {
 			Flash::addMessage("Przychód zapisany!");
-			View::renderTemplate('Income/new.html');
+			View::renderTemplate('Income/new.html',[
+				'income_categories' => $this->userSettings->userSettingsForView["income"]
+			]);
 		} else {
 			Flash::addMessage("Przychód nie został dodany", Flash::WARNING);
 			View::renderTemplate('Income/new.html', [
-                'income' => $income
+                'income' => $income,
+				'income_categories' => $this->userSettings->userSettingsForView["income"]
             ]);
 		}
 	}

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use \Core\View;
 use \App\Models\Expense;
+use \App\Models\UserSettings;
 use \App\Auth;
 use \App\Flash;
 
@@ -23,6 +24,7 @@ class Expenses extends Authenticated
 	{
 		parent::before();
 		$this->user = Auth::getUser();
+		$this->userSettings = new UserSettings($forView=true);
 	}
 
     /**
@@ -32,7 +34,10 @@ class Expenses extends Authenticated
      */
     public function newAction()
     {
-        View::renderTemplate('Expense/new.html');
+        View::renderTemplate('Expense/new.html', [
+			'expense_categories' =>  $this->userSettings->userSettingsForView["expense"],
+			'payment_methods' =>  $this->userSettings->userSettingsForView["payment"]
+		]);
     }
 
 	/**
@@ -46,11 +51,16 @@ class Expenses extends Authenticated
 
 		if ($expense->save()) {
 			Flash::addMessage("Wydatek zapisany!");
-			View::renderTemplate('Expense/new.html');
+			View::renderTemplate('Expense/new.html', [
+				'expense_categories' =>  $this->userSettings->userSettingsForView["expense"],
+				'payment_methods' =>  $this->userSettings->userSettingsForView["payment"]
+			]);
 		} else {
 			Flash::addMessage("Wydatek nie został dodany", Flash::WARNING);
 			View::renderTemplate('Expense/new.html', [
-				'expense' => $expense
+				'expense' => $expense,
+				'expense_categories' =>  $this->userSettings->userSettingsForView["expense"],
+				'payment_methods' =>  $this->userSettings->userSettingsForView["payment"]
 			]);
 		}
 
