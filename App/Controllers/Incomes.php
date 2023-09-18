@@ -61,4 +61,53 @@ class Incomes extends Authenticated
             ]);
 		}
 	}
+
+    /**
+     * Show the page allowing to edit an existing Income
+     *
+     * @return void
+     */
+    public function editAction()
+    {
+		//query string: 'edit&id=1', pobranie ID
+		$referer = $_SERVER['HTTP_REFERER'];
+		$referer = explode('//',$_SERVER['HTTP_REFERER']);
+		$referer = explode('/',$referer[1]);
+		unset($referer[0]);
+		$referer = implode('/', $referer);
+		$_SESSION['redirect_url'] = $referer;
+		$params = explode('&',$_SERVER['QUERY_STRING']);
+		$incomeId = explode('=', $params[1])[1];
+		//pobranie wpisu
+		$income = Income::getById($incomeId, 'income');
+
+		View::renderTemplate('Income/new.html', [
+			'income' => $income,
+			'income_categories' => $this->userSettings->userSettingsForView["income"]
+		]);
+    }
+
+	/**
+	 * Add a new income
+	 *
+	 * @return void
+	 */
+	public function updateAction()
+	{
+		$income = new Income($_POST);
+		var_dump($_SESSION['redirect_url']);
+
+		if ($income->update()) {
+			Flash::addMessage("Zmiany zapisane!");
+			$redirect = $_SESSION['redirect_url'];
+			unset($_SESSION['redirect_url']);
+			$this->redirect('/'.$redirect);
+		} else {
+			Flash::addMessage("Przychód nie został zapisany", Flash::WARNING);
+			View::renderTemplate('Income/new.html', [
+                'income' => $income,
+				'income_categories' => $this->userSettings->userSettingsForView["income"]
+            ]);
+		}
+	}
 }

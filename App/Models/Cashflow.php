@@ -68,7 +68,7 @@ class Cashflow extends \Core\Model
      *
      * @return mixed Expenses array if no error false otherwise
      */
-    static function getById($user_id, $cashflow_type, $chosen_period)
+    static function getByUserId($user_id, $cashflow_type, $chosen_period)
     {
         $sql = 'SELECT * FROM '. $cashflow_type .'s WHERE
             user_id = :user_id
@@ -195,6 +195,33 @@ class Cashflow extends \Core\Model
                                 $chosen_period[0], PDO::PARAM_STR);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        $this->errors[] = 'Null database!';
+        return false;
+    }
+
+    /**
+     * Gets a cashflow based on cashflow ID
+     *
+     * @param int $cashflow_id requested cashflow id
+     * @param string $cashflow_type type of cashflow, expense or income
+     *
+     * @return mixed Cashflow if no error false otherwise
+     */
+    static function getById($cashflow_id, $cashflow_type)
+    {
+        $sql = 'SELECT * FROM '. $cashflow_type .'s WHERE
+            id = :cashflow_id';
+
+        $db = static::getDB();
+        if ($db !== null )
+        {
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':cashflow_id', $cashflow_id, PDO::PARAM_INT);
+
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_OBJ);
         }
 
         $this->errors[] = 'Null database!';

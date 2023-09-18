@@ -102,12 +102,14 @@
                 {% if balance.incomes is not empty %}
                   <div class="cashflow_table_wrap my-1">
                     <table  class="income_table cashflow_table">
+                      <th></th>
                       <th>Wartość</th>
                       <th>Data</th>
                       <th>Kategoria</th>
                       <th>Opis</th>
                       {% for row in balance.incomes %}
                         <tr>
+                          <td><button type="button" class="btn edit" id="{{row.id}}" onclick="window.location.href='/incomes/edit?id={{row.id}}'"><i class="icon-pencil"></i></button></td>
                           <td>{{ row.amount }}</td>
                           <td>{{ row.date_of_income }}</td>
                           <td>{{ row.name }}</td>

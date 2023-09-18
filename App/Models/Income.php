@@ -82,4 +82,45 @@ class Income extends Cashflow
             $this->errors[] = $this->validateDate($this->income_date);
         }
     }
+
+    /**
+     * Upate the income model with the current property values
+     *
+     * @return boolean True if the income was saved, false otherwise
+     */
+    public function update()
+    {
+        $this->validate();
+        $user = Auth::getUser();
+        foreach ($this->errors as $key => $error_value)
+        {
+            if (empty($error_value)) unset($this->errors[$key]);
+        }
+
+        if (empty($this->errors))
+        {
+            $sql = 'UPDATE incomes SET
+                        income_category_id = :income_category,
+                        amount = :income_amount,
+                        date_of_income = :income_date,
+                        income_comment = :income_comment
+                    WHERE id = :id';
+            $db = static::getDB();
+            if ($db !== null )
+            {
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':income_category',
+                                    $this->income_category, PDO::PARAM_STR);
+                $stmt->bindValue(':income_amount', $this->income_amount, PDO::PARAM_STR);
+                $stmt->bindValue(':income_date', $this->income_date, PDO::PARAM_STR);
+                $stmt->bindValue(':income_comment', $this->income_comment, PDO::PARAM_STR);
+                $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+                $stmt->debugDumpParams();
+                return $stmt->execute();
+            }
+        }
+
+        $this->errors[] = 'Null database!';
+        return false;
+    }
 }

@@ -68,28 +68,45 @@
   </div>
   <div class="row">
       <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
-        <form method="post" action="/incomes/add" id="formIncome">
+        {% if income.id is not empty %}
+          {% set formAction = "/incomes/update" %}
+        {% endif %}
+        {% if income.id is empty %}
+          {% set formAction = "/incomes/add" %}
+        {% endif %}
+        <form method="post" action="{{formAction}}" id="formIncome">
+          {% if income.id is not empty %}
+          <input name="id" type="text" class="form-control " hidden value = "{{ income.id }}">
+          <input name="redirectUrl" type="text" class="form-control " hidden value = "{{ income.redirectUrl }}">
+          {% endif %}
           <div class="input-group inputControl w-100">
               <div class="input-group-prepend w-25">
                   <div class="input-group-text w-100 justify-content-center"><i class="icon-money"></i></div>
               </div>
-              <input name="income_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required value = "{{ income.income_amount }}">
+              <input name="income_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required value = "{{ income.amount }}">
           </div>
           <div class="input-group inputControl w-100">
               <div class="input-group-prepend w-25">
                 <label class="input-group-text w-100 justify-content-center"><span class="datePrependLabel">Data</span> <i class="icon-calendar"></i></label>
               </div>
-              <input name="income_date" type = "text" id = "datepicker-13" class="form-control datepicker" required value = "{{ income.income_date }}">
+              <input name="income_date" type = "text" id = "datepicker-13" class="form-control datepicker" required value = "{{ income.date_of_income }}">
           </div>
           <div class="input-group mb-3 inputControl w-100">
               <div class="input-group-prepend w-25">
                 <div class="input-group-text w-100 justify-content-center"><i class="icon-th"></i></div>
               </div>
               <select name="income_category" class="form-select">
-                <option selected>Kategoria</option>
+                {% if income.id is empty %}
+                <option>Kategoria</option>
+                {% endif %}
                 {% if income_categories is not empty %}
                   {% for row in income_categories %}
+                    {% if row.id == income.income_category_id %}
+                    <option value="{{row.id}}" selected>{{ row.name }}</option>
+                    {% endif %}
+                    {% if row.id != income.income_category_id %}
                     <option value="{{row.id}}">{{ row.name }}</option>
+                    {% endif %}
                   {% endfor %}
                 {% endif %}
               </select>
@@ -101,7 +118,10 @@
               <textarea id="income_comment" name="income_comment" rows="1" cols="50" class="form-control" placeholder="Opisz swój przychód">{{ income.income_comment }}</textarea>
           </div>
           <div class="buttonArea d-flex">
-            <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-down-open"></i>Dodaj</button>
+            {% if income.id is not empty %}
+            <button type="button" class="btn btn-outline-danger w-50 mx-auto"><i class="icon-trash"></i>Usuń</button>
+            {% endif %}
+            <button type="submit" class="btn btn-primary w-50 mx-auto"><i class="icon-down-open"></i>Dodaj</button>
           </div>
         </form>
       </div>
