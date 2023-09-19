@@ -117,11 +117,13 @@
               </div>
               <textarea id="income_comment" name="income_comment" rows="1" cols="50" class="form-control" placeholder="Opisz swój przychód">{{ income.income_comment }}</textarea>
           </div>
-          <div class="buttonArea d-flex">
+          <div class="buttonArea d-flex justify-content-center">
             {% if income.id is not empty %}
-            <button type="button" class="btn btn-outline-danger w-50 mx-auto"><i class="icon-trash"></i>Usuń</button>
+            <a href="/incomes/remove?id={{income.id}}" class="w-50 mx-1">
+              <button type="button" class="btn btn-outline-danger w-100"><i class="icon-trash"></i>Usuń</button>
+            </a>
             {% endif %}
-            <button type="submit" class="btn btn-primary w-50 mx-auto"><i class="icon-down-open"></i>Dodaj</button>
+            <button type="submit" class="btn btn-primary w-50 mx-1"><i class="icon-down-open"></i>Dodaj</button>
           </div>
         </form>
       </div>

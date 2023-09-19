@@ -227,4 +227,30 @@ class Cashflow extends \Core\Model
         $this->errors[] = 'Null database!';
         return false;
     }
+
+    /**
+     * Removes a cashflow based on cashflow ID
+     *
+     * @param int $cashflow_id deleted cashflow id
+     * @param string $cashflow_type type of cashflow, expense or income
+     *
+     * @return bool True if no error false otherwise
+     */
+    static function deleteById($cashflow_id, $cashflow_type){
+        $sql = 'DELETE FROM '. $cashflow_type .'s WHERE
+            id = :cashflow_id';
+
+        $db = static::getDB();
+        if ($db !== null )
+        {
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':cashflow_id', $cashflow_id, PDO::PARAM_INT);
+
+            return $stmt->execute();
+        }
+
+        $this->errors[] = 'Null database!';
+        return false;
+
+    }
 }

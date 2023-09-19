@@ -81,8 +81,7 @@ class Settings extends Authenticated
 	 * Publish JSON data false if there is no error with removal, userSetting object otherwise
 	 */
 	public function validateRemovalAction(){
-		$params = explode('&',$_SERVER['QUERY_STRING']);
-		$settingLabel = explode('=', $params[1])[1];
+		$settingLabel = $this->getQueryStringParams()['setting'];
 		$settingValues = explode('_',$settingLabel);
 		$settingType = $settingValues[0];
 		$settingId = $settingValues[1];
@@ -95,8 +94,7 @@ class Settings extends Authenticated
 	 * Publish JSON data false if there is no error with given name, error message otherwise
 	 */
 	public function validateNameAction(){
-		$params = explode('&',$_SERVER['QUERY_STRING']);
-		$settingLabel = explode('=', $params[1])[1];
+		$settingLabel = $this->getQueryStringParams()['setting'];
 		$settingValues = explode('_',$settingLabel);
 		$settingType = $settingValues[0];
 		$settingId = $settingValues[1];

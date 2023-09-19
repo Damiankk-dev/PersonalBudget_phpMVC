@@ -76,8 +76,7 @@ class Incomes extends Authenticated
 		unset($referer[0]);
 		$referer = implode('/', $referer);
 		$_SESSION['redirect_url'] = $referer;
-		$params = explode('&',$_SERVER['QUERY_STRING']);
-		$incomeId = explode('=', $params[1])[1];
+		$incomeId = $this->getQueryStringParams()['id'];
 		//pobranie wpisu
 		$income = Income::getById($incomeId, 'income');
 
@@ -95,7 +94,6 @@ class Incomes extends Authenticated
 	public function updateAction()
 	{
 		$income = new Income($_POST);
-		var_dump($_SESSION['redirect_url']);
 
 		if ($income->update()) {
 			Flash::addMessage("Zmiany zapisane!");
@@ -108,6 +106,24 @@ class Incomes extends Authenticated
                 'income' => $income,
 				'income_categories' => $this->userSettings->userSettingsForView["income"]
             ]);
+		}
+	}
+
+	/**
+	 * Add a new income
+	 *
+	 * @return void
+	 */
+	public function removeAction()
+	{
+		//query string: 'remove&id=1', pobranie ID
+		$incomeId = $this->getQueryStringParams()['id'];
+		if (Income::deleteById($incomeId, 'income')) {
+			Flash::addMessage("Wpis został usunięty!");
+			$this->returnToPrevious();
+		} else {
+			Flash::addMessage("Nie udało się połączyć z bazą danych", Flash::ERROR);
+			View::renderTemplate();
 		}
 	}
 }
