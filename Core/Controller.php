@@ -88,6 +88,22 @@ abstract class Controller
 	}
 
 	/**
+	 * Redirect to a different page
+	 *
+	 * @param string $url The relative URL
+	 *
+	 * @return  void
+	 */
+	public function returnToPrevious($url=null)
+	{
+        if ($url==null){
+            $url = $_SERVER['HTTP_REFERER'];
+        }
+		header('Location: '.$url, true, 303);
+		exit;
+	}
+
+	/**
 	 * Require the user to be logged in before giving access to the requested page.
 	 * Remember the requested page for later, then redirect to the login page.
 	 *
@@ -104,4 +120,22 @@ abstract class Controller
 			$this->redirect('/login/index');
 		}
 	}
+
+	/**
+	 * Returns params from a query string
+	 *
+	 * @return  array key = param name; value param value
+	 */
+    public function getQueryStringParams(){
+        $params = array();
+		$queryParams = explode('&',$_SERVER['QUERY_STRING']);
+        for ($i = 1 ; $i < count($queryParams); $i++){
+            $param = explode('=', $queryParams[1]);
+            $paramName = $param[0];
+            $paramValue = $param[1];
+            $params[$paramName] = $paramValue;
+        }
+
+        return $params;
+    }
 }
