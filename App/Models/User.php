@@ -224,7 +224,7 @@ class User extends \Core\Model
      *
      * @return mixed  The user object or false if authentication fails
      */
-	public static function authenticate($email, $password)
+	public function authenticate($email, $password)
 	{
 		$user = static::findByEmail($email);
 
@@ -233,9 +233,14 @@ class User extends \Core\Model
 			if (password_verify($password, $user->password_hash)){
 				return $user;
 			}
-		}
+            $user->errors[] = "Błędne hasło!";
 
-		return false;
+		} else {
+            $user = new User();
+            $user->errors[] = "Użytkownik o podanym adrese email nie istnieje lub jest nie aktywny";
+        }
+
+		return $user;
 	}
 
     /**

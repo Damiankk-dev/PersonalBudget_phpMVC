@@ -36,11 +36,12 @@ class Login extends \Core\Controller
 	 */
 	public function createAction()
 	{
-		$user = User::authenticate($_POST['email'], $_POST['password']);
+		$user = new User();
+		$user = $user->authenticate($_POST['email'], $_POST['password']);
 		$remember_me = isset($_POST['remember_me']);
 
 
-		if ($user)
+		if (empty($user->errors))
 		{
 			Auth::login($user, $remember_me);
 
@@ -57,10 +58,8 @@ class Login extends \Core\Controller
 		{
 			Flash::addMessage('Logowanie nieudane, spróbuj jeszcze raz!', Flash::WARNING);
 
-			$error = 'Użytkownik przypisany do adresu: '. $_POST['email'] .' nie istnieje lub jest jeszcze nie aktywny';
-
 			View::renderTemplate('Login/index.html', [
-				'error' => $error,
+				'error' => $user->errors[0],
 				'email' => $_POST['email'],
 				'remember_me' => $remember_me
 				]);
