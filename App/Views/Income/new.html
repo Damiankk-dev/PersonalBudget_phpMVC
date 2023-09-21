@@ -122,8 +122,11 @@
             <a href="/incomes/remove?id={{income.id}}" class="w-50 mx-1">
               <button type="button" class="btn btn-outline-danger w-100"><i class="icon-trash"></i>Usuń</button>
             </a>
+            <button type="submit" class="btn btn-primary w-50 mx-1"><i class="icon-floppy"></i>Zapisz</button>
             {% endif %}
+            {% if income.id is empty %}
             <button type="submit" class="btn btn-primary w-50 mx-1"><i class="icon-down-open"></i>Dodaj</button>
+            {% endif %}
           </div>
         </form>
       </div>
