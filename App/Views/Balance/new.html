@@ -111,7 +111,7 @@
                       {% for row in balance.incomes %}
                         <tr>
                           <td><button type="button" class="btn edit" id="{{row.id}}" onclick="window.location.href='/incomes/edit?id={{row.id}}'"><i class="icon-pencil"></i></button></td>
-                          <td><button type="button" class="btn edit" id="{{row.id}}" onclick="window.location.href='/incomes/remove?id={{row.id}}'"><i class="icon-trash"></i></button></td>
+                          <td><button type="button" class="btn edit" id="{{row.id}}" onclick="confirmCashflowRemoval('incomes', '{{row.id}}')"><i class="icon-trash"></i></button></td>
                           <td>{{ row.amount }}</td>
                           <td>{{ row.date_of_income }}</td>
                           <td>{{ row.name }}</td>
@@ -177,6 +177,29 @@
           </div>
         </div>
       </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="confirmCashflowRemoveModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeCashflowRemoveModal()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="deleteModalLabel">Potwierdź akcję</h4>
+      </div>
+      <div class="modal-body">
+        <h2>
+          <span>Jesteś pewien, że chcesz usunąć ten wpis?</span>
+        </h2>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeCashflowRemoveModal()">Zamknij</button>
+        <a href="" class="w-50 mx-1" id="deleteButton">
+        <button type="button" class="btn btn-danger">Potwierdź usunięcie</button>
+        </a>
+      </div>
+    </div>
   </div>
 </div>
 

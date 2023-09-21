@@ -231,3 +231,15 @@ $(document).ready(function() {
 		innerToggle: 'focus'
 	});
 });
+
+function confirmCashflowRemoval(cashflowType, cashflowId){
+	$('#confirmCashflowRemoveModal').on('show.bs.modal', function () {
+		var modal = $(this)
+		modal.find('#deleteButton').attr('href', '/'+cashflowType+'/remove?id='+cashflowId)
+	  });
+	$('#confirmCashflowRemoveModal').modal('show');
+}
+
+function closeCashflowRemoveModal(){
+	$('#confirmCashflowRemoveModal').modal('hide')
+}
