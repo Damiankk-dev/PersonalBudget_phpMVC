@@ -77,18 +77,28 @@
     </div>
     <div class="row">
         <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
-          <form method="post" action="/expenses/add" id="formExpense">
+          {% if expense.id is not empty %}
+          {% set formAction = "/expenses/update" %}
+        {% endif %}
+        {% if expense.id is empty %}
+          {% set formAction = "/expenses/add" %}
+        {% endif %}
+          <form method="post" action="{{formAction}}" id="formExpense">
+            {% if expense.id is not empty %}
+          <input name="id" type="text" class="form-control " hidden value = "{{ expense.id }}">
+          <input name="redirectUrl" type="text" class="form-control " hidden value = "{{ expense.redirectUrl }}">
+          {% endif %}
             <div class="input-group inputControl w-100">
                 <div class="input-group-prepend w-25">
                     <div class="input-group-text w-100 justify-content-center"><i class="icon-money"></i></div>
                 </div>
-                <input name="expense_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required value="{{ expense.expense_amount }}">
+                <input name="expense_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required value="{{ expense.amount }}">
             </div>
             <div class="input-group inputControl w-100">
                 <div class="input-group-prepend w-25">
                   <label class="input-group-text w-100 justify-content-center"><span class="datePrependLabel">Data</span> <i class="icon-calendar"></i></label>
                 </div>
-                <input name="expense_date" type = "text" id = "datepicker-13" class="form-control datepicker" required value="{{ expense.expense_date }}">
+                <input name="expense_date" type = "text" id = "datepicker-13" class="form-control datepicker" required value="{{ expense.date_of_expense }}">
             </div>  
             <div class="input-group mb-3 inputControl w-100">
                 <div class="input-group-prepend w-25">
@@ -99,10 +109,17 @@
                   </div>
                 </div>
                 <select name="payment_method" class="form-select">
+                  {% if expense.id is empty %}
                   <option selected>Forma płatności</option>
+                  {% endif %}
                   {% if payment_methods is not empty %}
                     {% for row in payment_methods %}
-                      <option value="{{row.id}}">{{ row.name }}</option>
+                      {% if row.id == expense.payment_method_id %}
+                        <option value="{{row.id}}" selected>{{ row.name }}</option>
+                      {% endif %}
+                      {% if row.id != expense.payment_method_id %}
+                        <option value="{{row.id}}">{{ row.name }}</option>
+                      {% endif %}
                     {% endfor %}
                   {% endif %}
                 </select>
@@ -112,10 +129,17 @@
                   <div class="input-group-text w-100 justify-content-center"><i class="icon-th"></i></div>
                 </div>
                 <select name="expense_category" class="form-select">
-                  <option selected>Kategoria</option>
+                  {% if expense.id is empty %}
+                    <option selected>Kategoria</option>
+                  {% endif %}
                   {% if expense_categories is not empty %}
                     {% for row in expense_categories %}
-                      <option value="{{row.id}}">{{ row.name }}</option>
+                      {% if row.id == expense.expense_category_id %}
+                        <option value="{{row.id}}" selected>{{ row.name }}</option>
+                      {% endif %}
+                      {% if row.id != expense.expense_category_id %}
+                        <option value="{{row.id}}">{{ row.name }}</option>
+                      {% endif %}
                     {% endfor %}
                   {% endif %}
                 </select>
@@ -126,8 +150,16 @@
                 </div>
                 <textarea id="expense_comment" name="expense_comment" rows="1" cols="50" class="form-control" placeholder="Opisz swój wydatek">{{ expense.expense_comment }}</textarea>
             </div>
-            <div class="buttonArea d-flex">
-              <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-up-open"></i>Dodaj</button>
+            <div class="buttonArea d-flex justify-content-center">
+              {% if expense.id is not empty %}
+                <a href="/expenses/remove?id={{expense.id}}" class="w-50 mx-1">
+                  <button type="button" class="btn btn-outline-danger w-100"><i class="icon-trash"></i>Usuń</button>
+                </a>
+                <button type="submit" class="btn btn-primary w-50 mx-1"><i class="icon-floppy"></i>Zapisz</button>
+              {% endif %}
+              {% if expense.id is empty %}
+                <button type="submit" class="btn btn-primary w-50 mx-1"><i class="icon-down-open"></i>Dodaj</button>
+              {% endif %}
             </div>    
           </form>
         </div>

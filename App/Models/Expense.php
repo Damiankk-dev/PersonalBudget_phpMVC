@@ -89,6 +89,44 @@ class Expense extends Cashflow
     }
 
     /**
+     * Upate the expense model with the current property values
      *
+     * @return boolean True if the expense was saved, false otherwise
      */
+    public function update()
+    {
+        $this->validate();
+        foreach ($this->errors as $key => $error_value)
+        {
+            if (empty($error_value)) unset($this->errors[$key]);
+        }
+
+        if (empty($this->errors))
+        {
+            $sql = 'UPDATE expenses SET
+                        expense_category_id = :expense_category,
+                        payment_method_id = :payment_method,
+                        amount = :expense_amount,
+                        date_of_expense = :expense_date,
+                        expense_comment = :expense_comment
+                    WHERE id = :id';
+            $db = static::getDB();
+            if ($db !== null )
+            {
+                $stmt = $db->prepare($sql);
+                $stmt->bindValue(':expense_category',
+                                    $this->expense_category, PDO::PARAM_STR);
+                $stmt->bindValue(':payment_method',
+                                    $this->payment_method, PDO::PARAM_STR);
+                $stmt->bindValue(':expense_amount', $this->expense_amount, PDO::PARAM_STR);
+                $stmt->bindValue(':expense_date', $this->expense_date, PDO::PARAM_STR);
+                $stmt->bindValue(':expense_comment', $this->expense_comment, PDO::PARAM_STR);
+                $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
+                return $stmt->execute();
+            }
+        }
+
+        $this->errors[] = 'Null database!';
+        return false;
+    }
 }

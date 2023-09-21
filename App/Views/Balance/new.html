@@ -24,7 +24,6 @@
 
         var data = google.visualization.arrayToDataTable(incomeData);
         var options = {
-          title: 'Przychody'
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-incomes'));
@@ -50,7 +49,6 @@
 
         var data = google.visualization.arrayToDataTable(expenseData);
         var options = {
-          title: 'Wydatki'
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('piechart-expenses'));
@@ -99,6 +97,14 @@
               <div class="balance_header_tile">
                   <h3>Przychody</h3>
               </div>
+              <div class="js-balance-incomes" data-balance-incomes="{{ balance.incomes_categories|json_encode }}">
+                <div id="piechart-incomes"></div>
+              </div>
+              <div class="balance_footer_tile">
+                {% if balance.incomes is not empty %}
+                    <h5>SUMA: {{ balance.incomes_sum }}</h5>
+                {% endif %}
+              </div>
                 {% if balance.incomes is not empty %}
                   <div class="cashflow_table_wrap my-1">
                     <table  class="income_table cashflow_table">
@@ -121,22 +127,24 @@
                     </table>
                   </div>
                 {% endif %}
-              <div class="js-balance-incomes" data-balance-incomes="{{ balance.incomes_categories|json_encode }}">
-                <div id="piechart-incomes"></div>
-              </div>
-              <div class="balance_footer_tile">
-                {% if balance.incomes is not empty %}
-                    <h5>SUMA: {{ balance.incomes_sum }}</h5>
-                {% endif %}
-              </div>
             </div>
             <div class="container_cashflow_col d-flex flex-column align-items-center">
               <div class="balance_header_tile">
                   <h3>Wydatki</h3>
               </div>
+              <div class="js-balance-expenses" data-balance-expenses="{{ balance.expenses_categories|json_encode }}">
+                <div id="piechart-expenses"></div>
+              </div>
+              <div class="balance_footer_tile">
+                {% if balance.expenses is not empty %}
+                  <h5>SUMA: {{ balance.expenses_sum }}</h5>
+                {% endif %}
+              </div>
                 {% if balance.expenses is not empty %}
                   <div class="cashflow_table_wrap my-1">
                     <table  class="expense_table cashflow_table">
+                      <th></th>
+                      <th></th>
                       <th>Wartość</th>
                       <th>Data</th>
                       <th>Kategoria</th>
@@ -144,6 +152,8 @@
                       <th>Opis</th>
                       {% for row in balance.expenses %}
                         <tr>
+                          <td><button type="button" class="btn edit" id="{{row.id}}" onclick="window.location.href='/expenses/edit?id={{row.id}}'"><i class="icon-pencil"></i></button></td>
+                          <td><button type="button" class="btn edit" id="{{row.id}}" onclick="confirmCashflowRemoval('expenses', '{{row.id}}')"><i class="icon-trash"></i></button></td>
                           <td>{{ row.amount }}</td>
                           <td>{{ row.date_of_expense }}</td>
                           <td>{{ row.name }}</td>
@@ -154,14 +164,6 @@
                     </table>
                   </div>
                 {% endif %}
-              <div class="js-balance-expenses" data-balance-expenses="{{ balance.expenses_categories|json_encode }}">
-                <div id="piechart-expenses"></div>
-              </div>
-              <div class="balance_footer_tile">
-                {% if balance.expenses is not empty %}
-                  <h5>SUMA: {{ balance.expenses_sum }}</h5>
-                {% endif %}
-              </div>
             </div>
           </div>
           <div class="container_balance_row d-flex flex-column px-2 align-items-center">

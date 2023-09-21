@@ -65,4 +65,71 @@ class Expenses extends Authenticated
 		}
 
 	}
+
+    /**
+     * Show the page allowing to edit an existing Expense
+     *
+     * @return void
+     */
+    public function editAction()
+    {
+		//query string: 'edit&id=1', pobranie ID
+		$referer = $_SERVER['HTTP_REFERER'];
+		$referer = explode('//',$_SERVER['HTTP_REFERER']);
+		$referer = explode('/',$referer[1]);
+		unset($referer[0]);
+		$referer = implode('/', $referer);
+		$_SESSION['redirect_url'] = $referer;
+		$expenseId = $this->getQueryStringParams()['id'];
+		//pobranie wpisu
+		$expense = Expense::getById($expenseId, 'expense');
+
+		View::renderTemplate('Expense/new.html', [
+			'expense' => $expense,
+			'expense_categories' => $this->userSettings->userSettingsForView["expense"],
+			'payment_methods' =>  $this->userSettings->userSettingsForView["payment"]
+		]);
+    }
+
+	/**
+	 * Add a new expense
+	 *
+	 * @return void
+	 */
+	public function updateAction()
+	{
+		$expense = new Expense($_POST);
+
+		if ($expense->update()) {
+			Flash::addMessage("Zmiany zapisane!");
+			$redirect = $_SESSION['redirect_url'];
+			unset($_SESSION['redirect_url']);
+			$this->redirect('/'.$redirect);
+		} else {
+			Flash::addMessage("Przychód nie został zapisany", Flash::WARNING);
+			View::renderTemplate('Expense/new.html', [
+                'expense' => $expense,
+				'expense_categories' => $this->userSettings->userSettingsForView["expense"],
+				'payment_methods' =>  $this->userSettings->userSettingsForView["payment"]
+            ]);
+		}
+	}
+
+	/**
+	 * Add a new expense
+	 *
+	 * @return void
+	 */
+	public function removeAction()
+	{
+		//query string: 'remove&id=1', pobranie ID
+		$expenseId = $this->getQueryStringParams()['id'];
+		if (Expense::deleteById($expenseId, 'expense')) {
+			Flash::addMessage("Wpis został usunięty!");
+			$this->returnToPrevious();
+		} else {
+			Flash::addMessage("Nie udało się połączyć z bazą danych", Flash::ERROR);
+			View::renderTemplate();
+		}
+	}
 }
