@@ -114,7 +114,7 @@ $('#formSettingsCategories input').change(function() {
 	if (error){
 		inputDiv.append("<label class='error'>"+error+"</span>")
 	} else {
-		input.attr('name', inputName + '_new');
+		input.attr('name', inputName + '_mod');
 		var input = inputDiv.find('label').hide();
 	}
 });
