@@ -136,8 +136,15 @@ class Balance extends \Core\Model
                 break;
             
             case $this::ANY:
-                $end_date = $this->endBalancePeriod;
-                $start_date = $this->startBalancePeriod;
+                if (isset($this->endBalancePeriod)){
+                    $end_date = $this->endBalancePeriod;
+                    $start_date = $this->startBalancePeriod;
+                    $_SESSION['endBalancePeriod'] = $end_date;
+                    $_SESSION['startBalancePeriod'] = $start_date;
+                } else {
+                    $end_date = $_SESSION['endBalancePeriod'];
+                    $start_date = $_SESSION['startBalancePeriod'];
+                }
                 break;
             default:
                 return false;
