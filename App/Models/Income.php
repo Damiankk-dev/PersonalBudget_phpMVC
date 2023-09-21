@@ -115,7 +115,6 @@ class Income extends Cashflow
                 $stmt->bindValue(':income_date', $this->income_date, PDO::PARAM_STR);
                 $stmt->bindValue(':income_comment', $this->income_comment, PDO::PARAM_STR);
                 $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
-                $stmt->debugDumpParams();
                 return $stmt->execute();
             }
         }
