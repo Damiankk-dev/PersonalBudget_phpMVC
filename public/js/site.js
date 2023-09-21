@@ -54,10 +54,6 @@ function(value, element, param) {
 'Data powinna być w formacie YYYY-mm-dd'
 );
 
-
-$(document).ready(function() {
-});
-
 $(document).ready(function() {
     $( ".datepicker" ).datepicker(
                {
@@ -65,8 +61,13 @@ $(document).ready(function() {
                }
        );
  });
+
  $(document).ready(function(){
-    $("#datepicker-13").datepicker().datepicker('setDate', new Date());
+	if ($("#datepicker-13").val() != ""){
+		$("#datepicker-13").datepicker().datepicker('setDate', $("#datepicker-13").val());
+	} else {
+		$("#datepicker-13").datepicker().datepicker('setDate', new Date());
+	}
  }); 
 
  function removeCategory(btn) {
