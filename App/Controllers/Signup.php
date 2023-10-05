@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use \Core\View;
+use \App\Flash;
 use \App\Models\User;
+use Exception;
 
 /**
  * Home controller
@@ -30,16 +32,25 @@ class Signup extends \Core\Controller
 	 */
 	public function createAction()
 	{
-		$user = new User($_POST);
-		
-		if ($user->save()) {
-			$user->sendActivationEmail();
+		try{
+			$user = new User($_POST);
 			
-			static::redirect('/Signup/success');
-		} else {
-			View::renderTemplate('Signup/index.html', [
-				'user' => $user
-				]);
+			if ($user->save()) {
+				try{
+					$user->sendActivationEmail();
+					//static::redirect('/Signup/success');
+				} catch (\Exception $e){
+					Flash::addMessage("Problem with sending activation email {$e->getMessage()}", Flash::WARNING);
+					View::renderTemplate('500.html');
+				}
+
+			} else {
+				View::renderTemplate('Signup/index.html', [
+					'user' => $user
+					]);
+			}
+		} catch (\Exception $e){
+			Flash::addMessage("User cannot be created: {$e->getMessage()}", Flash::WARNING);
 		}
 	}
 	

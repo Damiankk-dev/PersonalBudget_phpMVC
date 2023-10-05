@@ -6,6 +6,7 @@ use \Core\View;
 use PDO;
 use App\Token;
 use App\Mail;
+use Exception;
 
 /**
  * Example user model
@@ -161,12 +162,16 @@ class User extends \Core\Model
 	 */
 	public function sendActivationEmail()
 	{
-		$url = 'http://' . $_SERVER['HTTP_HOST'] . '/signup/activate/' . $this->activation_token;
+		try {
+            $url = 'http://' . $_SERVER['HTTP_HOST'] . '/signup/activate/' . $this->activation_token;
 
-		$text = View::getTemplate('Signup/activation_email.txt', ['url' => $url]);
-		$html = View::getTemplate('Signup/activation_email.html', ['url' => $url]);
+            $text = View::getTemplate('Signup/activation_email.txt', ['url' => $url]);
+            $html = View::getTemplate('Signup/activation_email.html', ['url' => $url]);
 
-		Mail::send($this->email, 'Aktywacja konta na stronie PersonalBudget', $text, $html);
+            Mail::send($this->email, 'Aktywacja konta na stronie PersonalBudget', $text, $html);
+        } catch (Exception $e) {
+            View::renderTemplate('Signup/index.html');
+        }
 	}
 
 	/**
@@ -316,13 +321,13 @@ class User extends \Core\Model
      */
     private function saveDefaultSettings()
     {
-        $sql = 'INSERT INTO payment_methods_assigned_to_users VALUES ';
+        $sql = 'INSERT INTO payment_methods_assigned_to_users (user_id, name) VALUES ';
         $sql = $this->concatenateParamsIntoSeparateValues($sql, 'payment_methods_default');
 
-        $sql .= 'INSERT INTO expenses_category_assigned_to_users VALUES ';
+        $sql .= 'INSERT INTO expenses_category_assigned_to_users (user_id, name) VALUES ';
         $sql = $this->concatenateParamsIntoSeparateValues($sql, 'expenses_category_default');
 
-        $sql .= 'INSERT INTO incomes_category_assigned_to_users VALUES ';
+        $sql .= 'INSERT INTO incomes_category_assigned_to_users (user_id, name) VALUES ';
         $sql = $this->concatenateParamsIntoSeparateValues($sql, 'incomes_category_default');
 
 		$db = static::getDB();
@@ -384,7 +389,7 @@ class User extends \Core\Model
 
         foreach ($params as $row)
         {
-            $query .= '('. $row['id'] . ', ' . $this->id . ', \'' .  $row['name'] . '\'),';
+            $query .= '('. $this->id . ', \'' .  $row['name'] . '\'),';
         }
         $query = $this->str_lreplace(',', ';', $query);
 
