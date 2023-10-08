@@ -180,20 +180,22 @@
                                         {% if '_confirm' in row.modificationType %}
                                             {% set confirmButton = "d-none" %}
                                         {% endif %}
-                                            <div class="input-group w-100 mx-auto {{errorClass}} {{displayClass}}">
-                                                <input name="{{row.modificationType}}" class="form-control settings-table" value="{{ row.name }}" required/>
-                                                {% if '_confirm' in row.modificationType %}
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="confirmRemoveCategory(this)">?</button>
-                                                {% endif %}
-                                                {% if '_confirm' not in row.modificationType %}
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
-                                                {% endif %}
-                                            </div>
+                                        <div class="input-group w-100 mx-auto {{errorClass}} {{displayClass}}">
+                                            <input name="{{row.modificationType}}" class="form-control settings-table" value="{{ row.name }}" required/>
+                                            {% if '_confirm' in row.modificationType %}
+                                                <button type="button" class="btn btn-outline-secondary" onclick="confirmRemoveCategory(this)">?</button>
+                                            {% endif %}
+                                            {% if '_confirm' not in row.modificationType %}
+                                                <button type="button" class="btn btn-outline-secondary" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
+                                            {% endif %}
+                                        </div>
                                     {% endif %}
                                     {% if validationStatus == true %}
                                         <div class="input-group w-100 mx-auto">
                                             <input name="expense_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required/>
-                                            <button type="button" class="btn btn-outline-secondary" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
+                                            <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}">Limit: 1000</label>
+                                            <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock"></i></button>
+                                            <button type="button" class="btn btn-outline-secondary settings-table" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -238,11 +240,36 @@
       </div>
     </div>
 </div>
+<div class="modal fade" id="limitModal" tabindex="-1" role="dialog" aria-labelledby="limitModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeLimitModal()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="limitModalLabel">Ustaw limit dla kategorii
+            <span class="limit-category-name"></span></h4>
+        </div>
+        <div class="modal-body d-flex flex-wrap">
+            <div class="d-flex w-100 justify-content-center">
+                <label for="add-limit">Dodaj limit do kategorii</label>
+                <input class="limit-modal-input-checkbox" type="checkbox" name="add-limit" id="add-limit">
+            </div>
+            <div class="d-flex w-100 justify-content-center">
+                <input class="limit-modal-input-number" type="number" name="" id="" min="0" max="99999999" step="1" disabled>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeLimitModal()">Zamknij</button>
+          <button type="button" class="btn btn-danger"  id="save-limit">Zapisz</button>
+        </div>
+      </div>
+    </div>
+</div>
 {% endblock %}
 
 
 {% block footer %}
 
 	<script src="/js/site.js"></Script>
+	<script src="/js/limit.js"></Script>
 
 {% endblock %}
