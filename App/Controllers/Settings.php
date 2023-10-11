@@ -292,4 +292,20 @@ class Settings extends Authenticated
 
 		return $userSetting;
 	}
+
+	/**
+	 * Gets limit amount for category ID
+	 *
+	 * @param int $categoryId
+	 *
+	 * @return void?
+	 */
+	public function limitAction(){
+		$parts = explode('/', $_SERVER['QUERY_STRING']);
+		$categoryId = $parts[2];
+		$userSettings = new UserSettings();
+		$data = $userSettings->getLimitValueById($categoryId);
+		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+		echo $myJSON;
+	}
 }

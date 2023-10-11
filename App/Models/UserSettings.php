@@ -381,4 +381,23 @@ class UserSettings extends \Core\Model
 
         return $settingsSortedForSave;
     }
+
+    /**
+     * Get limit value by id
+     * @param int $categoryId expense category id
+     * @return mixed category limit (nullable) or false
+     */
+    public function getLimitValueById($categoryId){
+        $sql = 'SELECT category_limit FROM expenses_category_assigned_to_users WHERE id = :id';
+
+        $db = $this->getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam('id', $categoryId, PDO::PARAM_INT);
+
+        $stmt->execute();
+		$stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        return $stmt->fetch();
+
+    }
 }

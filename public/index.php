@@ -37,5 +37,6 @@ $router->add('logout', ['controller' => 'Login', 'action' => 'destroy']);
 $router->add('balances/show/{type}', ['controller' => 'Balances', 'action' => 'Show']);
 $router->add('getToken', ['controller' => 'Account', 'action' => 'getToken']);
 $router->add('settings', ['controller' => 'Settings', 'action' => 'index']);
+$router->add('api/limit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'limit']);
     
 $router->dispatch($_SERVER['QUERY_STRING']);
