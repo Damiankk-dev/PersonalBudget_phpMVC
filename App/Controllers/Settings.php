@@ -308,4 +308,22 @@ class Settings extends Authenticated
 		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 		echo $myJSON;
 	}
+
+	/**
+	 * Sets expense category limit value by category id
+     * @param int $categoryId expense category id
+     * @param int $limitValue value of chosen limit
+	 * @return void
+	 */
+	public function setLimitAction(){
+		$parts = explode('/', $_SERVER['QUERY_STRING']);
+		$queryParams = explode('&', $parts[2]);
+		$categoryId = $queryParams[0];
+		$limitValue = $queryParams[1];
+		$userSettings = new UserSettings();
+		$userSettings->updateLimitById($categoryId, $limitValue);
+		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+		$this->indexAction();
+
+	}
 }

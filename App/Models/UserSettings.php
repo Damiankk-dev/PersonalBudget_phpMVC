@@ -400,4 +400,24 @@ class UserSettings extends \Core\Model
         return $stmt->fetch();
 
     }
+
+    /**
+     * Updates limit value by id
+     * @param int $categoryId expense category id
+     * @param int $limitValue value of chosen limit
+     * @return boolean true if no error else otherwise
+     */
+    public function updateLimitById($categoryId, $limitValue){
+        $sql = 'UPDATE expenses_category_assigned_to_users
+            SET category_limit = :categoryLimit
+            WHERE id = :id';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindValue(':categoryLimit', $limitValue, PDO::PARAM_INT);
+        $stmt->bindValue(':id', $categoryId, PDO::PARAM_INT);
+
+        $stmt->execute();
+    }
 }

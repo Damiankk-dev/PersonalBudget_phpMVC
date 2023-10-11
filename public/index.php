@@ -38,5 +38,6 @@ $router->add('balances/show/{type}', ['controller' => 'Balances', 'action' => 'S
 $router->add('getToken', ['controller' => 'Account', 'action' => 'getToken']);
 $router->add('settings', ['controller' => 'Settings', 'action' => 'index']);
 $router->add('api/limit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'limit']);
+$router->add('api/setLimit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'setLimit']);
     
 $router->dispatch($_SERVER['QUERY_STRING']);
