@@ -191,9 +191,9 @@
                                         </div>
                                     {% endif %}
                                     {% if validationStatus == true %}
-                                        <div class="input-group w-100 mx-auto">
-                                            <input name="expense_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required/>
-                                            <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}">Limit: 1000</label>
+                                        <div class="input-group w-100 mx-auto category-row">
+                                            <input name="expense_{{row.id}}" class="form-control settings-table category-name" value="{{ row.name }}" required/>
+                                            <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}" hidden>Limit: <span class="limit-value"></span></label>
                                             <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock"></i></button>
                                             <button type="button" class="btn btn-outline-secondary settings-table" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
                                         </div>
