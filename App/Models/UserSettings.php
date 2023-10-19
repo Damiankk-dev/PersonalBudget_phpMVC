@@ -408,6 +408,10 @@ class UserSettings extends \Core\Model
      * @return boolean true if no error else otherwise
      */
     public function updateLimitById($categoryId, $limitValue){
+        if ($limitValue == 'null'){
+            $limitValue = NULL;
+        }
+
         $sql = 'UPDATE expenses_category_assigned_to_users
             SET category_limit = :categoryLimit
             WHERE id = :id';
@@ -415,9 +419,8 @@ class UserSettings extends \Core\Model
         $db = static::getDB();
         $stmt = $db->prepare($sql);
 
-        $stmt->bindValue(':categoryLimit', $limitValue, PDO::PARAM_INT);
+        $stmt->bindValue(':categoryLimit', $limitValue, PDO::PARAM_STR);
         $stmt->bindValue(':id', $categoryId, PDO::PARAM_INT);
-
         $stmt->execute();
     }
 }

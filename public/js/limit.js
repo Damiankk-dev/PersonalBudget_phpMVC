@@ -10,10 +10,14 @@ const setLimitValues = async () => {
         let categoryName = limitRows[i].querySelector("input.category-name").getAttribute("value");
 
         limitButton.addEventListener("click", async () => {
-            showLimitModal(categoryName, limitData.category_limit);
+            showLimitModal(categoryName, expenseId,  limitData.category_limit);
         })
 
         if (limitData.category_limit !== null){
+            let limitIcon = limitRows[i].querySelector("button.expense_limit i");
+            console.log(limitIcon);
+            limitIcon.classList.remove("icon-lock-open");
+            limitIcon.classList.add("icon-lock");
             let limitValue = limitRows[i].querySelector("span.limit-value");
             limitValue.textContent = limitData.category_limit;
             let limitLabel = limitRows[i].querySelector("label.expense_limit");
@@ -31,20 +35,27 @@ limitModalCheckbox.addEventListener("click", async () => {
         document.querySelector(".limit-modal-input-number").removeAttribute("disabled");
     } else {
         document.querySelector(".limit-modal-input-number").setAttribute("disabled", "");
+        let form = document.querySelector("#formLimit");
+        let formAction = form.getAttribute("action");
+        formAction = formAction.split('&')[0];
+        form.setAttribute("action", `${formAction}&null`);
     };
 })
-const showLimitModal = (categoryName, limitValue) => {
+
+const showLimitModal = (categoryName, categoryId, limitValue) => {
     $('#limitModal').on('show.bs.modal', function (e) {
         let modal = document.querySelector("#limitModal");
         let modalName = modal.querySelector(".limit-category-name");
         modalName.textContent = categoryName;
         let valueInput = modal.querySelector(".limit-modal-input-number");
         valueInput.setAttribute("value", limitValue);
+        let form = modal.querySelector("#formLimit");
         let limitModalCheckbox = modal.querySelector("#add-limit");
         if (limitValue !== null) {
             limitModalCheckbox.setAttribute("checked", false);
             modal.querySelector(".limit-modal-input-number").removeAttribute("disabled");
         }
+        form.setAttribute("action", `/api/setLimit/${categoryId}&${limitValue}`)
       });
 
     $('#limitModal').modal('show');
@@ -62,4 +73,32 @@ const getLimitForCategory = async (categoryId) => {
     }
 }
 
+const saveLimit = () => {
+    let limitModalCheckbox = document.querySelector("#add-limit");
+    let limitValue = null;
+    if (limitModalCheckbox.checked === true){
+
+    }
+
+}
 setLimitValues();
+
+
+let valueInput = document.querySelector(".limit-modal-input-number");
+valueInput.addEventListener("change", async (e) => {
+    let modal = document.querySelector("#limitModal");
+    limitValue = valueInput.value;
+    if (limitValue === ''){
+        limitValue = null;
+    }
+    let form = modal.querySelector("#formLimit");
+    let formAction = form.getAttribute("action");
+    formAction = formAction.split('&')[0];
+    form.setAttribute("action", `${formAction}&${limitValue}`)
+})
+
+const validateLimitValue = (limitValue) => {
+    if (limitValue < 0){
+
+    }
+}

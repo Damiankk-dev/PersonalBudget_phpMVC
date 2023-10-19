@@ -323,7 +323,6 @@ class Settings extends Authenticated
 		$userSettings = new UserSettings();
 		$userSettings->updateLimitById($categoryId, $limitValue);
 		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
-		$this->indexAction();
-
+		$this->redirect('/settings/index');
 	}
 }

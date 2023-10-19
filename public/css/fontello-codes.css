@@ -19,6 +19,7 @@
 .icon-user:before { content: '\e811'; } /* '' */
 .icon-doc-text:before { content: '\e812'; } /* '' */
 .icon-search:before { content: '\e813'; } /* '' */
+.icon-lock-open:before { content: '\e814'; } /* '' */
 .icon-docs:before { content: '\f0c5'; } /* '' */
 .icon-money:before { content: '\f0d6'; } /* '' */
 .icon-gamepad:before { content: '\f11b'; } /* '' */

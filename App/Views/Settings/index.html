@@ -22,7 +22,7 @@
                     Zmiana hasła
                 </h6>
                 <form method="post" action="/settings/updatePassword" id ="formUpdatePassword">
-                    <div class="input-group w-75 mx-auto">
+                    <div class="input-group w-75 mx-auto justify-content-center">
                         <div class="input-group-prepend">
                             <div class="input-group-text"><i class="icon-lock"></i></div>
                         </div>
@@ -194,7 +194,7 @@
                                         <div class="input-group w-100 mx-auto category-row">
                                             <input name="expense_{{row.id}}" class="form-control settings-table category-name" value="{{ row.name }}" required/>
                                             <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}" hidden>Limit: <span class="limit-value"></span></label>
-                                            <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock"></i></button>
+                                            <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock-open"></i></button>
                                             <button type="button" class="btn btn-outline-secondary settings-table" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
                                         </div>
                                     {% endif %}
@@ -248,19 +248,21 @@
           <h4 class="modal-title" id="limitModalLabel">Ustaw limit dla kategorii
             <span class="limit-category-name"></span></h4>
         </div>
-        <div class="modal-body d-flex flex-wrap">
-            <div class="d-flex w-100 justify-content-center">
-                <label for="add-limit">Dodaj limit do kategorii</label>
-                <input class="limit-modal-input-checkbox" type="checkbox" name="add-limit" id="add-limit">
+        <form method="post" action="/api/setLimit" id="formLimit">
+            <div class="modal-body d-flex flex-wrap">
+                <div class="d-flex w-100 justify-content-center">
+                    <label for="add-limit">Dodaj limit do kategorii</label>
+                    <input class="limit-modal-input-checkbox" type="checkbox" name="add-limit" id="add-limit">
+                </div>
+                <div class="d-flex w-100 justify-content-center">
+                    <input class="limit-modal-input-number" type="number" name="modal-limitValue" id="modal-limitValue" min="0" max="99999999" step="1" disabled>
+                </div>
             </div>
-            <div class="d-flex w-100 justify-content-center">
-                <input class="limit-modal-input-number" type="number" name="" id="" min="0" max="99999999" step="1" disabled>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeLimitModal()">Zamknij</button>
+              <button type="submit" class="btn btn-danger" >Zapisz</button>
             </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeLimitModal()">Zamknij</button>
-          <button type="button" class="btn btn-danger"  id="save-limit">Zapisz</button>
-        </div>
+        </form>
       </div>
     </div>
 </div>
