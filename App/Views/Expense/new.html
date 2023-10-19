@@ -94,7 +94,7 @@
                 <div class="input-group-prepend w-25">
                     <div class="input-group-text w-100 justify-content-center"><i class="icon-money"></i></div>
                 </div>
-                <input name="expense_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required value="{{ expense.amount }}">
+                <input name="expense_amount" id="expense_amount" type="number" class="form-control " min="0.0" step=".01" placeholder="Kwota" required value="{{ expense.amount }}">
             </div>
             <div class="input-group inputControl w-100">
                 <div class="input-group-prepend w-25">
@@ -130,7 +130,7 @@
                 <div class="input-group-prepend w-25">
                   <div class="input-group-text w-100 justify-content-center"><i class="icon-th"></i></div>
                 </div>
-                <select name="expense_category" class="form-select">
+                <select name="expense_category" id="expense_category" class="form-select">
                   {% if expense.id is empty %}
                     <option selected>Kategoria</option>
                   {% endif %}
