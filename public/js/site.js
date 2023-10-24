@@ -63,10 +63,10 @@ $(document).ready(function() {
  });
 
  $(document).ready(function(){
-	if ($("#datepicker-13").val() != ""){
-		$("#datepicker-13").datepicker().datepicker('setDate', $("#datepicker-13").val());
+	if ($("#expense_date").val() != ""){
+		$("#expense_date").datepicker().datepicker('setDate', $("#expense_date").val());
 	} else {
-		$("#datepicker-13").datepicker().datepicker('setDate', new Date());
+		$("#expense_date").datepicker().datepicker('setDate', new Date());
 	}
  }); 
 
