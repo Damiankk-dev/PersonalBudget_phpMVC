@@ -325,4 +325,21 @@ class Settings extends Authenticated
 		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
 		$this->redirect('/settings/index');
 	}
+
+	/**
+	 * Gets limit value for given month and category
+	 *
+	 * @param int $categoryId
+	 * @param string $dateOfExpense
+	 *
+	 * @return void?
+	 */
+	public function monthlyLimitAction(){
+		$parts = explode('/', $_SERVER['QUERY_STRING']);
+		$queryParams = explode('&', $parts[2]);
+		$categoryId = $queryParams[0];
+		$expenseDate = $queryParams[1];
+		$dataJSON = "Monthly Limit for category: " . $categoryId . " from date: " . $expenseDate ;
+		echo $dataJSON;
+	}
 }
