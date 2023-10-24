@@ -26,6 +26,7 @@ const setLimitValue = async () => {
 setLimitValue();
 
 let expenseValueInput = document.querySelector("#expense_amount");
+
 expenseValueInput.addEventListener("change", async () => {
     let limitValue = document.querySelector("#limit-alert-limit-value").textContent;
     if (limitValue != ''){
@@ -38,4 +39,10 @@ expenseValueInput.addEventListener("change", async () => {
         }
     }
     console.log(limitValue);
+    getLimitForMonth();
 })
+
+const getLimitForMonth = async () => {
+    let expenseDate = document.querySelector("#expense_date");
+    console.log(`Expense date: ${expenseDate.value}`);
+}
