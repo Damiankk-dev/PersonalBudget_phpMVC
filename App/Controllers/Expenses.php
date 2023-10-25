@@ -132,4 +132,23 @@ class Expenses extends Authenticated
 			View::renderTemplate();
 		}
 	}
+
+	/**
+	 * Gets limit value for given month and category
+	 *
+	 * @param int $categoryId
+	 * @param string $dateOfExpense
+	 *
+	 * @return void?
+	 */
+	public function monthlyExpensesAction(){
+		$expense = new Expense();
+		$parts = explode('/', $_SERVER['QUERY_STRING']);
+		$queryParams = explode('&', $parts[2]);
+		$categoryId = $queryParams[0];
+		$expenseDate = $queryParams[1];
+		$data = $expense->getMonthlyExpensesForCategory($categoryId, $expenseDate);
+		$dataJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+		echo $dataJSON;
+	}
 }

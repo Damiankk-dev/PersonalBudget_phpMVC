@@ -39,6 +39,6 @@ $router->add('getToken', ['controller' => 'Account', 'action' => 'getToken']);
 $router->add('settings', ['controller' => 'Settings', 'action' => 'index']);
 $router->add('api/limit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'limit']);
 $router->add('api/setLimit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'setLimit']);
-$router->add('api/monthlyLimit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'monthlyLimit']);
+$router->add('api/monthlyExpenses/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Expenses', 'action' => 'monthlyExpenses']);
     
 $router->dispatch($_SERVER['QUERY_STRING']);

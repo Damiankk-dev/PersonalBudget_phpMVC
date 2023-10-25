@@ -129,4 +129,50 @@ class Expense extends Cashflow
         $this->errors[] = 'Null database!';
         return false;
     }
+
+    /**
+     * Gets sum of expenses from a given category and period
+     *
+	 * @param int $categoryId
+	 * @param string $dateOfExpense
+     *
+     */
+    public function getMonthlyExpensesForCategory($categoryId, $dateOfExpense){
+        $user = Auth::getUser();
+		if (strtotime($dateOfExpense)){
+			$month = date('m', strtotime($dateOfExpense));
+			$year = date('Y', strtotime($dateOfExpense));
+			$startDate = date('Y-m-d', mktime(0, 0, 0, 1, $month, $year));
+
+            $sql = 'SELECT
+                    SUM(e.amount) AS categorySum
+                    FROM expenses e
+                    WHERE
+                        e.user_id = :user_id
+                    AND
+                        e.expense_category_id = :categoryId
+                    AND
+                        e.date_of_expense BETWEEN :start_date AND :end_date';
+
+            $db = static::getDB();
+            if ($db !== null )
+            {
+                $stmt = $db->prepare($sql);
+                $stmt->bindParam(':user_id', $user->id, PDO::PARAM_INT);
+                $stmt->bindParam(':categoryId', $categoryId, PDO::PARAM_INT);
+                $stmt->bindParam(':start_date',
+                                    $startDate, PDO::PARAM_STR);
+                $stmt->bindParam(':end_date',
+                                    $dateOfExpense, PDO::PARAM_STR);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+
+            $this->errors[] = 'Null database!';
+            return false;
+		} else {
+			$this->errors[] = "ERROR - incorrect date";
+            return false;
+		}
+    }
 }
