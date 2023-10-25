@@ -122,8 +122,10 @@
 				{{ message.body }}
 			</div>
 			{% endfor %}
-			<div class="col-8 offset-2 alert alert-warning text-center limit-alert" hidden>
-				<span id="limit-alert-message"><span id="limit-alert-limit-value"></span></span>
+			<input type="text" id="limit-alert-limit-value" hidden>
+			<div class="col-8 offset-2 alert alert-warning text-center limit-alert" id="limit-alert" hidden>
+
+				<span id="limit-alert-message"></span>
 			</div>
 			<main>
 

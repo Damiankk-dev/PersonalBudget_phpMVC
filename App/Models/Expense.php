@@ -142,7 +142,7 @@ class Expense extends Cashflow
 		if (strtotime($dateOfExpense)){
 			$month = date('m', strtotime($dateOfExpense));
 			$year = date('Y', strtotime($dateOfExpense));
-			$startDate = date('Y-m-d', mktime(0, 0, 0, 1, $month, $year));
+			$startDate = date('Y-m-d', mktime(0, 0, 0, $month, 1, $year));
 
             $sql = 'SELECT
                     SUM(e.amount) AS categorySum
@@ -153,7 +153,6 @@ class Expense extends Cashflow
                         e.expense_category_id = :categoryId
                     AND
                         e.date_of_expense BETWEEN :start_date AND :end_date';
-
             $db = static::getDB();
             if ($db !== null )
             {
@@ -165,7 +164,8 @@ class Expense extends Cashflow
                 $stmt->bindParam(':end_date',
                                     $dateOfExpense, PDO::PARAM_STR);
                 $stmt->execute();
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                return $stmt->fetch();
             }
 
             $this->errors[] = 'Null database!';
