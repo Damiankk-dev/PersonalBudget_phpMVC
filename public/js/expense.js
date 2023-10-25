@@ -3,19 +3,19 @@
 let categorySelect = document.querySelector("#expense_category");
 categorySelect.addEventListener("change", async () => {
     setLimitValue();
-    console.log(await setStatusOfExpense());
+    await setStatusOfExpense();
     await showExpenseStatus();
 })
     //Value input
 let expenseValueInput = document.querySelector("#expense_amount");
 expenseValueInput.addEventListener("change", async () => {
-    console.log(await setStatusOfExpense());
+    await setStatusOfExpense();
     await showExpenseStatus();
 })
     //Datepicker
 let expenseDate = document.querySelector("#expense_date");
 expenseDate.addEventListener("change", async () => {
-    console.log(await setStatusOfExpense());
+    await setStatusOfExpense();
     await showExpenseStatus();
 })
 
@@ -48,7 +48,6 @@ const getMonthlySumOfExpensesForCategory = async () => {
 //Other funcs
 const setLimitValue = async () => {
     let category_limit = await getLimitForCategory();
-    console.log(category_limit);
     let limitMessageSpan = document.querySelector("#limit-alert-limit-value");
     limitMessageSpan.textContent = category_limit.category_limit;
 }
@@ -64,9 +63,7 @@ const setStatusOfExpense = async () => {
     let jsonMonthlyExpenses = await getMonthlySumOfExpensesForCategory();
     if (jsonMonthlyExpenses.categorySum != null) monthlyExpenses = parseFloat(jsonMonthlyExpenses.categorySum);
     let currentExpenseValue = parseFloat(expenseValueInput.value);
-    console.log(`Current exp val: ${currentExpenseValue}`);
     let sumExpenses = monthlyExpenses + currentExpenseValue;
-    console.log(`Current sum: ${sumExpenses}`);
     if ((limit != null && sumExpenses > 0.0) || sumExpenses < limit) status = "OK";
     else if (limit != null && sumExpenses >= limit) status = "WARN";
 
@@ -77,8 +74,6 @@ const showExpenseStatus = async () => {
     let expenseStatus = await setStatusOfExpense();
     let limitMessageText = document.querySelector("#limit-alert-message");
     let limitMessageField = document.querySelector("#limit-alert");
-    console.log(`Status: ${expenseStatus}`);
-    console.log(`Field: ${limitMessageField}`);
     switch (expenseStatus){
         case 'OK':
             limitMessageText.textContent = "Jest OK!";
