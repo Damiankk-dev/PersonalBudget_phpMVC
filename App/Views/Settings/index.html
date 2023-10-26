@@ -104,7 +104,7 @@
                             {% endif %}
                         </div>
                         <div class="buttonArea d-flex">
-                            <button type="button" class="btn btn-outline-primary w-75 mx-auto my-2" onclick="addCategory(this, 'payment')">
+                            <button type="button" class="btn btn-outline-primary w-75 mx-auto my-2 add-setting" name="payment">
                                 <i class="icon-plus-outline"></i>Dodaj sposób płatności
                             </button>
                         </div>
@@ -153,7 +153,7 @@
                             {% endif %}
                         </div>
                         <div class="buttonArea d-flex">
-                            <button type="button" class="btn btn-outline-primary w-75 mx-auto my-2" onclick="addCategory(this, 'income')">
+                            <button type="button" class="btn btn-outline-primary w-75 mx-auto my-2 add-setting" name="income">
                                 </label><i class="icon-plus-outline"></i>Dodaj Kategorię
                             </button>
                         </div>
@@ -202,7 +202,7 @@
                             {% endif %}
                         </div>
                         <div class="buttonArea d-flex">
-                            <button type="button" class="btn btn-outline-primary w-75 mx-auto my-2" onclick="addCategory(this, 'expense')">
+                            <button type="button" class="btn btn-outline-primary w-75 mx-auto my-2 add-setting" name="expense">
                                 </label><i class="icon-plus-outline"></i>Dodaj Kategorię
                             </button>
                         </div>
@@ -261,6 +261,27 @@
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeLimitModal()">Zamknij</button>
               <button type="submit" class="btn btn-danger" >Zapisz</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="settingModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="settingModalLabel">Dodaj <span class="modal-setting-type"></span></h4>
+        </div>
+        <form method="post" action="/api/addSetting" id="formSetting">
+            <div class="modal-body d-flex flex-wrap">
+                <div class="d-flex w-100 justify-content-center">
+                    <input class="setting-modal-input-name" type="text" name="modal-setting-name" id="modal-setting-name">
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default close" data-dismiss="modal">Zamknij</button>
+              <button type="submit" class="btn btn-primary"><i class="icon-floppy"></i>Zapisz</button>
             </div>
         </form>
       </div>

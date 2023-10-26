@@ -1,3 +1,13 @@
+//Event listeners
+let addSettingButtons = document.querySelectorAll(".add-setting");
+for (let i = 0; i<addSettingButtons.length; i++) {
+    let button = addSettingButtons[i];
+    let settingType = button.getAttribute("name");
+    button.addEventListener("click", async () => {
+        showSettingModal(settingType);
+    })
+}
+
 const setLimitValues = async () => {
     let limitRows = document.querySelectorAll(".category-row");
     for (let i = 0; i<limitRows.length; i++){
@@ -97,8 +107,12 @@ valueInput.addEventListener("change", async (e) => {
     form.setAttribute("action", `${formAction}&${limitValue}`)
 })
 
-const validateLimitValue = (limitValue) => {
-    if (limitValue < 0){
+const showSettingModal = (settingType) => {
+    $('#settingModal').on('show.bs.modal', function (e) {
+        let modal = document.querySelector("#settingModal");
+        let modalName = modal.querySelector(".modal-setting-type");
+        modalName.textContent = settingType;
+      });
 
-    }
+    $('#settingModal').modal('show');
 }
