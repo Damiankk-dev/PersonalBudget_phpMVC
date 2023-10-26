@@ -54,21 +54,15 @@ function(value, element, param) {
 'Data powinna być w formacie YYYY-mm-dd'
 );
 
-$(document).ready(function() {
-    $( ".datepicker" ).datepicker(
-               {
-                       dateFormat: "yy-mm-dd"
-               }
-       );
- });
-
- $(document).ready(function(){
-	if ($("#expense_date").val() != ""){
-		$("#expense_date").datepicker().datepicker('setDate', $("#expense_date").val());
-	} else {
-		$("#expense_date").datepicker().datepicker('setDate', new Date());
-	}
- }); 
+let dateInput = document.querySelector("#expense_date");
+if (dateInput.value === "" ) {
+	let date = new Date();
+	let day = date.getDate();
+	let month = date.getMonth() + 1;
+	let year = date.getFullYear();
+	let currentDate = `${year}-${month}-${day}`;
+	dateInput.value = currentDate;
+}
 
  function removeCategory(btn) {
 	var inputDiv = $(btn).parent()
