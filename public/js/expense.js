@@ -2,7 +2,7 @@
     //Dropdown
 let categorySelect = document.querySelector("#expense_category");
 categorySelect.addEventListener("change", async () => {
-    setLimitValue();
+    await setLimitValue();
     await showExpenseStatus();
 })
     //Value input
@@ -75,13 +75,13 @@ const showExpenseStatus = async () => {
     let difference = parseFloat(limitValue - expenses).toFixed(2);
     switch (expenseStatus){
         case 'OK':
-            limitMessageText.textContent = `Jest OK! W tym miesiącu kwota wydatków: ${expenses} jest poniżej kwoty limitu: ${limitValue}. Do wykorzystania w ramch limitu pozostało: ${difference}`;
+            limitMessageText.textContent = `Jest OK! W tym miesiącu kwota wydatków: ${expenses} jest poniżej kwoty limitu: ${limitValue}PLN. Do wykorzystania w ramch limitu pozostało: ${difference}PLN`;
             limitMessageField.removeAttribute("hidden");
             limitMessageField.classList.remove("alert-warning");
             limitMessageField.classList.add("alert-info");
         break;
         case 'WARN':
-            limitMessageText.textContent = `Uwaga! W tym miesiącu kwota wydatków: ${expenses} przekroczyła kwotę limitu: ${limitValue} o ${-1*difference}`;
+            limitMessageText.textContent = `Uwaga! W tym miesiącu kwota wydatków: ${expenses}PLN przekroczyła kwotę limitu: ${limitValue}PLN o: ${-1*difference}PLN`;
             limitMessageField.removeAttribute("hidden");
             limitMessageField.classList.remove("alert-info");
             limitMessageField.classList.add("alert-warning");
