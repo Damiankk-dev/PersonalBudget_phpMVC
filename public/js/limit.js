@@ -111,8 +111,47 @@ const showSettingModal = (settingType) => {
     $('#settingModal').on('show.bs.modal', function (e) {
         let modal = document.querySelector("#settingModal");
         let modalName = modal.querySelector(".modal-setting-type");
-        modalName.textContent = settingType;
+        modalName.textContent = setSettingName(settingType);
+        let limitDiv = modal.querySelector(".setting-limit");
+        if (settingType === "expense"){
+            limitDiv.classList.remove("d-none");
+        } else {
+            limitDiv.classList.add("d-none");
+        }
+        let form = modal.querySelector("#formSetting");
+        let formAction = form.getAttribute("action");
+        formAction += capitalizeFirstLetter(settingType);
+        form.setAttribute("action", formAction);
       });
 
     $('#settingModal').modal('show');
 }
+
+const setSettingName = (settingType) => {
+    switch(settingType){
+        case "income":
+            return "źródło dochodu";
+        case "expense":
+            return "kategorię wydatku";
+        case "payment":
+            return "sposób płatności";
+        default:
+            return "";
+    }
+}
+
+const capitalizeFirstLetter = (string) =>{
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+const closeSettingModal = () => $('#settingModal').modal('hide');
+
+let settingLimitCheckbox = document.querySelector("#setting-add-limit");
+settingLimitCheckbox.addEventListener("click", () =>{
+    let settingLimitValue = document.querySelector("#setting-limitValue");
+    if (settingLimitCheckbox.checked === true){
+        settingLimitValue.removeAttribute("disabled");
+    } else {
+        settingLimitValue.setAttribute("disabled", "");
+    }
+})
