@@ -120,8 +120,7 @@ const showSettingModal = (settingType) => {
         }
         let form = modal.querySelector("#formSetting");
         let formAction = form.getAttribute("action");
-        formAction += capitalizeFirstLetter(settingType);
-        form.setAttribute("action", formAction);
+        form.setAttribute("action", `${formAction}/${settingType}`);
       });
 
     $('#settingModal').modal('show');

@@ -325,4 +325,17 @@ class Settings extends Authenticated
 		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
 		$this->redirect('/settings/index');
 	}
+
+	/**
+	 * Adds setting by a given type
+	 *
+	 * @return void
+	 */
+	public function addAction(){
+        $data = [];
+		$data['type'] = $this->route_params['type'];
+		$data['setting-name'] = $_POST['modal-setting-name'];
+		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+		echo $myJSON;
+	}
 }
