@@ -41,5 +41,6 @@ $router->add('api/limit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', 
 $router->add('api/setLimit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'setLimit']);
 $router->add('api/monthlyExpenses/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Expenses', 'action' => 'monthlyExpenses']);
 $router->add('settings/add/{type}', ['controller' => 'Settings', 'action' => 'Add']);
+$router->add('api/settings/vaidate/{type}', ['controller' => 'Settings', 'action' => 'validateSettingName']);
     
 $router->dispatch($_SERVER['QUERY_STRING']);

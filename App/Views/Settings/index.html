@@ -274,7 +274,9 @@
           <h4 class="modal-title" id="settingModalLabel">Dodaj <span class="modal-setting-type"></span></h4>
         </div>
         <form method="post" action="/settings/add" id="formSetting">
+            <input hidden type="text" name="modal-setting-type" id="modal-setting-type">
             <div class="modal-body d-flex flex-wrap">
+                <label class="error d-none"></label>
                 <div class="d-flex w-100 justify-content-center">
                     <input class="setting-modal-input-name" type="text" name="modal-setting-name" id="modal-setting-name" placeholder="Podaj nazwę" required>
                 </div>

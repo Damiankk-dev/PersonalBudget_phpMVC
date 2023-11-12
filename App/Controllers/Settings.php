@@ -151,7 +151,7 @@ class Settings extends Authenticated
 			return 'Nazwa '.$userSetting->name.' jest już wykorzystana';
 		}
 
-		return false;
+		return "false";
 	}
 
 	/**
@@ -233,7 +233,7 @@ class Settings extends Authenticated
 	 *
 	 * @return UserSetting with error and/or changed modification type
 	 */
-	private function validateSetting($userSetting){
+	private function validateAction($userSetting){
 		$userSetting = $this->validateName($userSetting);
 		$userSetting = $this->validateUsage($userSetting);
 		$userSetting = $this->confirmRemoval($userSetting);
@@ -334,7 +334,43 @@ class Settings extends Authenticated
 	public function addAction(){
         $data = [];
 		$data['type'] = $this->route_params['type'];
-		$data['setting-name'] = $_POST['modal-setting-name'];
+		foreach($_POST as $key => $value){
+			$data[$key] = $value;
+		}
+		$setting = new UserSetting($data["modal-setting-name"], $data["type"]);
+		$settings = new UserSettings();
+		if ($data["type"] === "expense"){
+			if (!array_key_exists("add-limit", $data) ){
+				$data["modal-limitValue"] = null;
+			}
+			$settings->addSetting($setting, $data["modal-limitValue"]);
+		} else {
+			$settings->addSetting($setting);
+		}
+
+		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+		echo $myJSON;
+	}
+
+	/**
+	 * Verifies if name exists in database
+	 *
+	 * @return boolean true if exists false otherwie
+	 */
+	public function validateSettingNameAction(){
+		$data = [];
+		$parts = explode('/', $_SERVER['QUERY_STRING']);
+		$data['type'] = $this->route_params['type'];
+		$data['name_status'] = "false";
+		foreach ($parts as $part){
+			if (strpos($part, "name") > 0){
+				$elements = explode('=',$part);
+				$name = $elements[1];
+				$data['name'] = $name;
+				$setting = new UserSetting($name, $data['type']);
+				$data['name_status'] = $this->errorWhenNameIsNotCorrect($setting);
+			}
+		}
 		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 		echo $myJSON;
 	}

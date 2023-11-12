@@ -8,6 +8,25 @@ for (let i = 0; i<addSettingButtons.length; i++) {
     })
 }
 
+let settingNameInput = document.querySelector("#modal-setting-name");
+settingNameInput.addEventListener("keyup", async () => {
+    console.log(settingNameInput.value);
+    let name = settingNameInput.value;
+    let type = document.querySelector("#modal-setting-type").value;
+    let data = await validateNameAJAX(type, name);
+    let submitButton = document.querySelector("#settingModal button[type='submit']")
+    let errorLabel = document.querySelector('#formSetting label.error');
+    if (data.name_status !== 'false'){
+        errorLabel.classList.remove("d-none");
+        errorLabel.textContent= data.name_status;
+        submitButton.setAttribute("disabled", "");
+    } else {
+        errorLabel.classList.add("d-none");
+        submitButton.removeAttribute("disabled");
+    }
+    console.log(data);
+})
+
 const setLimitValues = async () => {
     let limitRows = document.querySelectorAll(".category-row");
     for (let i = 0; i<limitRows.length; i++){
@@ -111,6 +130,10 @@ const showSettingModal = (settingType) => {
     $('#settingModal').on('show.bs.modal', function (e) {
         let modal = document.querySelector("#settingModal");
         let modalName = modal.querySelector(".modal-setting-type");
+        let typeInput = modal.querySelector("#modal-setting-type");
+        let settingName = modal.querySelector("#modal-setting-name");
+        settingName.value = "";
+        typeInput.value = settingType;
         modalName.textContent = setSettingName(settingType);
         let limitDiv = modal.querySelector(".setting-limit");
         if (settingType === "expense"){
@@ -119,8 +142,7 @@ const showSettingModal = (settingType) => {
             limitDiv.classList.add("d-none");
         }
         let form = modal.querySelector("#formSetting");
-        let formAction = form.getAttribute("action");
-        form.setAttribute("action", `${formAction}/${settingType}`);
+        form.setAttribute("action", `/settings/add/${settingType}`);
       });
 
     $('#settingModal').modal('show');
@@ -154,3 +176,14 @@ settingLimitCheckbox.addEventListener("click", () =>{
         settingLimitValue.setAttribute("disabled", "");
     }
 })
+
+const validateNameAJAX = async (type, name) => {
+    try{
+        console.log(`../api/settings/vaidate/${type}?name=${name}`);
+        const res = await fetch(`../api/settings/vaidate/${type}?name=${name}`);
+        const data = await res.json();
+        return data;
+    }catch (e){
+        console.log("ERROR", e);
+    }
+}

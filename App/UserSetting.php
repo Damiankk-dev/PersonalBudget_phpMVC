@@ -4,17 +4,15 @@ namespace App;
 
 class UserSetting{
 
-    public string $id;
     public string $name;
     public string $settingType;
-    public string $modificationType;
+    public string $id = "";
     public $errors = [];
 
-    public function __construct($id, $name, $settingType, $modificationType, $errors = []){
-        $this->id = $id;
+    public function __construct($name, $settingType, $id = "", $errors = []){
         $this->name = $name;
         $this->settingType = $settingType;
-        $this->modificationType = $modificationType;
+        $this->id = $id;
         $this->errors = $errors;
     }
 

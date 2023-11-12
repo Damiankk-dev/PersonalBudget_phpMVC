@@ -423,4 +423,40 @@ class UserSettings extends \Core\Model
         $stmt->bindValue(':id', $categoryId, PDO::PARAM_INT);
         $stmt->execute();
     }
+
+    /**
+     * Prepare and execute query for all newly added settings
+     *
+     * @return void
+     */
+    public function addSetting($setting, $limit = null){
+        $insertQuery = array();
+        $insertData = array();
+        if ($setting->settingType == "expense"){
+            $sql = 'INSERT INTO expenses_category_assigned_to_users (category_limit, user_id, name) VALUES';
+            $insertQuery[] = '(?, ?, ?)';
+            $insertData[] = $limit;
+        } else if ($setting->settingType == "income"){
+            $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name) VALUES';
+            $insertQuery[] = '(?, ?)';
+        } else if ($setting->settingType == "payment"){
+            $sql = 'INSERT INTO payment_methods_assigned_to_users (user_id, name) VALUES';
+            $insertQuery[] = '(?, ?)';
+        }
+
+        if (!count($setting->errors) > 0 ){
+            $insertData[] = $this->userId;
+            $insertData[] = $setting->name;
+        }
+
+        $db = $this->getDB();
+        if (!empty($insertQuery)) {
+            $sql .= implode(', ', $insertQuery);
+            $stmt = $db->prepare($sql);
+            //$stmt->bindValue(':user_id', $this->userId, PDO::PARAM_INT);
+            //$stmt->debugDumpParams();
+            $stmt->execute($insertData);
+        }
+    }
 }
+
