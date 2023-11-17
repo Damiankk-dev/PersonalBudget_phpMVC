@@ -66,8 +66,9 @@ if (dateInput !== null){
 	}
 }
 
- function removeCategory(btn) {
-	var inputDiv = $(btn).parent()
+ //function removeCategory(btn) {
+
+/* 	var inputDiv = $(btn).parent()
 	var categoryWrapDiv = $(btn).parent().parent();
 	var numberOfInputs = categoryWrapDiv.find('.input-group').length;
 	var numberOfHiddenInputs = categoryWrapDiv.find('.input-group:hidden').length
@@ -97,8 +98,8 @@ if (dateInput !== null){
 				input.attr('name', inputName + '_del');
 			}
 		}
-	}
- }
+	} */
+ //}
 
 $('#formSettingsCategories input').change(function() {
 	var inputDiv = $(this).parent();
@@ -238,4 +239,47 @@ function confirmCashflowRemoval(cashflowType, cashflowId){
 
 function closeCashflowRemoveModal(){
 	$('#confirmCashflowRemoveModal').modal('hide')
+}
+
+let removeButtons = document.querySelectorAll(".remove-btn");
+
+for (let i = 0; i<removeButtons.length; i++) {
+    let button = removeButtons[i];
+    button.addEventListener("click", async () => {
+		let butttonInput = button.parentElement.querySelector("input");
+		let settingName = butttonInput.value;
+		let settingType = butttonInput.name.split("_")[0];//type_id
+		let settingId = butttonInput.name.split("_")[1];//type_id
+		console.log(`ID: ${settingId}, type:${settingType}, name: ${settingName}`);
+		removeResponse = await removeCategory(settingType, settingId)
+		console.log(await removeResponse);
+		if (await removeResponse.status != "false"){
+			showDeleteModal(settingName,settingType);
+		} else {
+			window.location = `../settings/remove/${settingType}/${settingName}`;
+		}
+
+    })
+}
+
+const removeCategory = async (type, settingId) => {
+    try{
+        console.log(`../api/settings/remove/${type}?settingId=${settingId}`);
+        const res = await fetch(`../api/settings/remove/${type}?settingId=${settingId}`);
+        const data = await res.json();
+        return data;
+    }catch (e){
+        console.log("ERROR", e);
+    }
+}
+
+const showDeleteModal = (settingName,settingType) =>{
+	$('#deleteModal').on('show.bs.modal', function () {
+		var modal = $(this)
+		modal.find('.modal-content').attr('name', settingType)
+		modal.find('.category-name').text(settingName);
+		modal.find('.confirm-btn').attr('href', `/settings/remove/${settingType}/${settingName}`)
+	  });
+	$('#deleteModal').modal('show');
+
 }

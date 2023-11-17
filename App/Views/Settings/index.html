@@ -97,7 +97,7 @@
                                     {% if validationStatus == true %}
                                         <div class="input-group w-100 mx-auto">
                                             <input name="payment_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required/>
-                                            <button type="button" class="btn btn-outline-secondary" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
+                                            <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -146,7 +146,7 @@
                                     {% if validationStatus == true %}
                                         <div class="input-group w-100 mx-auto">
                                             <input name="income_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required/>
-                                            <button type="button" class="btn btn-outline-secondary" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
+                                            <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -195,7 +195,7 @@
                                             <input name="expense_{{row.id}}" class="form-control settings-table category-name" value="{{ row.name }}" required/>
                                             <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}" hidden>Limit: <span class="limit-value"></span></label>
                                             <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock-open"></i></button>
-                                            <button type="button" class="btn btn-outline-secondary settings-table" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
+                                            <button type="button" class="btn btn-outline-secondary settings-table remove-btn"><i class="icon-trash"></i></button>
                                         </div>
                                     {% endif %}
                                 {% endfor %}
@@ -230,12 +230,11 @@
             <span>Usunięcie kategorii "</span>
             <span class="category-name"></span>
             <span>" spowoduje usunięcie wszystkich powiązanych z nią wpisów</span>
-            <span style="text-decoration: underline">po zapisaniu zmian</span>
           </h2>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeDeleteModal()">Zamknij</button>
-          <button type="button" class="btn btn-danger" onclick="confirmRemovalByModal(this)">Potwierdź usunięcie</button>
+          <a href="/settings/remove" class="confirm-btn"><button type="button" class="btn btn-danger">Potwierdź usunięcie</button></a>
         </div>
       </div>
     </div>

@@ -129,10 +129,10 @@ class Settings extends Authenticated
 	private function errorWhenSettingRemoved($userSetting){
 		$userSettings = new UserSettings();
 		if ($userSettings->isSettingInUse($userSetting)){
-			return 'Usunięcie kategorii '.$userSetting->name.' spowoduje usunięcie wszystkich wpisów związanych z kategorią';
+			return 'Usunięcie kategorii spowoduje usunięcie wszystkich związanych z nią wpisów';
 		}
 
-		return false;
+		return "false";
 	}
 
 	/**
@@ -348,8 +348,8 @@ class Settings extends Authenticated
 			$settings->addSetting($setting);
 		}
 
-		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
-		echo $myJSON;
+		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+		$this->redirect('/settings/index');
 	}
 
 	/**
@@ -372,6 +372,46 @@ class Settings extends Authenticated
 			}
 		}
 		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
+		echo $myJSON;
+	}
+
+	/**
+	 * Removes setting
+	 * HTTP DELETE?
+	 * @return void
+	 */
+	public function removeAction(){
+		$data = [];
+		$parts = explode('/', $_SERVER['QUERY_STRING']);
+		$data['type'] = $this->route_params['type'];
+		$data['name'] = $this->route_params['name'];
+		$settings = new UserSettings();
+		$setting = new UserSetting($data['name'], $data['type']);
+		$settings->removeSetting($setting);
+		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+		$this->redirect('/settings/index');
+	}
+
+	/**
+	 * Verify removal
+	 * API method
+	 */
+	public function verifyRemovalAction(){
+        $data = [];
+		$parts = explode('/', $_SERVER['QUERY_STRING']);
+		$data['type'] = $this->route_params['type'];
+		$status = [];
+		foreach ($parts as $part){
+			if (strpos($part, "settingId") > 0){
+				$elements = explode('=',$part);
+				$settingId = $elements[1];
+				$data['settingId'] = $settingId;
+				$setting = new UserSetting("", $data['type'], $settingId);
+				$status["status"] = $this->errorWhenSettingRemoved($setting);
+			}
+		}
+
+		$myJSON = json_encode($status, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 		echo $myJSON;
 	}
 }

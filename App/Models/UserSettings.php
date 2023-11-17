@@ -425,7 +425,9 @@ class UserSettings extends \Core\Model
     }
 
     /**
-     * Prepare and execute query for all newly added settings
+     * Prepare and execute query for adding a setting
+     * @param UserSetting $setting setting with defined name and type
+     * @param $limit optional, when type is expense, limit can be set
      *
      * @return void
      */
@@ -453,10 +455,32 @@ class UserSettings extends \Core\Model
         if (!empty($insertQuery)) {
             $sql .= implode(', ', $insertQuery);
             $stmt = $db->prepare($sql);
-            //$stmt->bindValue(':user_id', $this->userId, PDO::PARAM_INT);
-            //$stmt->debugDumpParams();
             $stmt->execute($insertData);
         }
     }
+
+    /**
+     * Prepare and execute query for removing a setting
+     * @param UserSetting $setting setting with defined id and type
+     *
+     * @return void
+     */
+    public function removeSetting($setting){
+        if ($setting->settingType == "expense"){
+            $sql = 'DELETE FROM expenses_category_assigned_to_users WHERE user_id = ? AND name = ?';
+        } else if ($setting->settingType == "income"){
+            $sql = 'DELETE FROM incomes_category_assigned_to_users WHERE user_id = ? AND name = ?';
+        } else if ($setting->settingType == "payment"){
+            $sql = 'DELETE FROM payment_methods_assigned_to_users WHERE user_id = ? AND name = ?';
+        }
+        $insertData = array();
+        $insertData[] = $this->userId;
+        $insertData[] = $setting->name;
+        $db = $this->getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->execute($insertData);
+    }
+
+
 }
 
