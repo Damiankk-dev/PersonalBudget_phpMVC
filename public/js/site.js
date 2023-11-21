@@ -101,7 +101,7 @@ if (dateInput !== null){
 	} */
  //}
 
-$('#formSettingsCategories input').change(function() {
+/* $('#formSettingsCategories input').change(function() {
 	var inputDiv = $(this).parent();
 	var input = inputDiv.find('input').first();
 	var inputName = input.attr('name');
@@ -114,7 +114,7 @@ $('#formSettingsCategories input').change(function() {
 		input.attr('name', inputName + '_mod');
 		var input = inputDiv.find('.error').hide();
 	}
-});
+}); */
 
 function addCategory(btn, setting){
 	var form = $(btn).parent().parent();//form
@@ -175,8 +175,13 @@ function validateName(setting){
 		});
 	return status;
 }
+
 function closeDeleteModal(){
 	$('#deleteModal').modal('hide')
+}
+
+function closeUpdateModal(){
+	$('#updateModal').modal('hide')
 }
 
 function confirmRemovalByModal(btn){
@@ -250,9 +255,7 @@ for (let i = 0; i<removeButtons.length; i++) {
 		let settingName = butttonInput.value;
 		let settingType = butttonInput.name.split("_")[0];//type_id
 		let settingId = butttonInput.name.split("_")[1];//type_id
-		console.log(`ID: ${settingId}, type:${settingType}, name: ${settingName}`);
 		removeResponse = await removeCategory(settingType, settingId)
-		console.log(await removeResponse);
 		if (await removeResponse.status != "false"){
 			showDeleteModal(settingName,settingType);
 		} else {
@@ -262,9 +265,31 @@ for (let i = 0; i<removeButtons.length; i++) {
     })
 }
 
+let settingNameInputs = document.querySelectorAll("input.settings-table");
+for (let i = 0; i<settingNameInputs.length; i++) {
+    let input = settingNameInputs[i];
+    input.addEventListener("keyup", async (e) => {
+		await verifyUpdate(e.target);
+	});
+    input.addEventListener("change", async (e) => {
+		await verifyUpdate(e.target);
+	});
+    input.addEventListener("focusin", async () => {
+		input.removeAttribute("readonly");
+	});
+    input.addEventListener("focusout", async (e) => {
+		input.setAttribute("readonly", "readonly");
+		if (!isSingleSettingChanged()){
+			showUpdateModal(e.target);
+		}
+	});
+    input.addEventListener("click", async () => {
+		input.removeAttribute("readonly");
+	});
+}
+
 const removeCategory = async (type, settingId) => {
     try{
-        console.log(`../api/settings/remove/${type}?settingId=${settingId}`);
         const res = await fetch(`../api/settings/remove/${type}?settingId=${settingId}`);
         const data = await res.json();
         return data;
@@ -282,4 +307,41 @@ const showDeleteModal = (settingName,settingType) =>{
 	  });
 	$('#deleteModal').modal('show');
 
+}
+
+const showUpdateModal = (input) => {
+	let settingType = input.name.split("_")[0];//type_id
+	let settingId = input.name.split("_")[1];//type_id
+	let settingName = input.value;
+	$('#updateModal').on('show.bs.modal', function () {
+		let modal = document.querySelector("#updateModal");
+		modal.querySelector('.confirm-btn').setAttribute('href', `/settings/update/${settingType}/${settingId}/${settingName}`)
+		});
+	$('#updateModal').modal('show');
+}
+
+const isSingleSettingChanged = () =>{
+	let settingsToUpdate = document.querySelectorAll(".update-btn.to-update");
+	if (settingsToUpdate.length > 0){
+		return false;
+	}
+
+	return true;
+}
+
+const verifyUpdate = async(input) =>{
+	let settingType = input.name.split("_")[0];//type_id
+	let settingId = input.name.split("_")[1];//type_id
+	let settingName = input.value;
+	let status = await validateNameAJAX(settingType, settingName)
+	if (status.name_status == "false"){
+		button = input.parentElement.querySelector(".update-btn");
+		button.classList.remove("d-none");
+		button.classList.add("to-update");
+		button.setAttribute("onclick", `window.location.href='../settings/update/${settingType}/${settingId}/${settingName}'`);
+	} else {
+		input.parentElement.querySelector(".update-btn").classList.add("d-none");
+		button.classList.remove("to-update");
+	};
+	isSingleSettingChanged();
 }

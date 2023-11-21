@@ -41,8 +41,9 @@ $router->add('api/limit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', 
 $router->add('api/setLimit/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'setLimit']);
 $router->add('api/monthlyExpenses/{category:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Expenses', 'action' => 'monthlyExpenses']);
 $router->add('settings/add/{type}', ['controller' => 'Settings', 'action' => 'Add']);
-$router->add('api/settings/vaidate/{type}', ['controller' => 'Settings', 'action' => 'validateSettingName']);
+$router->add('api/settings/vaidate/{type}/{name:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'validateSettingName']);
 $router->add('api/settings/remove/{type}', ['controller' => 'Settings', 'action' => 'verifyRemoval']);
 $router->add('settings/remove/{type}/{name:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'remove']);
+$router->add('settings/update/{type}/{id:[\d]+}/{name:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'update']);
     
 $router->dispatch($_SERVER['QUERY_STRING']);

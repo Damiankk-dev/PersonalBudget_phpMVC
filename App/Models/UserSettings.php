@@ -54,12 +54,31 @@ class UserSettings extends \Core\Model
         $this->userSettingsForView = $this->getUserSettingsByUserId();
     }
 
-    public function updateSettings($settings){
+    public function updateSetting($setting){
+        if ($setting->settingType == "expense"){
+            $sql = 'UPDATE expenses_category_assigned_to_users SET name = ? WHERE user_id = ? AND id = ? ';
+        } else if ($setting->settingType == "income"){
+            $sql = 'UPDATE incomes_category_assigned_to_users SET name = ? WHERE user_id = ? AND id = ? ';
+        } else if ($setting->settingType == "payment"){
+            $sql = 'UPDATE payment_methods_assigned_to_users SET name = ? WHERE user_id = ? AND id = ? ';
+        }
 
-		$settings = $this->sortSettingsForUpdate($settings);
-        $this->executeInsertQueriesForAllSettings($settings["new"]);
-        $this->executeDeleteQueriesForAllSettings($settings["del"]);
-        $this->executeUpdateQueriesForAllSettings($settings["mod"]);
+		echo "<pre>";
+		var_dump($setting);
+		echo "</pre>";
+        $insertData = array();
+        if (!count($setting->errors) > 0 ){
+            $insertData[] = $setting->name;
+            $insertData[] = $this->userId;
+            $insertData[] = $setting->id;
+        }
+
+        $db = $this->getDB();
+        if (!empty($insertData)) {
+            $stmt = $db->prepare($sql);
+            $stmt->execute($insertData);
+        }
+
     }
     /**
      * Fills user settings with empty types arrays
@@ -298,25 +317,22 @@ class UserSettings extends \Core\Model
      *
      * @return void
      */
-    public function executeUpdateQueriesForAllSettings($modifiedSettings){
-        foreach ($modifiedSettings as $settingType => $settings){
+    public function executeUpdateQueriesForAllSettings($settings){
+        foreach ($settings as $setting){
             if (count($settings) > 0){
-                if ($settingType == "expense"){
+                if ($setting->settingType == "expense"){
                     $sql = 'UPDATE expenses_category_assigned_to_users SET name = CASE WHEN ';
-                    $idName = 'id';
                 } else if ($settingType == "income"){
                     $sql = 'UPDATE incomes_category_assigned_to_users SET name = CASE WHEN ';
-                    $idName = 'id';
                 } else if ($settingType == "payment"){
                     $sql = 'UPDATE payment_methods_assigned_to_users SET name = CASE WHEN ';
-                    $idName = 'id';
                 }
 
                 $insertQuery = array();
                 $insertData = array();
                 foreach ($settings as $setting) {
                     if (!count($setting->errors) > 0 ){
-                        $insertQuery[] = $idName.' = ? THEN ?';
+                        $insertQuery[] = 'id = ? THEN ?';
                         $insertData[] = $setting->id;
                         $insertData[] = $setting->name;
                     }
@@ -479,6 +495,14 @@ class UserSettings extends \Core\Model
         $db = $this->getDB();
         $stmt = $db->prepare($sql);
         $stmt->execute($insertData);
+    }
+
+    /**
+     * Updates array of settings
+     *
+     */
+    public function updateSettings($settings){
+        $this->executeUpdateQueriesForAllSettings($settings);
     }
 
 

@@ -96,7 +96,8 @@
                                     {% endif %}
                                     {% if validationStatus == true %}
                                         <div class="input-group w-100 mx-auto">
-                                            <input name="payment_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required/>
+                                            <input name="payment_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required readonly="readonly"/>
+                                            <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
                                             <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
                                         </div>
                                     {% endif %}
@@ -145,7 +146,8 @@
                                     {% endif %}
                                     {% if validationStatus == true %}
                                         <div class="input-group w-100 mx-auto">
-                                            <input name="income_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required/>
+                                            <input name="income_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required readonly="readonly"/>
+                                            <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
                                             <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
                                         </div>
                                     {% endif %}
@@ -192,9 +194,10 @@
                                     {% endif %}
                                     {% if validationStatus == true %}
                                         <div class="input-group w-100 mx-auto category-row">
-                                            <input name="expense_{{row.id}}" class="form-control settings-table category-name" value="{{ row.name }}" required/>
+                                            <input name="expense_{{row.id}}" class="form-control settings-table category-name" value="{{ row.name }}" required readonly="readonly"/>
                                             <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}" hidden>Limit: <span class="limit-value"></span></label>
                                             <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock-open"></i></button>
+                                            <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
                                             <button type="button" class="btn btn-outline-secondary settings-table remove-btn"><i class="icon-trash"></i></button>
                                         </div>
                                     {% endif %}
@@ -294,6 +297,20 @@
               <button type="submit" class="btn btn-primary"><i class="icon-floppy"></i>Zapisz</button>
             </div>
         </form>
+      </div>
+    </div>
+</div>
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeUpdateModal()"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="updateModalLabel">Przed dalszymi modyfikacjami zapisz zmiany</h4>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="closeUpdateModal()">Zamknij</button>
+            <a href="" class="confirm-btn"><button type="button" class="btn btn-primary">Zapisz</button></a>
+        </div>
       </div>
     </div>
 </div>

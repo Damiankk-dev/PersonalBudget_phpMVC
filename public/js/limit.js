@@ -10,7 +10,6 @@ for (let i = 0; i<addSettingButtons.length; i++) {
 
 let settingNameInput = document.querySelector("#modal-setting-name");
 settingNameInput.addEventListener("keyup", async () => {
-    console.log(settingNameInput.value);
     let name = settingNameInput.value;
     let type = document.querySelector("#modal-setting-type").value;
     let data = await validateNameAJAX(type, name);
@@ -24,7 +23,6 @@ settingNameInput.addEventListener("keyup", async () => {
         errorLabel.classList.add("d-none");
         submitButton.removeAttribute("disabled");
     }
-    console.log(data);
 })
 
 const setLimitValues = async () => {
@@ -34,7 +32,6 @@ const setLimitValues = async () => {
         let expenseId = limitButton.getAttribute("id");
         expenseId = expenseId.split('_')[2];
         let limitData = await getLimitForCategory(expenseId);
-        console.log(limitData.category_limit);
 
         let categoryName = limitRows[i].querySelector("input.category-name").getAttribute("value");
 
@@ -44,7 +41,6 @@ const setLimitValues = async () => {
 
         if (limitData.category_limit !== null){
             let limitIcon = limitRows[i].querySelector("button.expense_limit i");
-            console.log(limitIcon);
             limitIcon.classList.remove("icon-lock-open");
             limitIcon.classList.add("icon-lock");
             let limitValue = limitRows[i].querySelector("span.limit-value");
@@ -179,8 +175,7 @@ settingLimitCheckbox.addEventListener("click", () =>{
 
 const validateNameAJAX = async (type, name) => {
     try{
-        console.log(`../api/settings/vaidate/${type}?name=${name}`);
-        const res = await fetch(`../api/settings/vaidate/${type}?name=${name}`);
+        const res = await fetch(`../api/settings/vaidate/${type}/${name}`);
         const data = await res.json();
         return data;
     }catch (e){

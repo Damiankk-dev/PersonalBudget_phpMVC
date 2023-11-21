@@ -361,15 +361,11 @@ class Settings extends Authenticated
 		$data = [];
 		$parts = explode('/', $_SERVER['QUERY_STRING']);
 		$data['type'] = $this->route_params['type'];
+		$data['name'] = $this->route_params['name'];
 		$data['name_status'] = "false";
-		foreach ($parts as $part){
-			if (strpos($part, "name") > 0){
-				$elements = explode('=',$part);
-				$name = $elements[1];
-				$data['name'] = $name;
-				$setting = new UserSetting($name, $data['type']);
-				$data['name_status'] = $this->errorWhenNameIsNotCorrect($setting);
-			}
+		if (strlen($data['name']) > 0){
+			$setting = new UserSetting($data['name'], $data['type']);
+			$data['name_status'] = $this->errorWhenNameIsNotCorrect($setting);
 		}
 		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 		echo $myJSON;
@@ -413,5 +409,39 @@ class Settings extends Authenticated
 
 		$myJSON = json_encode($status, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
 		echo $myJSON;
+	}
+
+	/**
+	 * Updates setting
+	 * HTTP PUT
+	 */
+	public function updateAction(){
+		$data = [];
+		$parts = explode('/', $_SERVER['QUERY_STRING']);
+		$data['type'] = $this->route_params['type'];
+		$data['name'] = $this->route_params['name'];
+		$data['settingId'] = $this->route_params['id'];
+		$settings = new UserSettings();
+		$setting = new UserSetting($data['name'], $data['type'], $data['settingId']);
+		$settings->updateSetting($setting);
+		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+		$this->redirect('/settings/index');
+	}
+
+	/**
+	 * Update chosen settings
+	 */
+	public function updateAllAction(){
+		$data = $_POST;
+		$settings = array();
+		foreach ($data as $id => $name){
+			$id = explode('_', $id);
+			$setting = new UserSetting($name, $id[0], $id[1]);
+			$settings[] = $setting;
+		}
+		$settingsModel = new UserSettings();
+		$settingsModel->updateSettings($settings);
+		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+		$this->redirect('/settings/index');
 	}
 }
