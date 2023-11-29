@@ -274,14 +274,19 @@ for (let i = 0; i<settingNameInputs.length; i++) {
     input.addEventListener("change", async (e) => {
 		await verifyUpdate(e.target);
 	});
-    input.addEventListener("focusin", async () => {
-		input.removeAttribute("readonly");
+    input.addEventListener("focusin", async (e) => {
+		if ((!( await isSingleSettingChanged()) && !(await isFocusOnModifiedElement(e.target)))){
+			showUpdateModal(e.target);
+			input.removeAttribute("readonly");
+		}
+
 	});
     input.addEventListener("focusout", async (e) => {
 		input.setAttribute("readonly", "readonly");
-		if (!isSingleSettingChanged()){
-			showUpdateModal(e.target);
-		}
+		// if ((isSingleSettingChanged() && !isFocusOnModifiedElement(e.target))
+		// || (!isSingleSettingChanged() && !isFocusOnModifiedElement(e.target))){
+		// 	showUpdateModal(e.target);
+		//}
 	});
     input.addEventListener("click", async () => {
 		input.removeAttribute("readonly");
@@ -310,9 +315,12 @@ const showDeleteModal = (settingName,settingType) =>{
 }
 
 const showUpdateModal = (input) => {
-	let settingType = input.name.split("_")[0];//type_id
-	let settingId = input.name.split("_")[1];//type_id
-	let settingName = input.value;
+	let modifiedInputDiv = document.querySelector(".update-btn.modified").parentElement;
+	let modifiedInput = modifiedInputDiv.querySelector("input");
+	let settingType = modifiedInput.name.split("_")[0];//type_id
+	let settingId = modifiedInput.name.split("_")[1];//type_id
+	let settingName = modifiedInput.value;
+
 	$('#updateModal').on('show.bs.modal', function () {
 		let modal = document.querySelector("#updateModal");
 		modal.querySelector('.confirm-btn').setAttribute('href', `/settings/update/${settingType}/${settingId}/${settingName}`)
@@ -321,7 +329,7 @@ const showUpdateModal = (input) => {
 }
 
 const isSingleSettingChanged = () =>{
-	let settingsToUpdate = document.querySelectorAll(".update-btn.to-update");
+	let settingsToUpdate = document.querySelectorAll(".update-btn.modified");
 	if (settingsToUpdate.length > 0){
 		return false;
 	}
@@ -336,12 +344,22 @@ const verifyUpdate = async(input) =>{
 	let status = await validateNameAJAX(settingType, settingName)
 	if (status.name_status == "false"){
 		button = input.parentElement.querySelector(".update-btn");
-		button.classList.remove("d-none");
-		button.classList.add("to-update");
-		button.setAttribute("onclick", `window.location.href='../settings/update/${settingType}/${settingId}/${settingName}'`);
+		if (isSingleSettingChanged()) {
+			button.classList.remove("d-none");
+			button.classList.add("modified");
+			button.setAttribute("onclick", `window.location.href='../settings/update/${settingType}/${settingId}/${settingName}'`);
+		}
 	} else {
 		input.parentElement.querySelector(".update-btn").classList.add("d-none");
-		button.classList.remove("to-update");
+		button.classList.remove("modified");
 	};
-	isSingleSettingChanged();
+}
+
+const isFocusOnModifiedElement = async (updateModalInputElement) => {
+	updateBtn = updateModalInputElement.parentElement.querySelector(".update-btn");
+	if (updateBtn.classList.contains("modified")){
+		return true;
+	}
+
+	return false;
 }
