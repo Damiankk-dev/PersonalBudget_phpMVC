@@ -36,27 +36,6 @@
             </div>
         </div>
     </div>
-<!--     <div class="row ">
-        <div class="col-10 col-xl-8 offset-1 offset-xl-2 my-2">
-            <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
-                <h6>
-                    Zmiana adresu email
-                </h6>
-                <form method="post" action="">
-                    <div class="input-group w-75 mx-auto">
-                        <div class="input-group-prepend">
-                            <div class="input-group-text"><i class="icon-at"></i></div>
-                        </div>
-                        <input name="email" type="email" class="form-control " id="inputEmail" aria-describedby="emailHelp" placeholder="Podaj email"
-                        value="{{ user.email }}" required />
-                    </div>
-                    <div class="buttonArea d-flex">
-                      <button type="submit" class="btn btn-outline-primary w-50 mx-auto"><i class="icon-floppy"></i>Zapisz</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> -->
     <div class="row ">
         <div class="col-10 col-xl-8 offset-1 offset-xl-2 my-2">
             <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 fullColorBackground my-4 px-4 pb-3">
@@ -69,38 +48,11 @@
                         <div id="paymetMethods" class="setting_wrapper">
                             {% if paymentMethods is not empty %}
                                 {% for row in paymentMethods %}
-                                    {% if validationStatus == false %}
-                                        {% set errorClass = "" %}
-                                        {% set displayClass = "" %}
-                                        {% if row.errors is not empty %}
-                                            {% set errorClass = "border border-danger rounded" %}
-                                            {% for error in row.errors %}
-                                                <label class="error">{{error}}</label>
-                                            {% endfor %}
-                                        {% endif %}
-                                        {% if '_del' in row.modificationType %}
-                                            {% set displayClass = "d-none" %}
-                                        {% endif %}
-                                        {% if '_confirm' in row.modificationType %}
-                                            {% set confirmButton = "d-none" %}
-                                        {% endif %}
-                                            <div class="input-group w-100 mx-auto {{errorClass}} {{displayClass}}">
-                                                <input name="{{row.modificationType}}" class="form-control settings-table" value="{{ row.name }}" required/>
-                                                {% if '_confirm' in row.modificationType %}
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="confirmRemoveCategory(this)">?</button>
-                                                {% endif %}
-                                                {% if '_confirm' not in row.modificationType %}
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
-                                                {% endif %}
-                                            </div>
-                                    {% endif %}
-                                    {% if validationStatus == true %}
-                                        <div class="input-group w-100 mx-auto">
-                                            <input name="payment_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required readonly="readonly"/>
-                                            <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
-                                            <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
-                                        </div>
-                                    {% endif %}
+                                    <div class="input-group w-100 mx-auto">
+                                        <input name="payment_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required readonly="readonly"/>
+                                        <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
+                                        <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
+                                    </div>
                                 {% endfor %}
                             {% endif %}
                         </div>
@@ -117,40 +69,11 @@
                         <div id="incomeCategories" class="setting_wrapper">
                             {% if incomesCategories is not empty %}
                                 {% for row in incomesCategories %}
-                                    {% if validationStatus == false %}
-                                        {% set errorClass = "" %}
-                                        {% set displayClass = "" %}
-                                        {% set confirmButton = "" %}
-                                        {% if row.errors is not empty %}
-                                            {% set errorClass = "border border-danger rounded" %}
-                                            {% for error in row.errors %}
-                                                <label class="error">{{error}}</label>
-                                            {% endfor %}
-                                        {% endif %}
-                                        {% if '_del' in row.modificationType %}
-                                            {% set displayClass = "d-none" %}
-                                        {% endif %}
-                                        {% if '_confirm' in row.modificationType %}
-                                            {% set confirmButton = "d-none" %}
-                                        {% endif %}
-                                            <div class="input-group w-100 mx-auto {{errorClass}} {{displayClass}}">
-                                                <input name="{{row.modificationType}}" class="form-control settings-table" value="{{ row.name }}" required/>
-                                                {% if '_confirm' in row.modificationType %}
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="confirmRemoveCategory(this)">?</button>
-                                                    <button type="button" class="btn btn-info" onclick="undoRemoveCategory(this)"><</button>
-                                                {% endif %}
-                                                {% if '_confirm' not in row.modificationType %}
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
-                                                {% endif %}
-                                            </div>
-                                    {% endif %}
-                                    {% if validationStatus == true %}
-                                        <div class="input-group w-100 mx-auto">
-                                            <input name="income_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required readonly="readonly"/>
-                                            <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
-                                            <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
-                                        </div>
-                                    {% endif %}
+                                    <div class="input-group w-100 mx-auto">
+                                        <input name="income_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required readonly="readonly"/>
+                                        <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
+                                        <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
+                                    </div>
                                 {% endfor %}
                             {% endif %}
                         </div>
@@ -167,40 +90,13 @@
                         <div id="expenseCategories" class="setting_wrapper">
                             {% if expensesCategories is not empty %}
                                 {% for row in expensesCategories %}
-                                    {% if validationStatus == false %}
-                                        {% set errorClass = "" %}
-                                        {% set displayClass = "" %}
-                                        {% if row.errors is not empty %}
-                                            {% set errorClass = "border border-danger rounded" %}
-                                            {% for error in row.errors %}
-                                                <label class="error">{{error}}</label>
-                                            {% endfor %}
-                                        {% endif %}
-                                        {% if '_del' in row.modificationType %}
-                                            {% set displayClass = "d-none" %}
-                                        {% endif %}
-                                        {% if '_confirm' in row.modificationType %}
-                                            {% set confirmButton = "d-none" %}
-                                        {% endif %}
-                                        <div class="input-group w-100 mx-auto {{errorClass}} {{displayClass}}">
-                                            <input name="{{row.modificationType}}" class="form-control settings-table" value="{{ row.name }}" required/>
-                                            {% if '_confirm' in row.modificationType %}
-                                                <button type="button" class="btn btn-outline-secondary" onclick="confirmRemoveCategory(this)">?</button>
-                                            {% endif %}
-                                            {% if '_confirm' not in row.modificationType %}
-                                                <button type="button" class="btn btn-outline-secondary" onclick="removeCategory(this)"><i class="icon-trash"></i></button>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                    {% if validationStatus == true %}
-                                        <div class="input-group w-100 mx-auto category-row">
-                                            <input name="expense_{{row.id}}" class="form-control settings-table category-name" value="{{ row.name }}" required readonly="readonly"/>
-                                            <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}" hidden>Limit: <span class="limit-value"></span></label>
-                                            <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock-open"></i></button>
-                                            <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
-                                            <button type="button" class="btn btn-outline-secondary settings-table remove-btn"><i class="icon-trash"></i></button>
-                                        </div>
-                                    {% endif %}
+                                    <div class="input-group w-100 mx-auto category-row">
+                                        <input name="expense_{{row.id}}" class="form-control settings-table category-name" value="{{ row.name }}" required readonly="readonly"/>
+                                        <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}" hidden>Limit: <span class="limit-value"></span></label>
+                                        <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock-open"></i></button>
+                                        <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
+                                        <button type="button" class="btn btn-outline-secondary settings-table remove-btn"><i class="icon-trash"></i></button>
+                                    </div>
                                 {% endfor %}
                             {% endif %}
                         </div>

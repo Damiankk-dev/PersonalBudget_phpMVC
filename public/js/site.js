@@ -330,7 +330,7 @@ const showUpdateModal = (input) => {
 
 const isSingleSettingChanged = () =>{
 	let settingsToUpdate = document.querySelectorAll(".update-btn.modified");
-	if (settingsToUpdate.length > 0){
+	if (settingsToUpdate.length >= 1){
 		return false;
 	}
 
@@ -347,8 +347,8 @@ const verifyUpdate = async(input) =>{
 		if (isSingleSettingChanged()) {
 			button.classList.remove("d-none");
 			button.classList.add("modified");
-			button.setAttribute("onclick", `window.location.href='../settings/update/${settingType}/${settingId}/${settingName}'`);
 		}
+		button.setAttribute("onclick", `window.location.href='../settings/update/${settingType}/${settingId}/${settingName}'`);
 	} else {
 		input.parentElement.querySelector(".update-btn").classList.add("d-none");
 		button.classList.remove("modified");
