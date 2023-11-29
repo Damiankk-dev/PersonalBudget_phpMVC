@@ -211,10 +211,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="buttonArea d-flex">
-				  <button type="button" class="btn btn-outline-success w-50 mx-auto" onclick="window.location.href='/settings'"><i class="icon-back"></i>Cofnij</button>
-                  <button type="submit" class="btn btn-primary w-50 mx-auto"><i class="icon-floppy"></i>Zapisz</button>
-                </div>    
               </form>
             </div>
         </div>    
@@ -223,7 +219,7 @@
 
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
+      <div class="modal-content fullColorBackground">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeDeleteModal()"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="deleteModalLabel">Potwierdź akcję</h4>
@@ -244,7 +240,7 @@
 </div>
 <div class="modal fade" id="limitModal" tabindex="-1" role="dialog" aria-labelledby="limitModalLabel">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
+      <div class="modal-content fullColorBackground">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeLimitModal()"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="limitModalLabel">Ustaw limit dla kategorii
@@ -261,8 +257,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal" onclick="closeLimitModal()">Zamknij</button>
-              <button type="submit" class="btn btn-danger" >Zapisz</button>
+              <button type="button" class="btn btn-outline-danger" data-dismiss="modal" onclick="closeLimitModal()">Zamknij</button>
+              <button type="submit" class="btn btn-primary"><i class="icon-floppy"></i>Zapisz</button>
             </div>
         </form>
       </div>
@@ -270,7 +266,7 @@
 </div>
 <div class="modal fade" id="settingModal" tabindex="-1" role="dialog" aria-labelledby="settingModalLabel">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
+      <div class="modal-content fullColorBackground">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeSettingModal()"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="settingModalLabel">Dodaj <span class="modal-setting-type"></span></h4>
@@ -293,7 +289,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default close" data-dismiss="modal" onclick="closeSettingModal()">Zamknij</button>
+              <button type="button" class="btn btn-outline-danger close" data-dismiss="modal" onclick="closeSettingModal()">Zamknij</button>
               <button type="submit" class="btn btn-primary"><i class="icon-floppy"></i>Zapisz</button>
             </div>
         </form>
@@ -302,14 +298,13 @@
 </div>
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
+      <div class="modal-content fullColorBackground">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeUpdateModal()"><span aria-hidden="true">&times;</span></button>
           <h4 class="modal-title" id="updateModalLabel">Przed dalszymi modyfikacjami zapisz zmiany</h4>
         </div>
         <div class="modal-footer">
-            <a href="../settings/index"><button type="button" class="btn btn-danger" data-dismiss="modal" onclick="closeUpdateModal()">Cofnij zmiany</button></a>
-            <a href="" class="confirm-btn"><button type="button" class="btn btn-primary">Zapisz</button></a>
+            <a href="../settings/index"><button type="button" class="btn btn-outline-danger" data-dismiss="modal" onclick="closeUpdateModal()"><i class="icon-back"></i>Cofnij zmiany</button></a>
+            <a href="" class="confirm-btn"><button type="button" class="btn btn-primary"><i class="icon-floppy"></i>Zapisz</button></a>
         </div>
       </div>
     </div>
