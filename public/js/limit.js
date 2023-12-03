@@ -128,6 +128,8 @@ const showSettingModal = (settingType) => {
         let modalName = modal.querySelector(".modal-setting-type");
         let typeInput = modal.querySelector("#modal-setting-type");
         let settingName = modal.querySelector("#modal-setting-name");
+        let errorLabel = modal.querySelector('#formSetting label.error');
+        errorLabel.classList.add("d-none");
         settingName.value = "";
         typeInput.value = settingType;
         modalName.textContent = setSettingName(settingType);
@@ -173,7 +175,7 @@ settingLimitCheckbox.addEventListener("click", () =>{
     }
 })
 
-const validateNameAJAX = async (type, name, id="null") => {
+const validateNameAJAX = async (type, name, id=0) => {
     try{
         let status = "";
         let data = "";

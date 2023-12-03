@@ -63,9 +63,6 @@ class UserSettings extends \Core\Model
             $sql = 'UPDATE payment_methods_assigned_to_users SET name = ? WHERE user_id = ? AND id = ? ';
         }
 
-		echo "<pre>";
-		var_dump($setting);
-		echo "</pre>";
         $insertData = array();
         if (!count($setting->errors) > 0 ){
             $insertData[] = $setting->name;
@@ -80,20 +77,7 @@ class UserSettings extends \Core\Model
         }
 
     }
-    /**
-     * Fills user settings with empty types arrays
-     *
-     * @return void
-     */
-    public function initializeSettingArray(){
-        $emptySettings = array();
-        $settings = ["expenses", "incomes", "payments"];
-        foreach ($settings as $type){
-            $emptySettings[$type] = array();
-        }
 
-        $this->userSettingsForView = $emptySettings;
-    }
     /**
      * Check whether setting name is not empty, if not check whether given name do not exist in database
      *
@@ -291,166 +275,6 @@ class UserSettings extends \Core\Model
 	}
 
     /**
-     * Prepare and execute query for all newly added settings
-     *
-     * @return void
-     */
-    private function executeInsertQueriesForAllSettings($newSettings){
-        foreach ($newSettings as $settingType => $settings){
-            if (count($settings) > 0){
-                if ($settingType == "expense"){
-                    $sql = 'INSERT INTO expenses_category_assigned_to_users (user_id, name) VALUES';
-                } else if ($settingType == "income"){
-                    $sql = 'INSERT INTO incomes_category_assigned_to_users (user_id, name) VALUES';
-                } else if ($settingType == "payment"){
-                    $sql = 'INSERT INTO payment_methods_assigned_to_users (user_id, name) VALUES';
-                }
-
-                $insertQuery = array();
-                $insertData = array();
-                foreach ($settings as $setting) {
-                    if (!count($setting->errors) > 0 ){
-                        $insertQuery[] = '(?, ?)';
-                        $insertData[] = $this->userId;
-                        $insertData[] = $setting->name;
-                    }
-                }
-
-                $db = $this->getDB();
-                if (!empty($insertQuery)) {
-                    $sql .= implode(', ', $insertQuery);
-                    $stmt = $db->prepare($sql);
-                    $stmt->bindValue(':user_id', $this->userId, PDO::PARAM_INT);
-                    $stmt->execute($insertData);
-                }
-            }
-        }
-    }
-
-    /**
-     * Prepare and execute query for settings that can be deleted
-     *
-     * @return void
-     */
-    private function executeDeleteQueriesForAllSettings($deletedSettings){
-        foreach ($deletedSettings as $settingType => $settings){
-            if (count($settings) > 0){
-                if ($settingType == "expense"){
-                    $sql = 'DELETE FROM expenses_category_assigned_to_users WHERE user_id = ? AND id in (';
-                } else if ($settingType == "income"){
-                    $sql = 'DELETE FROM incomes_category_assigned_to_users WHERE user_id = ? AND id in (';
-                } else if ($settingType == "payment"){
-                    $sql = 'DELETE FROM payment_methods_assigned_to_users WHERE user_id = ? AND id in (';
-                }
-
-                $insertQuery = array();
-                $insertData = array();
-                $insertData[] = $this->userId;
-                foreach ($settings as $setting) {
-                    if (!count($setting->errors) > 0 ){
-                        $insertQuery[] = '?';
-                        $insertData[] = $setting->id;
-                    }
-                }
-
-                $db = $this->getDB();
-                if (!empty($insertQuery)) {
-                    $sql .= implode(', ', $insertQuery);
-                    $sql .= ')';
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute($insertData);
-                }
-            }
-        }
-    }
-
-    /**
-     * Prepare and execute query for all updated settings
-     *
-     * @return void
-     */
-    public function executeUpdateQueriesForAllSettings($settings){
-        foreach ($settings as $setting){
-            if (count($settings) > 0){
-                if ($setting->settingType == "expense"){
-                    $sql = 'UPDATE expenses_category_assigned_to_users SET name = CASE WHEN ';
-                } else if ($settingType == "income"){
-                    $sql = 'UPDATE incomes_category_assigned_to_users SET name = CASE WHEN ';
-                } else if ($settingType == "payment"){
-                    $sql = 'UPDATE payment_methods_assigned_to_users SET name = CASE WHEN ';
-                }
-
-                $insertQuery = array();
-                $insertData = array();
-                foreach ($settings as $setting) {
-                    if (!count($setting->errors) > 0 ){
-                        $insertQuery[] = 'id = ? THEN ?';
-                        $insertData[] = $setting->id;
-                        $insertData[] = $setting->name;
-                    }
-                }
-
-                $insertData[] = $this->userId;
-                $db = $this->getDB();
-                if (!empty($insertQuery)) {
-                    $sql .= implode(' WHEN ', $insertQuery);
-                    $sql .= ' ELSE name END WHERE user_id = ?';
-                    $stmt = $db->prepare($sql);
-                    $stmt->execute($insertData);
-                }
-            }
-        }
-    }
-
-    /**
-     * Order settings by setting type to adjust them to view arrays
-     * @param array of UserSetting
-     * @return array of UserSetting ordered by setting type
-     */
-    public function sortSettingsForView($settings){
-		$updatedUserSettings = array(
-			"expense" => array(),
-			"income" => array(),
-			"payment" => array()
-		);
-        foreach($settings as $setting){
-            $updatedUserSettings[$setting->settingType][] = $setting;
-        }
-        return $updatedUserSettings;
-    }
-
-    /**
-     * Group settings by modification type and setting type to adjust them to queries
-     * @param array of UserSetting
-     * @return array of UserSetting grouped by modification type and setting type inside modifiaction group
-     */
-    public function sortSettingsForUpdate($settings){
-        $settingsSortedForSave = array(
-            "new" => array(
-                "expense" => array(),
-                "income" => array(),
-                "payment" => array()
-            ),
-            "del" => array(
-                "expense" => array(),
-                "income" => array(),
-                "payment" => array()
-            ),
-            "mod" => array(
-                "expense" => array(),
-                "income" => array(),
-                "payment" => array()
-            )
-        );
-
-        foreach ($settings as $setting){
-            $settingsSortedForSave[$setting->modificationType][$setting->settingType][] = $setting;
-        }
-
-        return $settingsSortedForSave;
-    }
-
-    /**
      * Get limit value by id
      * @param int $categoryId expense category id
      * @return mixed category limit (nullable) or false
@@ -548,15 +372,5 @@ class UserSettings extends \Core\Model
         $stmt = $db->prepare($sql);
         $stmt->execute($insertData);
     }
-
-    /**
-     * Updates array of settings
-     *
-     */
-    public function updateSettings($settings){
-        $this->executeUpdateQueriesForAllSettings($settings);
-    }
-
-
 }
 

@@ -60,37 +60,6 @@ class Settings extends Authenticated
     }
 
 	/**
-	 * Validate and save settings from input form
-	 *
-	 * @return void
-	 */
-	public function saveAction(){
-		$validatedUserSettings = $this->validateInputData($_POST);
-
-		if($this->validationStatus == true){
-			$this->updateSettings($validatedUserSettings);
-			Flash::addMessage('Zmiany zostały zapisane pomyślnie');
-			$this->indexAction();
-		} else {
-			$settingsWithErrorForView = $this->prepareSettingsWithErrorsForView($validatedUserSettings);
-			$this->indexAction($settingsWithErrorForView);
-		}
-	}
-
-	/**
-	 * Publish JSON data false if there is no error with removal, userSetting object otherwise
-	 */
-	public function validateRemovalAction(){
-		$settingLabel = $this->getQueryStringParams()['setting'];
-		$settingValues = explode('_',$settingLabel);
-		$settingType = $settingValues[0];
-		$settingId = $settingValues[1];
-		$setting = new UserSetting($settingId, "", $settingType, 'del');
-		$myJSON = json_encode($this->errorWhenSettingRemoved($setting), JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
-		echo $myJSON;
-	}
-
-	/**
 	 * Publish JSON data false if there is no error with given name, error message otherwise
 	 */
 	public function validateNameAction(){
@@ -148,156 +117,19 @@ class Settings extends Authenticated
 			return 'Nazwa nie może być pusta';
 		} else {
 			$userSettings = new UserSettings();
-			$validatedSetting = $userSettings->getSettingByIdAndType($userSetting->id, $userSetting->settingType);
 			if ($userSettings->isNameExists($userSetting)){
-				if ($validatedSetting->name == $userSetting->name){
-					return 'void';
-				} else {
-					return 'Nazwa '.$userSetting->name.' jest już wykorzystana';
+				if ($userSetting->id != ""){
+					$validatedSetting = $userSettings->getSettingByIdAndType($userSetting->id, $userSetting->settingType);
+					if ($validatedSetting->name == $userSetting->name){
+						return 'void';
+					}
 				}
+
+				return 'Nazwa '.$userSetting->name.' jest już wykorzystana';
 			}
 		}
 
 		return "false";
-	}
-
-	/**
-	 * Updates user settings
-	 *
-	 * @param array user settings without errors divided by setting type
-	 *
-	 * @return array user settings for a view
-	 */
-	private function updateSettings($settings){
-		$userSettings = new UserSettings();
-		$userSettings->updateSettings($settings);
-	}
-
-	/**
-	 * Changes format of user input data for UserSetting objects array
-	 * Values format is defined by JS script that creates inputs, example key: settingType_id_modificationType; value is an input value
-	 *
-	 * @param $_POST array from user settings form
-	 *
-	 * @return void
-	 */
-	private function validateInputData($inputForm){
-
-		$updatedUserSettings = array();
-		foreach($inputForm as $key => $value){
-			$keyParts = explode('_',$key);
-			if (count($keyParts) < 3 ){
-				$settingType = $keyParts[0];
-				$settingId = $keyParts[1];
-				$modificationType = "notChanged";
-				$userSetting = new UserSetting($settingId, $value, $settingType, $modificationType);
-			} else {
-				$settingType = $keyParts[0];
-				$settingId = $keyParts[1];
-				$modificationType = $keyParts[2];
-				$userSetting = new UserSetting($settingId, $value, $settingType, $modificationType);
-			}
-
-			$userSetting = $this->validateSetting($userSetting);
-			if(count($userSetting->errors) > 0 ){
-				$this->validationStatus = false;
-			}
-
-			$updatedUserSettings[] = $userSetting;
-		}
-
-		return $updatedUserSettings;
-	}
-
-	/**
-	 * Prepares settings array for a view after backend errors occurred
-	 * moves modofocationType param to name param, to use modification type as input name
-	 * to a proper view order
-	 *
-	 * @param array UserSetting after validation with any error
-	 * @return array settings gruped by type and with name changed for view with errors
-	 */
-	private function prepareSettingsWithErrorsForView($settingsWithError){
-		foreach($settingsWithError as $setting){
-			$nameOnView = [$setting->settingType, $setting->id];
-			if ($setting->modificationType != "notChanged"){
-				$nameOnView[] = $setting->modificationType;
-			}
-
-			$nameOnView = implode('_', $nameOnView);
-			$setting->modificationType = $nameOnView;
-
-		}
-
-		$userSettings = new UserSettings();
-		return $userSettings->sortSettingsForView($settingsWithError);
-	}
-
-	/**
-	 * Validates settings by name, usage and modification type
-	 *
-	 * @param UserSetting $userSetting
-	 *
-	 * @return UserSetting with error and/or changed modification type
-	 */
-	private function validateAction($userSetting){
-		$userSetting = $this->validateName($userSetting);
-		$userSetting = $this->validateUsage($userSetting);
-		$userSetting = $this->confirmRemoval($userSetting);
-		return $userSetting;
-	}
-
-	/**
-	 * Assigns error to a userSetting when name is empty or exists
-	 *
-	 * @param UserSetting $userSetting
-	 *
-	 * @return UserSetting when error ocurrs error is added
-	 */
-	private function validateName($userSetting){
-		if ($userSetting->modificationType == "mod" || $userSetting->modificationType == "new"){
-			$error = $this->errorWhenNameIsNotCorrect($userSetting);
-			if ($error){
-				$userSetting->errors[] = $error;
-			}
-		}
-
-		return $userSetting;
-	}
-
-	/**
-	 * Assigns error to a userSetting when setting is in use
-	 *
-	 * @param UserSetting $userSetting
-	 *
-	 * @return UserSetting when error ocurrs error is added
-	 */
-	private function validateUsage($userSetting){
-		if ($userSetting->modificationType == "del"){
-			$error = $this->errorWhenSettingRemoved($userSetting);
-			if ($error) {
-				$userSetting->modificationType = "confirm";
-				$userSetting->errors[] = $error;
-			}
-		}
-
-		return $userSetting;
-	}
-
-	/**
-	 * Changes setting modificationType flag from confirmed to del that allow model
-	 * methods to delete setting and its ocurrences in a whole db
-	 *
-	 * @param UserSetting $userSetting
-	 *
-	 * @return UserSetting when modification type is confirmed it changes to del
-	 */
-	private function confirmRemoval($userSetting){
-		if ($userSetting->modificationType == "confirmed"){
-			$userSetting->modificationType = "del";
-		}
-
-		return $userSetting;
 	}
 
 	/**
@@ -369,10 +201,14 @@ class Settings extends Authenticated
 		$parts = explode('/', $_SERVER['QUERY_STRING']);
 		$data['type'] = $this->route_params['type'];
 		$data['name'] = $this->route_params['name'];
-		$data['settingId'] = $this->route_params['id'];
+		if ($this->route_params['id'] != 0){
+			$data['settingId'] = $this->route_params['id'];
+			$setting = new UserSetting($data['name'], $data['type'], $data['settingId']);
+		} else {
+			$setting = new UserSetting($data['name'], $data['type']);
+		}
 		$data['name_status'] = "false";
 		if (strlen($data['name']) > 0){
-			$setting = new UserSetting($data['name'], $data['type'], $data['settingId']);
 			$data['name_status'] = $this->errorWhenNameIsNotCorrect($setting);
 		}
 		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
@@ -432,23 +268,6 @@ class Settings extends Authenticated
 		$settings = new UserSettings();
 		$setting = new UserSetting($data['name'], $data['type'], $data['settingId']);
 		$settings->updateSetting($setting);
-		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
-		$this->redirect('/settings/index');
-	}
-
-	/**
-	 * Update chosen settings
-	 */
-	public function updateAllAction(){
-		$data = $_POST;
-		$settings = array();
-		foreach ($data as $id => $name){
-			$id = explode('_', $id);
-			$setting = new UserSetting($name, $id[0], $id[1]);
-			$settings[] = $setting;
-		}
-		$settingsModel = new UserSettings();
-		$settingsModel->updateSettings($settings);
 		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
 		$this->redirect('/settings/index');
 	}

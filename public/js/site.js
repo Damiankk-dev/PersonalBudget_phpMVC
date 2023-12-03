@@ -59,62 +59,15 @@ if (dateInput !== null){
 	if (dateInput.value === "" ) {
 		let date = new Date();
 		let day = date.getDate();
+		if (day < 10){
+			day = `0${day}`;
+		}
 		let month = date.getMonth() + 1;
 		let year = date.getFullYear();
 		let currentDate = `${year}-${month}-${day}`;
 		dateInput.value = currentDate;
 	}
 }
-
- //function removeCategory(btn) {
-
-/* 	var inputDiv = $(btn).parent()
-	var categoryWrapDiv = $(btn).parent().parent();
-	var numberOfInputs = categoryWrapDiv.find('.input-group').length;
-	var numberOfHiddenInputs = categoryWrapDiv.find('.input-group:hidden').length
-	if (numberOfInputs - numberOfHiddenInputs <= 1) {
-		var errorDiv = categoryWrapDiv.find('.setting_error');
-		if (errorDiv.length == 0){
-			categoryWrapDiv.append("<div class='setting_error'><span>Nie można usunąć wszystkich pól!</span></div>")
-			errorDiv = categoryWrapDiv.find('.setting_error');
-		}
-		errorDiv.show();
-		errorDiv.fadeOut(1800);
-	} else {
-		var input = inputDiv.find('input').first();
-		var inputName = input.attr('name');
-		if (inputName.includes("new")){
-			inputDiv.remove();
-		} else {
-			if (validateSetting(inputName)){
-				$('#deleteModal').on('show.bs.modal', function () {
-					var modal = $(this)
-					modal.find('.modal-content').attr('name', inputName)
-					modal.find('.category-name').text(input.val());
-				  });
-				$('#deleteModal').modal('show');
-			} else {
-				inputDiv.hide();
-				input.attr('name', inputName + '_del');
-			}
-		}
-	} */
- //}
-
-/* $('#formSettingsCategories input').change(function() {
-	var inputDiv = $(this).parent();
-	var input = inputDiv.find('input').first();
-	var inputName = input.attr('name');
-	var newInputName = inputName + '_' + input.val()
-	var inputName = input.attr('name');
-	var error = validateName(newInputName);
-	if (error){
-		inputDiv.append("<label class='error'>"+error+"</span>")
-	} else {
-		input.attr('name', inputName + '_mod');
-		var input = inputDiv.find('.error').hide();
-	}
-}); */
 
 function addCategory(btn, setting){
 	var form = $(btn).parent().parent();//form
@@ -162,56 +115,12 @@ function validateSetting(setting){
 	return status;
 }
 
-function validateName(setting){
-	var status = false;
-	$.ajax({
-		url: "/settings/validateName?setting="+setting,
-		async: false
-	})
-		.done(function(data){
-			if (data != 'false'){
-				status = data;
-			}
-		});
-	return status;
-}
-
 function closeDeleteModal(){
 	$('#deleteModal').modal('hide')
 }
 
 function closeUpdateModal(){
 	$('#updateModal').modal('hide')
-}
-
-function confirmRemovalByModal(btn){
-	$('#deleteModal').modal('hide')
-	var modalContent = $(btn).parent().parent();
-	var inputName = modalContent.attr('name');
-	var input = $('input[name="'+inputName+'"]');
-	var inputDiv = input.parent();
-	inputDiv.hide();
-	input.attr('name', inputName + '_confirmed');
-}
-
-function confirmRemoveCategory(btn){
-	if(confirm("Potwierdź usunięcie kategorii")){
-	var inputDiv = $(btn).parent()
-	var input = inputDiv.find('input').first();
-	var inputName = input.attr('name');
-	inputDiv.parent().find('span').first().hide();
-	inputDiv.hide();
-	input.attr('name', inputName + 'ed');
-	}
-}
-function undoRemoveCategory(btn){
-	var inputDiv = $(btn).parent()
-	inputDiv.parent().find('span').first().hide();
-	inputDiv.removeClass('border');
-	var input = inputDiv.find('input').first();
-	var inputName = input.attr('name');
-	inputName = inputName.replace('confirm', 'del');
-	$(btn).hide();
 }
 
 $(document).ready(function() {
