@@ -341,16 +341,23 @@ const verifyUpdate = async(input) =>{
 	let settingType = input.name.split("_")[0];//type_id
 	let settingId = input.name.split("_")[1];//type_id
 	let settingName = input.value;
-	let status = await validateNameAJAX(settingType, settingName)
+	let status = await validateNameAJAX(settingType, settingName, settingId)
+	let button = input.parentElement.querySelector(".update-btn");
 	if (status.name_status == "false"){
-		button = input.parentElement.querySelector(".update-btn");
+		input.parentElement.querySelector("label.error").classList.add("d-none");
 		if (isSingleSettingChanged()) {
 			button.classList.remove("d-none");
 			button.classList.add("modified");
 		}
 		button.setAttribute("onclick", `window.location.href='../settings/update/${settingType}/${settingId}/${settingName}'`);
+	} else if(status.name_status == "void"){
+		input.parentElement.querySelector(".update-btn").classList.add("d-none");
+		input.parentElement.querySelector("label.error").classList.add("d-none");
+		button.classList.remove("modified");
 	} else {
 		input.parentElement.querySelector(".update-btn").classList.add("d-none");
+		input.parentElement.querySelector("label.error").classList.remove("d-none");
+		input.parentElement.querySelector("label.error").innerText = status.name_status;
 		button.classList.remove("modified");
 	};
 }

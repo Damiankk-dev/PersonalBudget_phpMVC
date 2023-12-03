@@ -143,12 +143,19 @@ class Settings extends Authenticated
 	 * @return mixed false if name is correct, error string otherwise
 	 */
 	private function errorWhenNameIsNotCorrect($userSetting){
+		$userSettings = new UserSettings();
 		if ($userSetting->name == ""){
 			return 'Nazwa nie może być pusta';
 		} else {
 			$userSettings = new UserSettings();
-			if ($userSettings->isNameExists($userSetting))
-			return 'Nazwa '.$userSetting->name.' jest już wykorzystana';
+			$validatedSetting = $userSettings->getSettingByIdAndType($userSetting->id, $userSetting->settingType);
+			if ($userSettings->isNameExists($userSetting)){
+				if ($validatedSetting->name == $userSetting->name){
+					return 'void';
+				} else {
+					return 'Nazwa '.$userSetting->name.' jest już wykorzystana';
+				}
+			}
 		}
 
 		return "false";
@@ -362,9 +369,10 @@ class Settings extends Authenticated
 		$parts = explode('/', $_SERVER['QUERY_STRING']);
 		$data['type'] = $this->route_params['type'];
 		$data['name'] = $this->route_params['name'];
+		$data['settingId'] = $this->route_params['id'];
 		$data['name_status'] = "false";
 		if (strlen($data['name']) > 0){
-			$setting = new UserSetting($data['name'], $data['type']);
+			$setting = new UserSetting($data['name'], $data['type'], $data['settingId']);
 			$data['name_status'] = $this->errorWhenNameIsNotCorrect($setting);
 		}
 		$myJSON = json_encode($data, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);

@@ -173,10 +173,18 @@ settingLimitCheckbox.addEventListener("click", () =>{
     }
 })
 
-const validateNameAJAX = async (type, name) => {
+const validateNameAJAX = async (type, name, id="null") => {
     try{
-        const res = await fetch(`../api/settings/vaidate/${type}/${name}`);
-        const data = await res.json();
+        let status = "";
+        let data = "";
+        if (name == "") {
+            status = '{"name_status":"Nazwa nie może być pusta"}';
+            data = JSON.parse(status);
+        } else {
+            const res = await fetch(`../api/settings/vaidate/${type}/${id}/${name}`);
+            data = await res.json();
+        }
+        console.log(data);
         return data;
     }catch (e){
         console.log("ERROR", e);

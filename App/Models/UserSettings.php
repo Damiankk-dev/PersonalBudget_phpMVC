@@ -102,7 +102,8 @@ class UserSettings extends \Core\Model
      * @return bool false if name is not correct, true otherwise
      */
     public function isNameExists($userSetting){
-        if ($this->findByName($userSetting->name, $userSetting->settingType)) {
+        $wantedSetting = $this->findByName($userSetting->name, $userSetting->settingType);
+        if ($wantedSetting) {
                 return true;
         }
 
@@ -120,6 +121,22 @@ class UserSettings extends \Core\Model
 		$setting = $this->findById($userSetting->id, $userSetting->settingType);
 		if ($setting) {
             return true;
+		}
+
+		return false;
+    }
+
+    /**
+     * Returns setting by type and id
+     * @param int $settingId
+     * @param string $type
+     *
+     * @return mixed UserSetting $userSetting when id exists, false otherwise
+     */
+    public function getSettingByIdAndType($settingId, $type){
+		$setting = $this->getByIdAndType($settingId, $type);
+		if ($setting) {
+            return $setting;
 		}
 
 		return false;
@@ -163,6 +180,41 @@ class UserSettings extends \Core\Model
         $stmt->bindParam(':settingId', $settingId, PDO::PARAM_STR);
 
 		//$stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
+
+		$stmt->execute();
+
+		return $stmt->fetch();
+	}
+
+    /**
+     * Gets a setting record model by setting id and setting type
+     *
+     * @param string $settingId category id to search for
+     * @param string $settingType type of setting the category name is from
+     *
+     * @return mixed Setting record if found, flase otherwise
+     */
+	private function getByIdAndType($settingId, $settingType){
+        switch($settingType):
+            case "expense":
+                $sql = 'SELECT c.* FROM expenses_category_assigned_to_users c
+                        WHERE c.id = :settingId';
+                break;
+            case "income":
+                $sql = 'SELECT c.* FROM incomes_category_assigned_to_users c
+                        WHERE c.id = :settingId';
+                break;
+            case "payment":
+                $sql = 'SELECT c.* FROM payment_methods_assigned_to_users c
+                        WHERE c.id = :settingId';
+                break;
+        endswitch;
+
+		$db = $this->getDB();
+		$stmt = $db->prepare($sql);
+        $stmt->bindParam(':settingId', $settingId, PDO::PARAM_STR);
+
+		$stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
 		$stmt->execute();
 

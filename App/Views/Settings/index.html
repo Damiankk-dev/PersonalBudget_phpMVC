@@ -91,6 +91,7 @@
                             {% if expensesCategories is not empty %}
                                 {% for row in expensesCategories %}
                                     <div class="input-group w-100 mx-auto category-row">
+                                        <label class="error d-none"></label>
                                         <input name="expense_{{row.id}}" class="form-control settings-table category-name" value="{{ row.name }}" required readonly="readonly"/>
                                         <label class="form-check-label form-control settings-table expense_limit" for="expense_limit_{{row.id}}" hidden>Limit: <span class="limit-value"></span></label>
                                         <button name="expense_limit_{{row.id}}" id="expense_limit_{{row.id}}" type="button" class="btn btn-outline-secondary settings-table expense_limit"><i class="icon-lock-open"></i></button>
