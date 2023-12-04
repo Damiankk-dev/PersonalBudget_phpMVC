@@ -126,7 +126,12 @@ class Expenses extends Authenticated
 		$expenseId = $this->getQueryStringParams()['id'];
 		if (Expense::deleteById($expenseId, 'expense')) {
 			Flash::addMessage("Wpis został usunięty!");
-			$this->returnToPrevious();
+			if (strpos($_SERVER['HTTP_REFERER'], "balance") > 0){
+				$this->returnToPrevious();
+			} else {
+				$this->newAction();
+			}
+
 		} else {
 			Flash::addMessage("Nie udało się połączyć z bazą danych", Flash::ERROR);
 			View::renderTemplate();
