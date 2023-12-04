@@ -10,17 +10,21 @@ function (value, element, params) {
 $(document).ready(validation());
 $("#endBalancePeriod").focusout(validation())
 $("#startBalancePeriod").focusout(validation())
-$("button[type=submit]").hover(validation())
+$("button[type=submit]").click(validation())
 function validation() {
-$('#anyPeriodForm').validate({
-    rules: {
-        endBalancePeriod: {
-            greaterThan: "#startBalancePeriod",
-            validDate: true
+    $('#anyPeriodForm').validate({
+        rules: {
+            endBalancePeriod: {
+                greaterThan: "#startBalancePeriod",
+                validDate: true
+            }
+        },
+        messages: {
+            endBalancePeriod: {greaterThan: "Data końcowa musi być późniejsza niż początkowa!"}
         }
-    },
-    messages: {
-        endBalancePeriod: {greaterThan: "Data końcowa musi być późniejsza niż początkowa!"}
-    }
-});
+    });
+}
+
+function closeAnyPeriodModal(){
+	$('#anyPeriodModal').modal('hide')
 }
