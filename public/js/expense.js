@@ -32,7 +32,7 @@ const getLimitForCategory = async () => {
     }
 }
 
-const getMonthlySumOfExpensesForCategory = async () => {
+const getMonthlySumOfExpensesForCategory = async (id="0") => {
     let categorySelect = document.querySelector("#expense_category");
     let categoryId = categorySelect.value;
     let dateOfExpense = document.querySelector("#expense_date").value;
@@ -99,6 +99,11 @@ const setSumOfExpenses = async () => {
     if (jsonMonthlyExpenses.categorySum != null) monthlyExpenses = parseFloat(jsonMonthlyExpenses.categorySum);
     let currentExpenseValue = parseFloat(expenseValueInput.value);
     let sumExpenses = monthlyExpenses + currentExpenseValue;
+    if (window.location.href.includes("edit")){
+        savedCurrentExpenseValue = document.querySelector("#curentExpenseValue").value;
+        sumExpenses -=savedCurrentExpenseValue;
+        console.log(savedCurrentExpenseValue);
+    }
     let sumValue = document.querySelector("#sum-of-expenses");
     if (sumExpenses ) sumValue.value = sumExpenses;
     return sumExpenses;

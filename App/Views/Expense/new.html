@@ -89,6 +89,7 @@
             {% if expense.id is not empty %}
           <input name="id" type="text" class="form-control " hidden value = "{{ expense.id }}">
           <input name="redirectUrl" type="text" class="form-control " hidden value = "{{ expense.redirectUrl }}">
+          <input name="curentExpenseValue" id="curentExpenseValue"  type="text" hidden value = "{{ expense.amount }}">
           {% endif %}
             <div class="input-group inputControl w-100">
                 <div class="input-group-prepend w-25">
