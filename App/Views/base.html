@@ -150,7 +150,7 @@
 											<span class="datePrependLabel"></span><i class="icon-calendar"></i>
 											Od:</label>
 										<div class="modal-body">
-											<input type="text" name="startBalancePeriod" id="startBalancePeriod" class="form-control datepicker"
+											<input type="date" name="startBalancePeriod" id="startBalancePeriod" class="form-control datepicker"
 												data-toggle="datepicker" required>
 										</div>
 									</div>
@@ -159,7 +159,7 @@
 											<span class="datePrependLabel"></span><i class="icon-calendar"></i>
 											Do:</label>
 										<div class="modal-body">
-											<input type="text" name="endBalancePeriod" id="endBalancePeriod" class="form-control datepicker"
+											<input type="date" name="endBalancePeriod" id="endBalancePeriod" class="form-control datepicker"
 												data-toggle="datepicker" required>
 										</div>
 									</div>
@@ -188,35 +188,9 @@
 		crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 	<script src="/js/hideShowPassword.min.js"></Script>
+	<script src="/js/balance.js"></Script>
 	{% block footer %}
 	{% endblock %}
-
-	<script>
-		jQuery.validator.addMethod("greaterThan",
-			function (value, element, params) {
-				if (!/Invalid|NaN/.test(new Date(value))) {
-					return new Date(value) > new Date($(params).val());
-				}
-
-				return isNaN(value) && isNaN($(params).val())
-					|| (Number(value) > Number($(params).val()));
-			});
-		$(document).ready(function () {
-			$('#anyPeriodForm').validate({
-				rules: {
-					endBalancePeriod: {
-						greaterThan: "#startBalancePeriod",
-						validDate: true
-					}
-				},
-				messages: {
-					endBalancePeriod: {greaterThan: "Data końcowa musi być późniejsza niż początkowa!"}
-				}
-			});
-
-    		$(".alert").fadeOut(6500);
-		});
-	</script>
 
 </body>
 
