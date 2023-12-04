@@ -12,7 +12,7 @@ let settingNameInput = document.querySelector("#modal-setting-name");
 settingNameInput.addEventListener("keyup", async () => {
     let name = settingNameInput.value;
     let type = document.querySelector("#modal-setting-type").value;
-    let data = await validateNameAJAX(type, name);
+    let data = await validateName(type, name);
     let submitButton = document.querySelector("#settingModal button[type='submit']")
     let errorLabel = document.querySelector('#formSetting label.error');
     if (data.name_status !== 'false'){
@@ -175,7 +175,7 @@ settingLimitCheckbox.addEventListener("click", () =>{
     }
 })
 
-const validateNameAJAX = async (type, name, id=0) => {
+const validateName = async (type, name, id=0) => {
     try{
         let status = "";
         let data = "";
@@ -186,7 +186,6 @@ const validateNameAJAX = async (type, name, id=0) => {
             const res = await fetch(`../api/settings/vaidate/${type}/${id}/${name}`);
             data = await res.json();
         }
-        console.log(data);
         return data;
     }catch (e){
         console.log("ERROR", e);

@@ -250,7 +250,7 @@ const verifyUpdate = async(input) =>{
 	let settingType = input.name.split("_")[0];//type_id
 	let settingId = input.name.split("_")[1];//type_id
 	let settingName = input.value;
-	let status = await validateNameAJAX(settingType, settingName, settingId)
+	let status = await validateName(settingType, settingName, settingId)
 	let button = input.parentElement.querySelector(".update-btn");
 	if (status.name_status == "false"){
 		input.parentElement.querySelector("label.error").classList.add("d-none");

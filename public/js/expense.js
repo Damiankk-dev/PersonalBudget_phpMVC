@@ -102,7 +102,6 @@ const setSumOfExpenses = async () => {
     if (window.location.href.includes("edit")){
         savedCurrentExpenseValue = document.querySelector("#curentExpenseValue").value;
         sumExpenses -=savedCurrentExpenseValue;
-        console.log(savedCurrentExpenseValue);
     }
     let sumValue = document.querySelector("#sum-of-expenses");
     if (sumExpenses ) sumValue.value = sumExpenses;
