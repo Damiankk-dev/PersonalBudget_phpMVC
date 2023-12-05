@@ -49,7 +49,9 @@
                             {% if paymentMethods is not empty %}
                                 {% for row in paymentMethods %}
                                     <div class="input-group w-100 mx-auto">
+                                        <label class="error d-none"></label>
                                         <input name="payment_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required readonly="readonly"/>
+                                        <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
                                         <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
                                         <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
                                     </div>
@@ -70,7 +72,9 @@
                             {% if incomesCategories is not empty %}
                                 {% for row in incomesCategories %}
                                     <div class="input-group w-100 mx-auto">
+                                        <label class="error d-none"></label>
                                         <input name="income_{{row.id}}" class="form-control settings-table" value="{{ row.name }}" required readonly="readonly"/>
+                                        <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
                                         <button type="button" class="btn btn-outline-success update-btn d-none"><i class="icon-floppy"></i></button>
                                         <button type="button" class="btn btn-outline-secondary remove-btn"><i class="icon-trash"></i></button>
                                     </div>
