@@ -60,7 +60,7 @@ const setStatusOfExpense = async () => {
     if (limit == '') limit = null;
     else limit = parseFloat(limit);
     let sumExpenses = await setSumOfExpenses();
-    if (limit != null && sumExpenses < limit) status = "OK";
+    if ((limit != null && sumExpenses < limit) || limit != null) status = "OK";
     else if (limit != null && sumExpenses >= limit) status = "WARN";
 
     return status;
