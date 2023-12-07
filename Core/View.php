@@ -66,4 +66,25 @@ class View
  
         return $twig->render($template, $args);
     }
+
+	/**
+	 * Get the content of a view template using Twig
+	 *
+	 * @param string $template The template file
+	 * @param array $args Associative array of data to display in the view (optional)
+	 *
+	 * @return void
+	 */
+    public static function getTemplateSimple(string $template, array $args = [])
+    {
+        static $twig = null;
+
+        if ($twig === null)
+        {
+            $loader = new \Twig\Loader\FilesystemLoader('../App/Views');
+            $twig = new \Twig\Environment($loader);
+        }
+
+        return $twig->render($template, $args);
+    }
 }

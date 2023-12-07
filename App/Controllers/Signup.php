@@ -36,12 +36,14 @@ class Signup extends \Core\Controller
 			$user = new User($_POST);
 			
 			if ($user->save()) {
-				try{
-					$user->sendActivationEmail();
-					//static::redirect('/Signup/success');
-				} catch (\Exception $e){
-					Flash::addMessage("Problem with sending activation email {$e->getMessage()}", Flash::WARNING);
-					View::renderTemplate('500.html');
+				$user->sendActivationEmail();
+				if (empty($user->errors)){
+					static::redirect('/signup/success');
+				} else {
+					$user->removeUserByEmailOnFailure();
+					View::renderTemplate('Signup/index.html', [
+						'user' => $user
+						]);
 				}
 
 			} else {
@@ -51,6 +53,7 @@ class Signup extends \Core\Controller
 			}
 		} catch (\Exception $e){
 			Flash::addMessage("User cannot be created: {$e->getMessage()}", Flash::WARNING);
+			View::renderTemplate('500.html');
 		}
 	}
 	

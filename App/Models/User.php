@@ -44,7 +44,6 @@ class User extends \Core\Model
     public function save()
     {
         $this->validate();
-
         if (empty($this->errors)) {
             $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
 
@@ -108,10 +107,6 @@ class User extends \Core\Model
                 $this->errors[] = 'Hasło musi zawierać przynajmniej jedną cyfrę';
             }
         }
-        // Rules
-        if ( ! isset($this->rules_accepted)) {
-            $this->errors[] = 'Proszę o akceptację regulaminu';
-        }
     }
 
     /**
@@ -170,7 +165,7 @@ class User extends \Core\Model
 
             Mail::send($this->email, 'Aktywacja konta na stronie PersonalBudget', $text, $html);
         } catch (Exception $e) {
-            View::renderTemplate('Signup/index.html');
+            $this->errors[] = "Problem with sending activation email {$e->getMessage()}";
         }
 	}
 
@@ -433,5 +428,26 @@ class User extends \Core\Model
         }
 
         return true;
+    }
+
+    /**
+     * Removes user record when sending email failed
+     */
+    public function removeUserByEmailOnFailure(){
+        $sql = 'DELETE FROM users WHERE
+            email = :email';
+
+        $db = static::getDB();
+        if ($db !== null )
+        {
+            $stmt = $db->prepare($sql);
+            $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
+
+            return $stmt->execute();
+        }
+
+        $this->errors[] = 'Null database!';
+        return false;
+
     }
 }
