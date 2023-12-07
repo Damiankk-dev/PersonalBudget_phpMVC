@@ -280,4 +280,6 @@ const isFocusOnModifiedElement = async (updateModalInputElement) => {
 	return false;
 }
 
-$(".alert").fadeOut(6500);
+$(document).ready(function() {
+	$(".alert").fadeOut(6500);
+});

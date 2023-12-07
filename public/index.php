@@ -45,5 +45,11 @@ $router->add('api/settings/vaidate/{type}/{id:[\d]+}/{name:[\wżźćńółęąś
 $router->add('api/settings/remove/{type}', ['controller' => 'Settings', 'action' => 'verifyRemoval']);
 $router->add('settings/remove/{type}/{name:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'remove']);
 $router->add('settings/update/{type}/{id:[\d]+}/{name:[\wżźćńółęąśŻŹĆĄŚĘŁÓŃ ]+}', ['controller' => 'Settings', 'action' => 'update']);
+try{
+    $router->dispatch($_SERVER['QUERY_STRING']);
+} catch (\Exception $e){
+    http_response_code(500);
+    echo null;
+}
+//$router->dispatch($_SERVER['QUERY_STRING']);
     
-$router->dispatch($_SERVER['QUERY_STRING']);

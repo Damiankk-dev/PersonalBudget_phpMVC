@@ -32,16 +32,21 @@ class Balances extends Authenticated
      */
     public function showAction()
     {
-		$balance = new Balance($_POST);
-        $balance->show($this->route_params['type']);
-		if ($balance)
-		{
-			View::renderTemplate('Balance/new.html', [
-				'balance' => $balance
-			]);
-		} else {
+		try{
+			$balance = new Balance($_POST);
+			$balance->show($this->route_params['type']);
+			if ($balance)
+			{
+				View::renderTemplate('Balance/new.html', [
+					'balance' => $balance
+				]);
+			} else {
+				Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+				View::renderTemplate('Balance/new.html');
+			}
+		} catch (\Exception $e){
 			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
-			View::renderTemplate('Balance/new.html');
+			View::renderTemplate('500.html');
 		}
     }
 }

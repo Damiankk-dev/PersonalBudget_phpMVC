@@ -71,9 +71,14 @@ class Signup extends \Core\Controller
 	 */
 	public function activateAction()
 	{
-		User::activate($this->route_params['token']);	
+		try{
+			User::activate($this->route_params['token']);
 
-		$this->redirect('/signup/activated');
+			$this->redirect('/signup/activated');
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
+		}
 	}
 	
 	/**

@@ -36,33 +36,38 @@ class Login extends \Core\Controller
 	 */
 	public function createAction()
 	{
-		$user = new User();
-		$user = $user->authenticate($_POST['email'], $_POST['password']);
-		$remember_me = isset($_POST['remember_me']);
+		try{
+			$user = new User();
+			$user = $user->authenticate($_POST['email'], $_POST['password']);
+			$remember_me = isset($_POST['remember_me']);
 
-
-		if (empty($user->errors))
-		{
-			Auth::login($user, $remember_me);
-
-			if ( !($user->prepareUserAtFirstLogin()) )
+			if (empty($user->errors))
 			{
-				Flash::addMessage('Inicjalizacja użytkownika nieudana, niektóre funkcje mogą nie działać poprawnie, skontaktuj się z administratorem!', Flash::WARNING);
+				Auth::login($user, $remember_me);
+
+				if ( !($user->prepareUserAtFirstLogin()) )
+				{
+					Flash::addMessage('Inicjalizacja użytkownika nieudana, niektóre funkcje mogą nie działać poprawnie, skontaktuj się z administratorem!', Flash::WARNING);
+				}
+
+				Flash::addMessage('Logowanie powiodło się!');
+
+				$this->redirect(Auth::getReturnToPage());
+			}
+			else
+			{
+				Flash::addMessage('Logowanie nieudane, spróbuj jeszcze raz!', Flash::WARNING);
+
+				View::renderTemplate('Login/index.html', [
+					'error' => $user->errors[0],
+					'email' => $_POST['email'],
+					'remember_me' => $remember_me
+					]);
 			}
 
-			Flash::addMessage('Logowanie powiodło się!');
-
-			$this->redirect(Auth::getReturnToPage());
-		}
-		else
-		{
-			Flash::addMessage('Logowanie nieudane, spróbuj jeszcze raz!', Flash::WARNING);
-
-			View::renderTemplate('Login/index.html', [
-				'error' => $user->errors[0],
-				'email' => $_POST['email'],
-				'remember_me' => $remember_me
-				]);
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
 		}
 	}
 
@@ -73,9 +78,14 @@ class Login extends \Core\Controller
 	 */
 	public function destroyAction()
 	{
-		Auth::logout();
+		try{
+			Auth::logout();
 
-		$this->redirect('/login/show-logout-message');
+			$this->redirect('/login/show-logout-message');
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
+		}
 	}
 
 	/**

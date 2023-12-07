@@ -41,21 +41,26 @@ class Settings extends Authenticated
      */
     public function indexAction($settingsForView=null)
     {
-		if ($settingsForView==null){
-			$userSettings = new UserSettings();
-			$userSettings->getUserSettingsForView();
-			$settingsForView = $userSettings->userSettingsForView;
-		}
-		if ($settingsForView) {
-			View::renderTemplate('Settings/index.html', [
-				'expensesCategories' => $settingsForView["expense"],
-				'incomesCategories' => $settingsForView["income"],
-				'paymentMethods' => $settingsForView["payment"],
-				'validationStatus' => $this->validationStatus
-			]);
-		} else {
-			Flash::addMessage('Nie udało się pobrać ustawień użytkownika, spróbuj ponownie później', Flash::WARNING);
-			View::renderTemplate('Settings/index.html');
+		try{
+			if ($settingsForView==null){
+				$userSettings = new UserSettings();
+				$userSettings->getUserSettingsForView();
+				$settingsForView = $userSettings->userSettingsForView;
+			}
+			if ($settingsForView) {
+				View::renderTemplate('Settings/index.html', [
+					'expensesCategories' => $settingsForView["expense"],
+					'incomesCategories' => $settingsForView["income"],
+					'paymentMethods' => $settingsForView["payment"],
+					'validationStatus' => $this->validationStatus
+				]);
+			} else {
+				Flash::addMessage('Nie udało się pobrać ustawień użytkownika, spróbuj ponownie później', Flash::WARNING);
+				View::renderTemplate('Settings/index.html');
+			}
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
 		}
     }
 
@@ -78,13 +83,18 @@ class Settings extends Authenticated
 	 * Updates user password action
 	 */
 	public function updatePasswordAction(){
-		$password = $_POST['password'];
-		$user = Auth::getUser();
-		if (User::updatePassword($user->id, $password)){
-			Flash::addMessage('Zmiany zostały zapisane pomyślnie');
-			$this->indexAction();
-		} else {
-			Flash::addMessage('Zmiana hasła nie powiodła się', Flash::WARNING);
+		try{
+			$password = $_POST['password'];
+			$user = Auth::getUser();
+			if (User::updatePassword($user->id, $password)){
+				Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+				$this->indexAction();
+			} else {
+				Flash::addMessage('Zmiana hasła nie powiodła się', Flash::WARNING);
+			}
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
 		}
 	}
 
@@ -155,14 +165,19 @@ class Settings extends Authenticated
 	 * @return void
 	 */
 	public function setLimitAction(){
-		$parts = explode('/', $_SERVER['QUERY_STRING']);
-		$queryParams = explode('&', $parts[2]);
-		$categoryId = $queryParams[0];
-		$limitValue = $queryParams[1];
-		$userSettings = new UserSettings();
-		$userSettings->updateLimitById($categoryId, $limitValue);
-		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
-		$this->redirect('/settings/index');
+		try{
+			$parts = explode('/', $_SERVER['QUERY_STRING']);
+			$queryParams = explode('&', $parts[2]);
+			$categoryId = $queryParams[0];
+			$limitValue = $queryParams[1];
+			$userSettings = new UserSettings();
+			$userSettings->updateLimitById($categoryId, $limitValue);
+			Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+			$this->redirect('/settings/index');
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
+		}
 	}
 
 	/**
@@ -171,24 +186,29 @@ class Settings extends Authenticated
 	 * @return void
 	 */
 	public function addAction(){
-        $data = [];
-		$data['type'] = $this->route_params['type'];
-		foreach($_POST as $key => $value){
-			$data[$key] = $value;
-		}
-		$setting = new UserSetting($data["modal-setting-name"], $data["type"]);
-		$settings = new UserSettings();
-		if ($data["type"] === "expense"){
-			if (!array_key_exists("add-limit", $data) ){
-				$data["modal-limitValue"] = null;
+		try{
+			$data = [];
+			$data['type'] = $this->route_params['type'];
+			foreach($_POST as $key => $value){
+				$data[$key] = $value;
 			}
-			$settings->addSetting($setting, $data["modal-limitValue"]);
-		} else {
-			$settings->addSetting($setting);
-		}
+			$setting = new UserSetting($data["modal-setting-name"], $data["type"]);
+			$settings = new UserSettings();
+			if ($data["type"] === "expense"){
+				if (!array_key_exists("add-limit", $data) ){
+					$data["modal-limitValue"] = null;
+				}
+				$settings->addSetting($setting, $data["modal-limitValue"]);
+			} else {
+				$settings->addSetting($setting);
+			}
 
-		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
-		$this->redirect('/settings/index');
+			Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+			$this->redirect('/settings/index');
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
+		}
 	}
 
 	/**
@@ -221,15 +241,20 @@ class Settings extends Authenticated
 	 * @return void
 	 */
 	public function removeAction(){
-		$data = [];
-		$parts = explode('/', $_SERVER['QUERY_STRING']);
-		$data['type'] = $this->route_params['type'];
-		$data['name'] = $this->route_params['name'];
-		$settings = new UserSettings();
-		$setting = new UserSetting($data['name'], $data['type']);
-		$settings->removeSetting($setting);
-		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
-		$this->redirect('/settings/index');
+		try{
+			$data = [];
+			$parts = explode('/', $_SERVER['QUERY_STRING']);
+			$data['type'] = $this->route_params['type'];
+			$data['name'] = $this->route_params['name'];
+			$settings = new UserSettings();
+			$setting = new UserSetting($data['name'], $data['type']);
+			$settings->removeSetting($setting);
+			Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+			$this->redirect('/settings/index');
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
+		}
 	}
 
 	/**
@@ -260,15 +285,20 @@ class Settings extends Authenticated
 	 * HTTP PUT
 	 */
 	public function updateAction(){
-		$data = [];
-		$parts = explode('/', $_SERVER['QUERY_STRING']);
-		$data['type'] = $this->route_params['type'];
-		$data['name'] = $this->route_params['name'];
-		$data['settingId'] = $this->route_params['id'];
-		$settings = new UserSettings();
-		$setting = new UserSetting($data['name'], $data['type'], $data['settingId']);
-		$settings->updateSetting($setting);
-		Flash::addMessage('Zmiany zostały zapisane pomyślnie');
-		$this->redirect('/settings/index');
+		try{
+			$data = [];
+			$parts = explode('/', $_SERVER['QUERY_STRING']);
+			$data['type'] = $this->route_params['type'];
+			$data['name'] = $this->route_params['name'];
+			$data['settingId'] = $this->route_params['id'];
+			$settings = new UserSettings();
+			$setting = new UserSetting($data['name'], $data['type'], $data['settingId']);
+			$settings->updateSetting($setting);
+			Flash::addMessage('Zmiany zostały zapisane pomyślnie');
+			$this->redirect('/settings/index');
+		} catch (\Exception $e){
+			Flash::addMessage("Coś poszło nie tak", Flash::WARNING);
+			View::renderTemplate('500.html');
+		}
 	}
 }
